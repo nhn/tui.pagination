@@ -13,7 +13,7 @@
  * @param {Object} $element 루트 엘리먼트
  *
  */
-function PaginationView(options, $element) {
+function    PaginationView(options, $element) {
     /**
      * 페이지네이션의 루트 엘리먼트
      *
@@ -50,15 +50,15 @@ function PaginationView(options, $element) {
      */
     this._eventData = {};
 
-    $.extend(this._options, {
-        $firstPageLinkOn: this._options['$firstPageLinkOn'] || $('a.' + this._wrapPrefix('pre_end'), this._element),
-        $prevPageLinkOn: this._options['$prevPageLinkOn'] || $('a.' + this._wrapPrefix('pre'), this._element),
-        $nextPageLinkOn: this._options['$nextPageLinkOn'] || $('a.' + this._wrapPrefix('next'), this._element),
-        $lastPageLinkOn: this._options['$lastPageLinkOn'] || $('a.' + this._wrapPrefix('next_end'), this._element),
-        $firstPageLinkOff: this._options['$firstPageLinkOff'] || $('span.' + this._wrapPrefix('pre_end'), this._element),
-        $prevPageLinkOff: this._options['$prevPageLinkOff'] || $('span.' + this._wrapPrefix('pre'), this._element),
-        $nextPageLinkOff: this._options['$nextPageLinkOff'] || $('span.' + this._wrapPrefix('next'), this._element),
-        $lastPageLinkOff: this._options['$lastPageLinkOff'] || $('span.' + this._wrapPrefix('next_end'), this._element)
+    $.extend(options, {
+        $pre_endOn: options['$pre_endOn'] || $('a.' + this._wrapPrefix('pre_end'), this._element),
+        $preOn: options['$preOn'] || $('a.' + this._wrapPrefix('pre'), this._element),
+        $nextOn: options['$nextOn'] || $('a.' + this._wrapPrefix('next'), this._element),
+        $lastOn: options['$lastOn'] || $('a.' + this._wrapPrefix('next_end'), this._element),
+        $pre_endOff: options['$pre_endOff'] || $('span.' + this._wrapPrefix('pre_end'), this._element),
+        $preOff: options['$preOff'] || $('span.' + this._wrapPrefix('pre'), this._element),
+        $nextOff: options['$nextOff'] || $('span.' + this._wrapPrefix('next'), this._element),
+        $lastOff: options['$lastOff'] || $('span.' + this._wrapPrefix('next_end'), this._element)
     });
 
     this._element.addClass(this._wrapPrefix('loaded'));
@@ -124,24 +124,24 @@ PaginationView.prototype.getBaseElement = function() {
  */
 PaginationView.prototype.empty = function(){
 
-    var htOption = this._options,
-        $firstPageLinkOn = htOption.$firstPageLinkOn,
-        $prevPageLinkOn = htOption.$prevPageLinkOn,
-        $nextPageLinkOn = htOption.$nextPageLinkOn,
-        $lastPageLinkOn = htOption.$lastPageLinkOn,
-        $firstPageLinkOff = htOption.$firstPageLinkOff,
-        $prevPageLinkOff = htOption.$prevPageLinkOff,
-        $nextPageLinkOff = htOption.$nextPageLinkOff,
-        $lastPageLinkOff = htOption.$lastPageLinkOff;
+    var options = this._options,
+        $pre_endOn = options.$pre_endOn,
+        $preOn = options.$preOn,
+        $nextOn = options.$nextOn,
+        $lastOn = options.$lastOn,
+        $pre_endOff = options.$pre_endOff,
+        $preOff = options.$preOff,
+        $nextOff = options.$nextOff,
+        $lastOff = options.$lastOff;
 
-    htOption.$firstPageLinkOn = this._clone($firstPageLinkOn);
-    htOption.$prevPageLinkOn = this._clone($prevPageLinkOn);
-    htOption.$lastPageLinkOn = this._clone($lastPageLinkOn);
-    htOption.$nextPageLinkOn = this._clone($nextPageLinkOn);
-    htOption.$firstPageLinkOff = this._clone($firstPageLinkOff);
-    htOption.$prevPageLinkOff = this._clone($prevPageLinkOff);
-    htOption.$lastPageLinkOff = this._clone($lastPageLinkOff);
-    htOption.$nextPageLinkOff = this._clone($nextPageLinkOff);
+    options.$pre_endOn = this._clone($pre_endOn);
+    options.$preOn = this._clone($preOn);
+    options.$lastOn = this._clone($lastOn);
+    options.$nextOn = this._clone($nextOn);
+    options.$pre_endOff = this._clone($pre_endOff);
+    options.$preOff = this._clone($preOff);
+    options.$lastOff = this._clone($lastOff);
+    options.$nextOff = this._clone($nextOff);
 
     this._pageItemList = [];
 
@@ -284,28 +284,28 @@ PaginationView.prototype._setPageResult = function(lastNum) {
 
 PaginationView.prototype._getEdge = function(viewSet) {
 
-    var htOption = this._options,
+    var options = this._options,
         leftPageNumber,
         rightPageNumber,
         nLeft;
 
-    if (htOption.isCenterAlign) {
+    if (options.isCenterAlign) {
 
-        nLeft = Math.floor(htOption.pagePerPageList / 2);
+        nLeft = Math.floor(options.pagePerPageList / 2);
         leftPageNumber = viewSet.page - nLeft;
         leftPageNumber = Math.max(leftPageNumber, 1);
-        rightPageNumber = leftPageNumber + htOption.pagePerPageList - 1;
+        rightPageNumber = leftPageNumber + options.pagePerPageList - 1;
 
         if (rightPageNumber > viewSet.nLastPage) {
-            leftPageNumber = viewSet.nLastPage - htOption.pagePerPageList + 1;
+            leftPageNumber = viewSet.nLastPage - options.pagePerPageList + 1;
             leftPageNumber = Math.max(leftPageNumber, 1);
             rightPageNumber = viewSet.nLastPage;
         }
 
     } else {
 
-        leftPageNumber = (viewSet.nThisPageList - 1) * htOption.pagePerPageList + 1;
-        rightPageNumber = (viewSet.nThisPageList) * htOption.pagePerPageList;
+        leftPageNumber = (viewSet.nThisPageList - 1) * options.pagePerPageList + 1;
+        rightPageNumber = (viewSet.nThisPageList) * options.pagePerPageList;
         rightPageNumber = Math.min(rightPageNumber, viewSet.nLastPage);
 
     }
@@ -323,15 +323,15 @@ PaginationView.prototype._getEdge = function(viewSet) {
  * @private
  */
 PaginationView.prototype._setFirst = function(viewSet) {
-    var option = this._options;
+    var options = this._options;
     if (viewSet.page > 1) {
-        if (option.$firstPageLinkOn) {
-            this._element.append(option.$firstPageLinkOn);
+        if (options.$pre_endOn) {
+            this._element.append(options.$pre_endOn);
             this._addTextNode();
         }
     } else {
-        if (option.$firstPageLinkOff) {
-            this._element.append(option.$firstPageLinkOff);
+        if (options.$pre_endOff) {
+            this._element.append(options.$pre_endOff);
             this._addTextNode();
         }
     }
@@ -341,20 +341,20 @@ PaginationView.prototype._setFirst = function(viewSet) {
 /**
  * 이전페이지가 있는지 여부에 따른 오브젝트 활성화
  *
- * @param {Object}  viewSet
+ * @param {Object} viewSet
  * @private
  *
  */
 PaginationView.prototype._setPrev = function(viewSet) {
-    var option = this._options;
+    var options = this._options;
     if (viewSet.nThisPageList > 1) {
-        if (option.$prevPageLinkOn) {
-            this._element.append(option.$prevPageLinkOn);
+        if (options.$preOn) {
+            this._element.append(options.$preOn);
             this._addTextNode();
         }
     } else {
-        if (option.$prevPageLinkOff) {
-            this._element.append(option.$prevPageLinkOff);
+        if (options.$preOff) {
+            this._element.append(options.$preOff);
             this._addTextNode();
         }
     }
@@ -368,16 +368,16 @@ PaginationView.prototype._setPrev = function(viewSet) {
  */
 PaginationView.prototype._setNext = function(viewSet) {
 
-    var option = this._options;
+    var options = this._options;
 
     if (viewSet.nThisPageList < viewSet.nLastPageList) {
-        if (option.$nextPageLinkOn) {
-            this._element.append(option.$nextPageLinkOn);
+        if (options.$nextOn) {
+            this._element.append(options.$nextOn);
             this._addTextNode();
         }
     } else {
-        if (option.$nextPageLinkOff) {
-            this._element.append(option.$nextPageLinkOff);
+        if (options.$nextOff) {
+            this._element.append(options.$nextOff);
             this._addTextNode();
         }
     }
@@ -392,16 +392,16 @@ PaginationView.prototype._setNext = function(viewSet) {
  */
 PaginationView.prototype._setLast = function(viewSet) {
 
-    var option = this._options;
+    var options = this._options;
 
     if (viewSet.page < viewSet.nLastPage) {
-        if (option.$lastPageLinkOn) {
-            this._element.append(option.$lastPageLinkOn);
+        if (options.$lastOn) {
+            this._element.append(options.$lastOn);
             this._addTextNode();
         }
     } else {
-        if (option.$lastPageLinkOff) {
-            this._element.append(option.$lastPageLinkOff);
+        if (options.$lastOff) {
+            this._element.append(options.$lastOff);
             this._addTextNode();
         }
     }
@@ -418,14 +418,14 @@ PaginationView.prototype._setPageNumbers = function(viewSet) {
     var $pageItem,
         firstPage = viewSet.leftPageNumber,
         lastPage = viewSet.rightPageNumber,
-        option = this._options,
+        options = this._options,
         i;
 
     for (i = firstPage; i <= lastPage; i++) {
         if (i == viewSet.page) {
-            $pageItem = $(option.currentPageTemplate.replace('{=page}', i.toString()));
+            $pageItem = $(options.currentPageTemplate.replace('{=page}', i.toString()));
         } else {
-            $pageItem = $(option.pageTemplate.replace('{=page}', i.toString()));
+            $pageItem = $(options.pageTemplate.replace('{=page}', i.toString()));
             this._pageItemList.push($pageItem);
         }
 
