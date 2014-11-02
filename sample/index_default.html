@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../src/lib/jquery-1.11.1.min.js"></script>
+    <script src="../src/js/pagenationview.js"></script>
+    <script src="../src/js/pagination.js"></script>
+    <link rel="stylesheet" href="../src/css/common.css">
+    <style>
+        h3 ,p { margin-left:30px; }
+        h3 {margin-top:20px;}
+        .pagination .pre_end, .pagination .pre, .pagination .next, .pagination .next_end {
+            font-size:11px;
+            line-height: 1.0em;
+        }
+    </style>
+    <title></title>
+</head>
+<body>
+<div>
+    <h3>페이지 네이션</h3>
+    <p>- 전체 아이템 : 500</p>
+    <p>(기본옵션이 적용 된다)</p>
+    <pre>
+        기본옵션값
+
+        var defaultOption = {
+            itemCount: 10,
+            itemPerPage: 10,
+            pagePerPageList: 10,
+            page: 1,
+            moveUnit: 'pagelist',
+            isCenterAlign: false,
+            insertTextNode: '',
+            classPrefix: '',
+            firstItemClassName: 'first-child',
+            lastItemClassName: 'last-child',
+            pageTemplate: '<a href="#">{=page}</a>',
+            currentPageTemplate: '<strong>{=page}</strong>'
+        };
+    </pre>
+     <pre>
+        실행코드
+
+        var pagination = new ne.Component.Pagination({
+            itemCount: 500
+        }, $('.paginate1'));
+    </pre>
+    <div class="paginate1 pagination">
+        <a href="#" class="pre_end">처음</a>
+        <a href="#" class="pre">이전</a>
+        <a href="#" class="next">다음</a>
+        <a href="#" class="next_end">마지</a>
+    </div>
+
+</div>
+<script>
+    var pagination = new ne.Component.Pagination({
+        itemCount: 500
+    }, $('.paginate1'));
+
+</script>
+</body>
+</html>

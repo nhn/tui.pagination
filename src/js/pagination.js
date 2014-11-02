@@ -4,6 +4,10 @@
  * @author 이제인(jein.yi@nhnent.com)
  */
 
+
+var ne = ne || {};
+ne.Component = ne.Component || {};
+
 /**
  *
  * @constructor
@@ -35,7 +39,7 @@
  * @param {jQueryObject} $element 페이지목록을 생성할 jQuery객체가 랩핑된 엘리먼트
  *
  */
-function Pagination(options, $element) {
+ne.Component.Pagination = function(options, $element) {
     // 기본옵션
     var defaultOption = {
         itemCount: 10,
@@ -72,7 +76,7 @@ function Pagination(options, $element) {
      * @type {PaginationView}
      * @private
      */
-    this._view = new PaginationView(this._options, $element);
+    this._view = new ne.Component.PaginationView(this._options, $element);
     this._view.attachEvent('click', $.proxy(this._onClickPageList, this));
     // 페이지 초기화(이동)
     this.movePageTo(this._getOption('page'), false);
@@ -83,11 +87,11 @@ function Pagination(options, $element) {
 /**
  * 페이징을 다시 그린다
  *
- * @param itemCount
+ * @param {*} itemCount 다시 그릴 페이지의 아이템 갯수
  */
-Pagination.prototype.reset = function(itemCount) {
+ne.Component.Pagination.prototype.reset = function(itemCount) {
 
-    var isExist = itemCount !== null && itemCount !== undefined;
+    var isExist = (itemCount !== null) && (itemCount !== undefined);
 
     if (!isExist) {
         itemCount = this._getOption('itemCount');
@@ -105,7 +109,7 @@ Pagination.prototype.reset = function(itemCount) {
  * @returns {*}
  *
  */
-Pagination.prototype._getOption = function(optionKey) {
+ne.Component.Pagination.prototype._getOption = function(optionKey) {
 
     return this._options[optionKey];
 
@@ -117,22 +121,20 @@ Pagination.prototype._getOption = function(optionKey) {
  * 이동하기 전엔 beforeMove라는 커스텀 이벤트를 발생시키고, 이동후에는 afterMove라는 커스텀 이벤터를 발생시킨다.
  *
  * @param {Number} targetPage 이동할 페이지
- * @param {Boolean} runCustomEvent [runCustomEvent=true] 커스텀 이벤트의 발생 여부
+ * @param {Boolean} isisRunCustomEvent [isisRunCustomEvent=true] 커스텀 이벤트의 발생 여부
  */
-Pagination.prototype.movePageTo = function(targetPage, runCustomEvent) {
+ne.Component.Pagination.prototype.movePageTo = function(targetPage, isRunCustomEvent) {
 
-    runCustomEvent = !!(runCustomEvent || runCustomEvent === undefined);
+    isRunCustomEvent = !!(isRunCustomEvent || isRunCustomEvent === undefined);
 
     targetPage = this._convertToAvailPage(targetPage);
 
     this._currentPage = targetPage;
 
-    if (runCustomEvent) {
+    if (isRunCustomEvent) {
         /**
          * 페이지 이동이 수행되기 직전에 발생
          *
-         * @global
-         * @event beforeMove
          * @param {ComponentEvent} eventData
          * @param {String} eventData.eventType 커스텀 이벤트명
          * @param {Number} eventData.page 이동하게 될 페이지
@@ -151,12 +153,10 @@ Pagination.prototype.movePageTo = function(targetPage, runCustomEvent) {
 
     this._paginate(targetPage);
 
-    if (runCustomEvent) {
+    if (isRunCustomEvent) {
         /**
          * 페이지 이동이 완료된 시점에서 발생
          *
-         * @global
-         * @event afterMove
          * @param {ComponentEvent} eventData
          * @param {String} eventData.eventType 커스텀 이벤트명
          * @param {Number} eventData.page 사용자 클릭의 결과로 이동한 페이지
@@ -178,7 +178,7 @@ Pagination.prototype.movePageTo = function(targetPage, runCustomEvent) {
  * @param {*} optionValue 변경할 옵션 값
  * @private
  */
-Pagination.prototype._setOption = function(optionKey, optionValue) {
+ne.Component.Pagination.prototype._setOption = function(optionKey, optionValue) {
 
     this._options[optionKey] = optionValue;
 
@@ -189,7 +189,7 @@ Pagination.prototype._setOption = function(optionKey, optionValue) {
  *
  * @returns {Number} 현재 페이지
  */
-Pagination.prototype.getCurrentPage = function() {
+ne.Component.Pagination.prototype.getCurrentPage = function() {
 
     return this._currentPage || this._options['page'];
 
@@ -201,7 +201,7 @@ Pagination.prototype.getCurrentPage = function() {
  * @param {Number} pageNumber 해당 페이지 번호
  * @returns {number}
  */
-Pagination.prototype.getFirstItemOfPage = function(pageNumber) {
+ne.Component.Pagination.prototype.getIndexOfFirstItem = function(pageNumber) {
 
     return this._getOption('itemPerPage') * (pageNumber - 1) + 1;
 
@@ -213,7 +213,7 @@ Pagination.prototype.getFirstItemOfPage = function(pageNumber) {
  * @returns {number} 마지막 페이지 숫자
  * @private
  */
-Pagination.prototype._getLastPage = function() {
+ne.Component.Pagination.prototype._getLastPage = function() {
     return Math.ceil(this._getOption('itemCount') / this._getOption('itemPerPage'));
 
 };
@@ -226,15 +226,16 @@ Pagination.prototype._getLastPage = function() {
  * @return {Number} 페이지 리스트 순번
  * @private
  */
-Pagination.prototype._getPageList = function(pageNumber) {
-    if (this._options["isCenterAlign"]) {
-        var nLeft = Math.floor(this._options["pagePerPageList"] / 2);
-        var nPageList = pageNumber - nLeft;
-        nPageList = Math.max(nPageList, 1);
-        nPageList = Math.min(nPageList, this._getLastPage());
-        return nPageList;
+ne.Component.Pagination.prototype._getPageIndex = function(pageNumber) {
+    //현재 페이지 리스트가 중앙에 와야할때
+    if (this._getOption('isCenterAlign')) {
+        var left = Math.floor(this._getOption('pagePerPageList') / 2),
+        pageIndex = pageNumber - left;
+        pageIndex = Math.max(pageIndex, 1);
+        pageIndex = Math.min(pageIndex, this._getLastPage());
+        return pageIndex;
     }
-    return Math.ceil(pageNumber / this._options["pagePerPageList"]);
+    return Math.ceil(pageNumber / this._getOption("pagePerPageList"));
 };
 
 /**
@@ -245,29 +246,29 @@ Pagination.prototype._getPageList = function(pageNumber) {
  * @private
  *
  */
-Pagination.prototype._getRelativePage = function(relativeName) {
-    var nPage = null,
-        bMovePage = this._getOption('moveUnit') === 'page',
-        nThisPageList = this._getPageList(this.getCurrentPage());
+ne.Component.Pagination.prototype._getRelativePage = function(relativeName) {
+    var page = null,
+        isMovePage = this._getOption('moveUnit') === 'page',
+        currentPageIndex = this._getPageIndex(this.getCurrentPage());
     switch (relativeName) {
         case 'pre_end' :
-            nPage = 1;
+            page = 1;
             break;
 
         case 'next_end' :
-            nPage = this._getLastPage();
+            page = this._getLastPage();
             break;
 
         case 'pre':
-            nPage = bMovePage ? this.getCurrentPage() - 1 : (nThisPageList - 1) * this._getOption('pagePerPageList');
+            page = isMovePage ? this.getCurrentPage() - 1 : (currentPageIndex - 1) * this._getOption('pagePerPageList');
             break;
 
         case 'next':
-            nPage = bMovePage ? this.getCurrentPage() + 1 : (nThisPageList) * this._getOption('pagePerPageList') + 1;
+            page = isMovePage ? this.getCurrentPage() + 1 : (currentPageIndex) * this._getOption('pagePerPageList') + 1;
             break;
     }
 
-    return nPage;
+    return page;
 };
 
 /**
@@ -278,7 +279,7 @@ Pagination.prototype._getRelativePage = function(relativeName) {
  * @returns {number} 페이지 범위내로 확인된 숫자
  * @private
  */
-Pagination.prototype._convertToAvailPage = function(page) {
+ne.Component.Pagination.prototype._convertToAvailPage = function(page) {
     var lastPageNumber = this._getLastPage();
     page = Math.max(page, 1);
     page = Math.min(page, lastPageNumber);
@@ -292,16 +293,16 @@ Pagination.prototype._convertToAvailPage = function(page) {
  * @param {Number} page
  * @private
  */
-Pagination.prototype._paginate = function(page){
+ne.Component.Pagination.prototype._paginate = function(page){
 
     // 뷰의 버튼 및 페이지를 모두 제거 및 복사
     this._view.empty();
 
     var viewSet = {};
 
-    viewSet.nLastPage = this._getLastPage();
-    viewSet.nThisPageList = this._getPageList(page);
-    viewSet.nLastPageList = this._getPageList(viewSet.nLastPage);
+    viewSet.lastPage = this._getLastPage();
+    viewSet.currentPageIndex = this._getPageIndex(page);
+    viewSet.lastPageListIndex = this._getPageIndex(viewSet.lastPage);
     viewSet.page = page;
 
     this._view.update(viewSet, page);
@@ -310,32 +311,31 @@ Pagination.prototype._paginate = function(page){
 /**
  * 페이지네이션 이벤트 핸들
  *
- * @param we
+ * @param {JQueryEvent} event
  * @private
  */
-Pagination.prototype._onClickPageList = function(we) {
+ne.Component.Pagination.prototype._onClickPageList = function(event) {
 
-    we.preventDefault();
+    event.preventDefault();
 
-    var nPage = null,
-        htOption = this._options,
-        el = $(we.target),
-        elPage;
+    var page = null,
+        targetElement = $(event.target),
+        targetPage;
 
-    if (this._view.isIn(el, htOption.$pre_endOn)) {
-        nPage = this._getRelativePage('pre_end');
-    } else if (this._view.isIn(el, htOption.$preOn)) {
-        nPage = this._getRelativePage('pre');
-    } else if (this._view.isIn(el, htOption.$nextOn)) {
-        nPage = this._getRelativePage('next');
-    } else if (this._view.isIn(el, htOption.$lastOn)) {
-        nPage = this._getRelativePage('next_end');
+    if (this._view.isIn(targetElement, this._getOption('$pre_endOn'))) {
+        page = this._getRelativePage('pre_end');
+    } else if (this._view.isIn(targetElement, this._getOption('$preOn'))) {
+        page = this._getRelativePage('pre');
+    } else if (this._view.isIn(targetElement, this._getOption('$nextOn'))) {
+        page = this._getRelativePage('next');
+    } else if (this._view.isIn(targetElement, this._getOption('$lastOn'))) {
+        page = this._getRelativePage('next_end');
     } else {
 
-        elPage = this._view.getPageElement(el);
+        targetPage = this._view.getPageElement(targetElement);
 
-        if (elPage && elPage.length) {
-            nPage = parseInt(elPage.text(), 10);
+        if (targetPage && targetPage.length) {
+            page = parseInt(targetPage.text(), 10);
         } else {
             return;
         }
@@ -344,7 +344,6 @@ Pagination.prototype._onClickPageList = function(we) {
     /**
      페이지 이동을 위한 숫자나 버튼을 클릭했을때 발생
 
-     @event click
      @param {ComponentEvent} eventData
      @param {String} eventData.eventType 커스텀 이벤트명
      @param {Number} eventData.page 클릭해서 이동할 페이지
@@ -352,36 +351,39 @@ Pagination.prototype._onClickPageList = function(we) {
 
      **/
 
-    var isFired = this.fireEvent("click", {"page" : nPage});
+    var isFired = this.fireEvent("click", {"page" : page});
     if (!isFired) {
         return;
     }
 
-    this.movePageTo(nPage);
+    this.movePageTo(page);
 };
 
 /**
  * 커스텀 이벤트를 등록시킨다
- * @param {String} eventType
+ * @param {String|Object} eventType
  * @param {Function} handlerToAttach
- * @returns {Pagination}
+ * @returns {ne.Component.Pagination}
  */
-Pagination.prototype.attach = function(eventType, handlerToAttach) {
-    if (arguments.length == 1) {
-        for(var x in arguments[0]){
-            this.attach(x, arguments[0][x]);
+ne.Component.Pagination.prototype.attach = function(eventType, handlerToAttach) {
+    if (arguments.length === 1) {
+        var eventType,
+            handler;
+        for (eventType in arguments[0]) {
+            handler = arguments[0][eventType];
+            this.attach(eventType, handler);
         }
         return this;
     }
 
     var handlerList = this._eventHandler[eventType];
-    if (typeof handlerList == 'undefined'){
+    if (typeof handlerList === 'undefined'){
         handlerList = this._eventHandler[eventType] = [];
     }
     handlerList.push(handlerToAttach);
 
     return this;
-}
+};
 
 
 
@@ -392,7 +394,7 @@ Pagination.prototype.attach = function(eventType, handlerToAttach) {
  * @param {Object} eventObject 커스텀 이벤트 핸들러에 전달되는 객체.
  * @return {Boolean} 핸들러의 커스텀 이벤트객체에서 stop메서드가 수행되면 false를 리턴
  */
-Pagination.prototype.fireEvent = function(eventType, eventObject) {
+ne.Component.Pagination.prototype.fireEvent = function(eventType, eventObject) {
     eventObject = eventObject || {};
 
     var inlineHandler = this['on' + eventType],
@@ -412,33 +414,34 @@ Pagination.prototype.fireEvent = function(eventType, eventObject) {
 
         eventObject.stop = function(){
             if (eventObject._aExtend.length > 0) {
-                eventObject._aExtend[eventObject._aExtend.length - 1].bCanceled = true;
+                eventObject._aExtend[eventObject._aExtend.length - 1].canceled = true;
             }
         };
     }
 
     eventObject._aExtend.push({
-        sType: eventType,
-        bCanceled: false
+        type: eventType,
+        canceled: false
     });
 
-    var aArg = [eventObject],
-        i, nLen;
+    var argument = [eventObject],
+        i,
+        length;
 
-    for (i = 2, nLen = arguments.length; i < nLen; i++){
-        aArg.push(arguments[i]);
+    for (i = 2, length = arguments.length; i < length; i++){
+        argument.push(arguments[i]);
     }
 
     if (hasInlineHandler) {
-        inlineHandler.apply(this, aArg);
+        inlineHandler.apply(this, argument);
     }
 
     if (hasHandlerList) {
         var handler;
         for (i = 0; (handler = handlerList[i]); i++) {
-            handler.apply(this, aArg);
+            handler.apply(this, argument);
         }
     }
 
-    return !eventObject._aExtend.pop().bCanceled;
+    return !eventObject._aExtend.pop().canceled;
 };

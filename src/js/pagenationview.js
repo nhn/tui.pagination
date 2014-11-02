@@ -5,15 +5,16 @@
  */
 
 
+var ne = ne || {};
+ne.Component = ne.Component || {};
 
 /**
- *
  * @constructor
  * @param {Object} options 옵션 객체
  * @param {Object} $element 루트 엘리먼트
  *
  */
-function    PaginationView(options, $element) {
+ne.Component.PaginationView = function(options, $element) {
     /**
      * 페이지네이션의 루트 엘리먼트
      *
@@ -71,9 +72,9 @@ function    PaginationView(options, $element) {
  *
  * @param {Object} viewSet 뷰갱신에 대한 값들
  */
-PaginationView.prototype.update = function(viewSet) {
+ne.Component.PaginationView.prototype.update = function(viewSet) {
     this._addTextNode();
-    this._setPageResult(viewSet.nLastPage);
+    this._setPageResult(viewSet.lastPage);
 
     var options = this._options,
         edges = this._getEdge(viewSet),
@@ -84,8 +85,8 @@ PaginationView.prototype.update = function(viewSet) {
     viewSet.rightPageNumber = rightPageNumber;
 
     if (options.moveUnit === 'page') {
-        viewSet.nThisPageList = viewSet.page;
-        viewSet.nLastPageList = viewSet.nLastPage;
+        viewSet.currentPageIndex = viewSet.page;
+        viewSet.lastPageIndex = viewSet.lastPage;
     }
 
     this._setFirst(viewSet);
@@ -102,11 +103,11 @@ PaginationView.prototype.update = function(viewSet) {
  * @param {JQueryObject} $parent 포함하고 있는지 체크할 대상
  * @returns {boolean}
  */
-PaginationView.prototype.isIn = function($find, $parent) {
+ne.Component.PaginationView.prototype.isIn = function($find, $parent) {
     if (!$parent) {
         return false;
     }
-    return ($find[0] === $parent[0]) ? true : $parent.find($find).length > 0;
+    return ($find[0] === $parent[0]) ? true : $.contains($parent, $find);
 };
 
 /**
@@ -114,7 +115,7 @@ PaginationView.prototype.isIn = function($find, $parent) {
  *
  * @returns {JQueryObject}
  */
-PaginationView.prototype.getBaseElement = function() {
+ne.Component.PaginationView.prototype.getBaseElement = function() {
     return this._element;
 };
 
@@ -122,7 +123,7 @@ PaginationView.prototype.getBaseElement = function() {
 /**
  * 기준엘리먼트를 초기화 시킨다
  */
-PaginationView.prototype.empty = function(){
+ne.Component.PaginationView.prototype.empty = function(){
 
     var options = this._options,
         $pre_endOn = options.$pre_endOn,
@@ -157,7 +158,7 @@ PaginationView.prototype.empty = function(){
  * @return {jQueryObject} 있을 경우 해당 엘리먼트 jQuery 객체를 반환하며, 없으면 null을 반환한다.
  */
 
-PaginationView.prototype.getPageElement = function(el) {
+ne.Component.PaginationView.prototype.getPageElement = function(el) {
 
     var i,
         length,
@@ -174,18 +175,18 @@ PaginationView.prototype.getPageElement = function(el) {
 
 
 /**
- * targetElement 엘리먼트에 eventType 이벤트의 콜백함수로 callback 함수를 등록한다. <br />
- * - 컴포넌트 내에서 _attachEventHandler() 메서드를 이용하여 이벤트를 등록하는 경우, 내부에 해당 이벤트 정보들을 저장하게 되며,<br />
+ * targetElement 엘리먼트에 eventType 이벤트의 콜백함수로 callback 함수를 등록한다.
+ * - 컴포넌트 내에서 _attachEventHandler() 메서드를 이용하여 이벤트를 등록하는 경우, 내부에 해당 이벤트 정보들을 저장하게 되며,
  *   추후 컴포넌트의 destroy 시에 이 정보를 이용하여 자동으로 이벤트 해제를 수행하게 된다.
  *
  * @param {String} eventType 등록할 이벤트 명
  * @param {Function} callback 해당 이벤트가 발생 시에 호출할 콜백함수
  * @return {String} eventType 과 random 값이 "_" 로 연결된 유일한 key 값.
  */
-PaginationView.prototype.attachEvent = function(eventType, callback) {
+ne.Component.PaginationView.prototype.attachEvent = function(eventType, callback) {
 
     var targetElement = this._element,
-        isSavedElement = typeof(targetElement) == 'string' && this._elementSelector[targetElement];
+        isSavedElement = typeof(targetElement) === 'string' && this._elementSelector[targetElement];
 
     if (isSavedElement) {
         targetElement = this._getElement(targetElement, true);
@@ -194,6 +195,7 @@ PaginationView.prototype.attachEvent = function(eventType, callback) {
     if (targetElement && eventType && callback) {
 
         var key = eventType + '_' + parseInt(Math.random() * 10000000, 10);
+
         $(targetElement).bind(eventType, null, callback);
 
         this._eventData[key] = {
@@ -212,21 +214,21 @@ PaginationView.prototype.attachEvent = function(eventType, callback) {
  *
  * @returns {jQueryObject}
  */
-PaginationView.prototype.getElement = function() {
+ne.Component.PaginationView.prototype.getElement = function() {
 
     return this._element;
 
 };
 
 /**
- * 클래스명에 Prefix 를 붙힘<br />
+ * 클래스명에 Prefix 를 붙힘
  * Prefix는 options.classPrefix를 참조, 붙혀질 때 기존 클래스명의 언더바(_) 문자는 하이픈(-)으로 변환됨
  *
  * @param {String} className
  * @returns {*}
  * @private
  */
-PaginationView.prototype._wrapPrefix = function(className) {
+ne.Component.PaginationView.prototype._wrapPrefix = function(className) {
     var classPrefix = this._options['classPrefix'];
     return classPrefix ? classPrefix + className.replace(/_/g, '-') : className;
 };
@@ -235,7 +237,7 @@ PaginationView.prototype._wrapPrefix = function(className) {
  * 페이지표시 마크업 사이사이에 options.insertTextNode를 끼어넣어준다.
  * @private
  */
-PaginationView.prototype._addTextNode = function() {
+ne.Component.PaginationView.prototype._addTextNode = function() {
 
     var textNode = this._options['insertTextNode'];
     this._element.append(document.createTextNode(textNode));
@@ -247,7 +249,7 @@ PaginationView.prototype._addTextNode = function() {
  * @returns {*}
  * @private
  */
-PaginationView.prototype._clone = function($link) {
+ne.Component.PaginationView.prototype._clone = function($link) {
 
     if ($link && $link.length && $link.get(0).cloneNode) {
         return $($link.get(0).cloneNode(true));
@@ -261,7 +263,7 @@ PaginationView.prototype._clone = function($link) {
  * @param {Number} lastNum
  * @private
  */
-PaginationView.prototype._setPageResult = function(lastNum) {
+ne.Component.PaginationView.prototype._setPageResult = function(lastNum) {
 
     if (lastNum === 0) {
         this._element.addClass(this._wrapPrefix('no-result'));
@@ -282,31 +284,31 @@ PaginationView.prototype._setPageResult = function(lastNum) {
  * @private
  */
 
-PaginationView.prototype._getEdge = function(viewSet) {
+ne.Component.PaginationView.prototype._getEdge = function(viewSet) {
 
     var options = this._options,
         leftPageNumber,
         rightPageNumber,
-        nLeft;
+        left;
 
     if (options.isCenterAlign) {
 
-        nLeft = Math.floor(options.pagePerPageList / 2);
-        leftPageNumber = viewSet.page - nLeft;
+        left = Math.floor(options.pagePerPageList / 2);
+        leftPageNumber = viewSet.page - left;
         leftPageNumber = Math.max(leftPageNumber, 1);
         rightPageNumber = leftPageNumber + options.pagePerPageList - 1;
 
-        if (rightPageNumber > viewSet.nLastPage) {
-            leftPageNumber = viewSet.nLastPage - options.pagePerPageList + 1;
+        if (rightPageNumber > viewSet.lastPage) {
+            leftPageNumber = viewSet.lastPage - options.pagePerPageList + 1;
             leftPageNumber = Math.max(leftPageNumber, 1);
-            rightPageNumber = viewSet.nLastPage;
+            rightPageNumber = viewSet.lastPage;
         }
 
     } else {
 
-        leftPageNumber = (viewSet.nThisPageList - 1) * options.pagePerPageList + 1;
-        rightPageNumber = (viewSet.nThisPageList) * options.pagePerPageList;
-        rightPageNumber = Math.min(rightPageNumber, viewSet.nLastPage);
+        leftPageNumber = (viewSet.currentPageIndex - 1) * options.pagePerPageList + 1;
+        rightPageNumber = (viewSet.currentPageIndex) * options.pagePerPageList;
+        rightPageNumber = Math.min(rightPageNumber, viewSet.lastPage);
 
     }
 
@@ -319,10 +321,10 @@ PaginationView.prototype._getEdge = function(viewSet) {
 /**
  * 첫번째 페이지인지 여부에 따라 첫번째페이지로 가는 링크를 노출할지 결정한다.
  *
- * @param {Obejct} viewSet
+ * @param {Object} viewSet
  * @private
  */
-PaginationView.prototype._setFirst = function(viewSet) {
+ne.Component.PaginationView.prototype._setFirst = function(viewSet) {
     var options = this._options;
     if (viewSet.page > 1) {
         if (options.$pre_endOn) {
@@ -345,9 +347,11 @@ PaginationView.prototype._setFirst = function(viewSet) {
  * @private
  *
  */
-PaginationView.prototype._setPrev = function(viewSet) {
+ne.Component.PaginationView.prototype._setPrev = function(viewSet) {
+
     var options = this._options;
-    if (viewSet.nThisPageList > 1) {
+
+    if (viewSet.currentPageIndex > 1) {
         if (options.$preOn) {
             this._element.append(options.$preOn);
             this._addTextNode();
@@ -366,11 +370,11 @@ PaginationView.prototype._setPrev = function(viewSet) {
  * @param {Obejct} viewSet
  * @private
  */
-PaginationView.prototype._setNext = function(viewSet) {
+ne.Component.PaginationView.prototype._setNext = function(viewSet) {
 
     var options = this._options;
 
-    if (viewSet.nThisPageList < viewSet.nLastPageList) {
+    if (viewSet.currentPageIndex < viewSet.lastPageIndex) {
         if (options.$nextOn) {
             this._element.append(options.$nextOn);
             this._addTextNode();
@@ -390,11 +394,11 @@ PaginationView.prototype._setNext = function(viewSet) {
  * @param {Object} viewSet
  * @private
  */
-PaginationView.prototype._setLast = function(viewSet) {
+ne.Component.PaginationView.prototype._setLast = function(viewSet) {
 
     var options = this._options;
 
-    if (viewSet.page < viewSet.nLastPage) {
+    if (viewSet.page < viewSet.lastPage) {
         if (options.$lastOn) {
             this._element.append(options.$lastOn);
             this._addTextNode();
@@ -414,7 +418,7 @@ PaginationView.prototype._setLast = function(viewSet) {
  * @param {Object} viewSet
  * @private
  */
-PaginationView.prototype._setPageNumbers = function(viewSet) {
+ne.Component.PaginationView.prototype._setPageNumbers = function(viewSet) {
     var $pageItem,
         firstPage = viewSet.leftPageNumber,
         lastPage = viewSet.rightPageNumber,
@@ -430,10 +434,10 @@ PaginationView.prototype._setPageNumbers = function(viewSet) {
         }
 
         if (i == firstPage) {
-            $pageItem.addClass(this._wrapPrefix(this._options['firstItemClassName']));
+            $pageItem.addClass(this._wrapPrefix(options['firstItemClassName']));
         }
         if (i == lastPage) {
-            $pageItem.addClass(this._wrapPrefix(this._options['lastItemClassName']));
+            $pageItem.addClass(this._wrapPrefix(options['lastItemClassName']));
         }
         this._element.append($pageItem);
 
@@ -452,19 +456,20 @@ PaginationView.prototype._setPageNumbers = function(viewSet) {
  * @returns {*}
  * @private
  */
-PaginationView.prototype._getElement = function(key, isOriginal, isNotUseCache){
+
+ne.Component.PaginationView.prototype._getElement = function(key, isOriginal, isNotUseCache){
 
     var chechedElement = this._cachedElement[key];
 
     if (key) {
         if (!chechedElement || isNotUseCache) {
-            var sSelector = this._elementSelector[key] || '._' + key;
-            this._cachedElement[key] = $(sSelector, this._cachedElement['root']);
+            var selector = this._elementSelector[key] || '._' + key;
+            this._cachedElement[key] = $(selector, this._cachedElement['root']);
         }
-        var vResult = chechedElement;
+        var result = chechedElement;
 
-        if (vResult) {
-            return isOriginal ? (vResult.length > 1 ? vResult.get() : vResult.get(0)) : vResult;
+        if (result) {
+            return isOriginal ? (result.length > 1 ? result.get() : result.get(0)) : result;
         } else {
             return null;
         }
