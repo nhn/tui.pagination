@@ -31,6 +31,11 @@ module.exports = function(config) {
          ]
          */
         files: [
+            'src/lib/jquery-1.11.1.min.js',
+            'src/js/common.js',
+            'src/js/pagination.js',
+            'src/js/paginationview.js',
+            'test/pagingTest.js'
         ],
 
 
