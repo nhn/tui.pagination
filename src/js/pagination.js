@@ -2,11 +2,12 @@
  * @fileoverview 페이지네이션의 뷰를 생성하고, 이벤트를 건다.
  * (pug.Pagination 에서 분리)
  * @author 이제인(jein.yi@nhnent.com)
+ * @dependency jquery-1.11.1.min.js, type.js, CustomEvent.js, defineClass.js
  */
 
 
 var ne = ne || {};
-ne.Component = ne.Component || {};
+ne.component = ne.component || {};
 
 /**
  *
@@ -39,409 +40,308 @@ ne.Component = ne.Component || {};
  * @param {jQueryObject} $element 페이지목록을 생성할 jQuery객체가 랩핑된 엘리먼트
  *
  */
-ne.Component.Pagination = function(options, $element) {
-    // 기본옵션
-    var defaultOption = {
-        itemCount: 10,
-        itemPerPage: 10,
-        pagePerPageList: 10,
-        page: 1,
-        moveUnit: 'pagelist',
-        isCenterAlign: false,
-        insertTextNode: '',
-        classPrefix: '',
-        firstItemClassName: 'first-child',
-        lastItemClassName: 'last-child',
-        pageTemplate: '<a href="#">{=page}</a>',
-        currentPageTemplate: '<strong>{=page}</strong>'
-    };
-
-    /**
-     * 옵션객체
-     * @type {Object}
-     * @private
-     */
-    this._options = $.extend(defaultOption, options);
-    /**
-     * 이벤트 핸들러 저장객체
-     *
-     * @type {Object}
-     * @private
-     */
-    this._eventHandler = {};
-
-    // 뷰 생성
-    /**
-     * 뷰객체
-     * @type {PaginationView}
-     * @private
-     */
-    this._view = new ne.Component.PaginationView(this._options, $element);
-    this._view.attachEvent('click', $.proxy(this._onClickPageList, this));
-    // 페이지 초기화(이동)
-    this.movePageTo(this._getOption('page'), false);
-
-};
-
-
-/**
- * 페이징을 다시 그린다
- *
- * @param {*} itemCount 다시 그릴 페이지의 아이템 갯수
- */
-ne.Component.Pagination.prototype.reset = function(itemCount) {
-
-    var isExist = (itemCount !== null) && (itemCount !== undefined);
-
-    if (!isExist) {
-        itemCount = this._getOption('itemCount');
-    }
-
-    this._setOption('itemCount', itemCount);
-    this.movePageTo(1, false);
-};
-
-/**
- * 옵션값을 가져온다
- *
- * @param {String} optionKey 가져올 옵션 키 값
- * @private
- * @returns {*}
- *
- */
-ne.Component.Pagination.prototype._getOption = function(optionKey) {
-
-    return this._options[optionKey];
-
-};
-
-
-/**
- * 지정한 페이지로 이동하고, 페이지 목록을 다시 그린다
- * 이동하기 전엔 beforeMove라는 커스텀 이벤트를 발생시키고, 이동후에는 afterMove라는 커스텀 이벤터를 발생시킨다.
- *
- * @param {Number} targetPage 이동할 페이지
- * @param {Boolean} isisRunCustomEvent [isisRunCustomEvent=true] 커스텀 이벤트의 발생 여부
- */
-ne.Component.Pagination.prototype.movePageTo = function(targetPage, isRunCustomEvent) {
-
-    isRunCustomEvent = !!(isRunCustomEvent || isRunCustomEvent === undefined);
-
-    targetPage = this._convertToAvailPage(targetPage);
-
-    this._currentPage = targetPage;
-
-    if (isRunCustomEvent) {
-        /**
-         * 페이지 이동이 수행되기 직전에 발생
-         *
-         * @param {ComponentEvent} eventData
-         * @param {String} eventData.eventType 커스텀 이벤트명
-         * @param {Number} eventData.page 이동하게 될 페이지
-         * @param {Function} eventData.stop 페이지 이동을 정지한다
-         * @example
-         * paganation.attach("beforeMove", function(eventData) {
-            // 사용자  클릭의 결과로 이동한 페이지
-            var currentPage = eventData.page;
-         });
-         */
-
-        if (!this.fireEvent('beforeMove', { page: targetPage })) {
-            return;
-        }
-    }
-
-    this._paginate(targetPage);
-
-    if (isRunCustomEvent) {
-        /**
-         * 페이지 이동이 완료된 시점에서 발생
-         *
-         * @param {ComponentEvent} eventData
-         * @param {String} eventData.eventType 커스텀 이벤트명
-         * @param {Number} eventData.page 사용자 클릭의 결과로 이동한 페이지
-         * @example
-         * paganation.attach("beforeMove", function(eventData) {
-            // 사용자  클릭의 결과로 이동한 페이지
-            var currentPage = eventData.page;
-         });
-         */
-        this.fireEvent('afterMove', { page: targetPage });
-    }
-};
-
-
-/**
- * 옵션값을 변경한다
- *
- * @param {String} optionKey 변경할 옵션 키 값
- * @param {*} optionValue 변경할 옵션 값
- * @private
- */
-ne.Component.Pagination.prototype._setOption = function(optionKey, optionValue) {
-
-    this._options[optionKey] = optionValue;
-
-};
-
-/**
- * 현재 페이지를 가져온다
- *
- * @returns {Number} 현재 페이지
- */
-ne.Component.Pagination.prototype.getCurrentPage = function() {
-
-    return this._currentPage || this._options['page'];
-
-};
-
-/**
- * 해당 페이지의 첫번째 아이템이 전체중 몇번째 인지 구한다
- *
- * @param {Number} pageNumber 해당 페이지 번호
- * @returns {number}
- */
-ne.Component.Pagination.prototype.getIndexOfFirstItem = function(pageNumber) {
-
-    return this._getOption('itemPerPage') * (pageNumber - 1) + 1;
-
-};
-
-/**
- * 마지막 페이지 숫자를 구함
- *
- * @returns {number} 마지막 페이지 숫자
- * @private
- */
-ne.Component.Pagination.prototype._getLastPage = function() {
-    return Math.ceil(this._getOption('itemCount') / this._getOption('itemPerPage'));
-
-};
-
-
-/**
- * 몇번째 페이지 리스트인지 구함
- *
- * @param {Number} pageNumber
- * @return {Number} 페이지 리스트 순번
- * @private
- */
-ne.Component.Pagination.prototype._getPageIndex = function(pageNumber) {
-    //현재 페이지 리스트가 중앙에 와야할때
-    if (this._getOption('isCenterAlign')) {
-        var left = Math.floor(this._getOption('pagePerPageList') / 2),
-        pageIndex = pageNumber - left;
-        pageIndex = Math.max(pageIndex, 1);
-        pageIndex = Math.min(pageIndex, this._getLastPage());
-        return pageIndex;
-    }
-    return Math.ceil(pageNumber / this._getOption("pagePerPageList"));
-};
-
-/**
- * 이전, 다음 버튼을 클릭할 때 제공받을 페이지 숫자를 구한다
- *
- * @param {String} relativeName 어떤 영역으로 옮겨갈지 정한다(pre_end, next_end, pre, next)
- * @return {Number} 해당되는 페이지 숫자
- * @private
- *
- */
-ne.Component.Pagination.prototype._getRelativePage = function(relativeName) {
-    var page = null,
-        isMovePage = this._getOption('moveUnit') === 'page',
-        currentPageIndex = this._getPageIndex(this.getCurrentPage());
-    switch (relativeName) {
-        case 'pre_end' :
-            page = 1;
-            break;
-
-        case 'next_end' :
-            page = this._getLastPage();
-            break;
-
-        case 'pre':
-            page = isMovePage ? this.getCurrentPage() - 1 : (currentPageIndex - 1) * this._getOption('pagePerPageList');
-            break;
-
-        case 'next':
-            page = isMovePage ? this.getCurrentPage() + 1 : (currentPageIndex) * this._getOption('pagePerPageList') + 1;
-            break;
-    }
-
-    return page;
-};
-
-/**
- * 페이지 숫자를 받으면 현재 페이지 범위내로 변경하여 반환한다.
- * 예를들어 총 페이지수가 23인데 30이라는 수를 넣으면 23을 반환받는다. 숫자가 1보다 작으면 1을 반환받는다.
- *
- * @param {Number} page
- * @returns {number} 페이지 범위내로 확인된 숫자
- * @private
- */
-ne.Component.Pagination.prototype._convertToAvailPage = function(page) {
-    var lastPageNumber = this._getLastPage();
-    page = Math.max(page, 1);
-    page = Math.min(page, lastPageNumber);
-    return page;
-};
-
-
-/**
- * 페이지를 그리는데 필요한 뷰셋을 만들고, 뷰에 업데이트를 요청한다
- *
- * @param {Number} page
- * @private
- */
-ne.Component.Pagination.prototype._paginate = function(page){
-
-    // 뷰의 버튼 및 페이지를 모두 제거 및 복사
-    this._view.empty();
-
-    var viewSet = {};
-
-    viewSet.lastPage = this._getLastPage();
-    viewSet.currentPageIndex = this._getPageIndex(page);
-    viewSet.lastPageListIndex = this._getPageIndex(viewSet.lastPage);
-    viewSet.page = page;
-
-    this._view.update(viewSet, page);
-};
-
-/**
- * 페이지네이션 이벤트 핸들
- *
- * @param {JQueryEvent} event
- * @private
- */
-ne.Component.Pagination.prototype._onClickPageList = function(event) {
-
-    event.preventDefault();
-
-    var page = null,
-        targetElement = $(event.target),
-        targetPage;
-
-    if (this._view.isIn(targetElement, this._getOption('$pre_endOn'))) {
-        page = this._getRelativePage('pre_end');
-    } else if (this._view.isIn(targetElement, this._getOption('$preOn'))) {
-        page = this._getRelativePage('pre');
-    } else if (this._view.isIn(targetElement, this._getOption('$nextOn'))) {
-        page = this._getRelativePage('next');
-    } else if (this._view.isIn(targetElement, this._getOption('$lastOn'))) {
-        page = this._getRelativePage('next_end');
-    } else {
-
-        targetPage = this._view.getPageElement(targetElement);
-
-        if (targetPage && targetPage.length) {
-            page = parseInt(targetPage.text(), 10);
-        } else {
-            return;
-        }
-    }
-
-    /**
-     페이지 이동을 위한 숫자나 버튼을 클릭했을때 발생
-
-     @param {ComponentEvent} eventData
-     @param {String} eventData.eventType 커스텀 이벤트명
-     @param {Number} eventData.page 클릭해서 이동할 페이지
-     @param {Function} eventData.stop 페이지 이동을 정지한다
-
-     **/
-
-    var isFired = this.fireEvent("click", {"page" : page});
-    if (!isFired) {
-        return;
-    }
-
-    this.movePageTo(page);
-};
-
-/**
- * 커스텀 이벤트를 등록시킨다
- * @param {String|Object} eventType
- * @param {Function} handlerToAttach
- * @returns {ne.Component.Pagination}
- */
-ne.Component.Pagination.prototype.attach = function(eventType, handlerToAttach) {
-    if (arguments.length === 1) {
-        var eventType,
-            handler;
-        for (eventType in arguments[0]) {
-            handler = arguments[0][eventType];
-            this.attach(eventType, handler);
-        }
-        return this;
-    }
-
-    var handlerList = this._eventHandler[eventType];
-    if (typeof handlerList === 'undefined'){
-        handlerList = this._eventHandler[eventType] = [];
-    }
-    handlerList.push(handlerToAttach);
-
-    return this;
-};
-
-
-
-/**
- * 이벤트를 발생시킨다.
- *
- * @param {String} eventType 커스텀 이벤트명
- * @param {Object} eventObject 커스텀 이벤트 핸들러에 전달되는 객체.
- * @return {Boolean} 핸들러의 커스텀 이벤트객체에서 stop메서드가 수행되면 false를 리턴
- */
-ne.Component.Pagination.prototype.fireEvent = function(eventType, eventObject) {
-    eventObject = eventObject || {};
-
-    var inlineHandler = this['on' + eventType],
-        handlerList = this._eventHandler[eventType] || [],
-        hasInlineHandler = $.isFunction(inlineHandler),
-        hasHandlerList = handlerList.length > 0;
-
-    if (!hasInlineHandler && !hasHandlerList) {
-        return true;
-    }
-
-    handlerList = handlerList.concat(); //fireEvent수행시 핸들러 내부에서 detach되어도 최초수행시의 핸들러리스트는 모두 수행하게 하기위한 복사
-    eventObject.eventType = eventType;
-
-    if (!eventObject._aExtend) {
-        eventObject._aExtend = [];
-
-        eventObject.stop = function(){
-            if (eventObject._aExtend.length > 0) {
-                eventObject._aExtend[eventObject._aExtend.length - 1].canceled = true;
-            }
+ne.component.Pagination = ne.defineClass({
+    init: function(options, $element) {
+        // 기본옵션
+        var defaultOption = {
+            itemCount: 10,
+            itemPerPage: 10,
+            pagePerPageList: 10,
+            page: 1,
+            moveUnit: 'pagelist',
+            isCenterAlign: false,
+            insertTextNode: '',
+            classPrefix: '',
+            firstItemClassName: 'first-child',
+            lastItemClassName: 'last-child',
+            pageTemplate: '<a href="#">{=page}</a>',
+            currentPageTemplate: '<strong>{=page}</strong>'
         };
-    }
+        /**
+         * 옵션객체
+         * @type {Object}
+         * @private
+         */
+        this._options = $.extend(defaultOption, options);
+        /**
+         * 이벤트 핸들러 저장객체
+         *
+         * @type {Object}
+         * @private
+         */
+        this._events = {};
 
-    eventObject._aExtend.push({
-        type: eventType,
-        canceled: false
-    });
+        // 뷰 생성
+        /**
+         * 뷰객체
+         * @type {PaginationView}
+         * @private
+         */
+        this._view = new ne.component.Pagination.PaginationView(this._options, $element);
+        this._view.attachEvent('click', $.proxy(this._onClickPageList, this));
+        // 페이지 초기화(이동)
+        this.movePageTo(this._getOption('page'), false);
+    },
+    /**
+     * 페이징을 다시 그린다
+     *
+     * @param {*} itemCount 다시 그릴 페이지의 아이템 갯수
+     */
+    reset: function(itemCount) {
 
-    var argument = [eventObject],
-        i,
-        length;
+        var isExist = (itemCount !== null) && (itemCount !== undefined);
 
-    for (i = 2, length = arguments.length; i < length; i++){
-        argument.push(arguments[i]);
-    }
-
-    if (hasInlineHandler) {
-        inlineHandler.apply(this, argument);
-    }
-
-    if (hasHandlerList) {
-        var handler;
-        for (i = 0; (handler = handlerList[i]); i++) {
-            handler.apply(this, argument);
+        if (!isExist) {
+            itemCount = this._getOption('itemCount');
         }
-    }
 
-    return !eventObject._aExtend.pop().canceled;
-};
+        this._setOption('itemCount', itemCount);
+        this.movePageTo(1, false);
+    },
+    /**
+     * 옵션값을 가져온다
+     *
+     * @param {String} optionKey 가져올 옵션 키 값
+     * @private
+     * @returns {*}
+     *
+     */
+    _getOption: function(optionKey) {
+
+        return this._options[optionKey];
+
+    },
+    /**
+     * 지정한 페이지로 이동하고, 페이지 목록을 다시 그린다
+     * 이동하기 전엔 beforeMove라는 커스텀 이벤트를 발생시키고, 이동후에는 afterMove라는 커스텀 이벤터를 발생시킨다.
+     *
+     * @param {Number} targetPage 이동할 페이지
+     * @param {Boolean} isisRunCustomEvent [isisRunCustomEvent=true] 커스텀 이벤트의 발생 여부
+     */
+    movePageTo: function(targetPage, isRunCustomEvent) {
+
+        isRunCustomEvent = !!(isRunCustomEvent || isRunCustomEvent === undefined);
+
+        targetPage = this._convertToAvailPage(targetPage);
+
+        this._currentPage = targetPage;
+
+        if (isRunCustomEvent) {
+            /**
+             * 페이지 이동이 수행되기 직전에 발생
+             *
+             * @param {componentEvent} eventData
+             * @param {String} eventData.eventType 커스텀 이벤트명
+             * @param {Number} eventData.page 이동하게 될 페이지
+             * @param {Function} eventData.stop 페이지 이동을 정지한다
+             * @example
+             * paganation.on("beforeMove", function(eventData) {
+            // 사용자  클릭의 결과로 이동한 페이지
+            var currentPage = eventData.page;
+         });
+             */
+
+            if (!this.fire('beforeMove', { page: targetPage })) {
+                return;
+            }
+        }
+
+        this._paginate(targetPage);
+
+        if (isRunCustomEvent) {
+            /**
+             * 페이지 이동이 완료된 시점에서 발생
+             *
+             * @param {componentEvent} eventData
+             * @param {String} eventData.eventType 커스텀 이벤트명
+             * @param {Number} eventData.page 사용자 클릭의 결과로 이동한 페이지
+             * @example
+             * paganation.on("beforeMove", function(eventData) {
+            // 사용자  클릭의 결과로 이동한 페이지
+            var currentPage = eventData.page;
+         });
+             */
+            this.fire('afterMove', { page: targetPage });
+        }
+    },
+    /**
+     * 옵션값을 변경한다
+     *
+     * @param {String} optionKey 변경할 옵션 키 값
+     * @param {*} optionValue 변경할 옵션 값
+     * @private
+     */
+    _setOption: function(optionKey, optionValue) {
+
+        this._options[optionKey] = optionValue;
+
+    },
+    /**
+     * 현재 페이지를 가져온다
+     *
+     * @returns {Number} 현재 페이지
+     */
+    getCurrentPage: function() {
+
+        return this._currentPage || this._options['page'];
+
+    },
+    /**
+     * 해당 페이지의 첫번째 아이템이 전체중 몇번째 인지 구한다
+     *
+     * @param {Number} pageNumber 해당 페이지 번호
+     * @returns {number}
+     */
+    getIndexOfFirstItem: function(pageNumber) {
+
+        return this._getOption('itemPerPage') * (pageNumber - 1) + 1;
+
+    },
+    /**
+     * 마지막 페이지 숫자를 구함
+     *
+     * @returns {number} 마지막 페이지 숫자
+     * @private
+     */
+    _getLastPage: function() {
+        return Math.ceil(this._getOption('itemCount') / this._getOption('itemPerPage'));
+
+    },
+    /**
+     * 몇번째 페이지 리스트인지 구함
+     *
+     * @param {Number} pageNumber
+     * @return {Number} 페이지 리스트 순번
+     * @private
+     */
+    _getPageIndex: function(pageNumber) {
+        //현재 페이지 리스트가 중앙에 와야할때
+        if (this._getOption('isCenterAlign')) {
+            var left = Math.floor(this._getOption('pagePerPageList') / 2),
+                pageIndex = pageNumber - left;
+
+            pageIndex = Math.max(pageIndex, 1);
+            pageIndex = Math.min(pageIndex, this._getLastPage());
+            return pageIndex;
+        }
+        return Math.ceil(pageNumber / this._getOption("pagePerPageList"));
+    },
+    /**
+     * 이전, 다음 버튼을 클릭할 때 제공받을 페이지 숫자를 구한다
+     *
+     * @param {String} relativeName 어떤 영역으로 옮겨갈지 정한다(pre_end, next_end, pre, next)
+     * @return {Number} 해당되는 페이지 숫자
+     * @private
+     *
+     */
+    _getRelativePage: function(relativeName) {
+        var page = null,
+            isMovePage = this._getOption('moveUnit') === 'page',
+            currentPageIndex = this._getPageIndex(this.getCurrentPage());
+        switch (relativeName) {
+            case 'pre_end' :
+                page = 1;
+                break;
+
+            case 'next_end' :
+                page = this._getLastPage();
+                break;
+
+            case 'pre':
+                page = isMovePage ? this.getCurrentPage() - 1 : (currentPageIndex - 1) * this._getOption('pagePerPageList');
+                break;
+
+            case 'next':
+                page = isMovePage ? this.getCurrentPage() + 1 : (currentPageIndex) * this._getOption('pagePerPageList') + 1;
+                break;
+        }
+
+        return page;
+    },
+    /**
+     * 페이지 숫자를 받으면 현재 페이지 범위내로 변경하여 반환한다.
+     * 예를들어 총 페이지수가 23인데 30이라는 수를 넣으면 23을 반환받는다. 숫자가 1보다 작으면 1을 반환받는다.
+     *
+     * @param {Number} page
+     * @returns {number} 페이지 범위내로 확인된 숫자
+     * @private
+     */
+    _convertToAvailPage: function(page) {
+        var lastPageNumber = this._getLastPage();
+        page = Math.max(page, 1);
+        page = Math.min(page, lastPageNumber);
+        return page;
+    },
+    /**
+     * 페이지를 그리는데 필요한 뷰셋을 만들고, 뷰에 업데이트를 요청한다
+     *
+     * @param {Number} page
+     * @private
+     */
+    _paginate: function(page){
+
+        // 뷰의 버튼 및 페이지를 모두 제거 및 복사
+        this._view.empty();
+
+        var viewSet = {};
+
+        viewSet.lastPage = this._getLastPage();
+        viewSet.currentPageIndex = this._getPageIndex(page);
+        viewSet.lastPageListIndex = this._getPageIndex(viewSet.lastPage);
+        viewSet.page = page;
+
+        this._view.update(viewSet, page);
+    },
+    /**
+     * 페이지네이션 이벤트 핸들
+     *
+     * @param {JQueryEvent} event
+     * @private
+     */
+    _onClickPageList: function(event) {
+
+        event.preventDefault();
+
+        var page = null,
+            targetElement = $(event.target),
+            targetPage;
+
+        if (this._view.isIn(targetElement, this._getOption('$pre_endOn'))) {
+            page = this._getRelativePage('pre_end');
+        } else if (this._view.isIn(targetElement, this._getOption('$preOn'))) {
+            page = this._getRelativePage('pre');
+        } else if (this._view.isIn(targetElement, this._getOption('$nextOn'))) {
+            page = this._getRelativePage('next');
+        } else if (this._view.isIn(targetElement, this._getOption('$lastOn'))) {
+            page = this._getRelativePage('next_end');
+        } else {
+
+            targetPage = this._view.getPageElement(targetElement);
+
+            if (targetPage && targetPage.length) {
+                page = parseInt(targetPage.text(), 10);
+            } else {
+                return;
+            }
+        }
+
+        /**
+         페이지 이동을 위한 숫자나 버튼을 클릭했을때 발생
+
+         @param {componentEvent} eventData
+         @param {String} eventData.eventType 커스텀 이벤트명
+         @param {Number} eventData.page 클릭해서 이동할 페이지
+         @param {Function} eventData.stop 페이지 이동을 정지한다
+
+         **/
+
+        var isFired = this.fire("click", {"page" : page});
+        if (!isFired) {
+            return;
+        }
+
+        this.movePageTo(page);
+    }
+});
+// 커스텀 이벤트 믹스인
+ne.CustomEvents.mixin(ne.component.Pagination);

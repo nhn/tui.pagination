@@ -1,9 +1,9 @@
 describe('페이징 객체의 동작을 테스트', function() {
     // 객체 생성
-    var pagination = new ne.Component.Pagination({
+    var pagination = new ne.component.Pagination({
     }, $('.paginate1'));
 
-    var paginationOption = new ne.Component.Pagination({
+    var paginationOption = new ne.component.Pagination({
         itemCount: 500,
         itemPerPage: 15,
         pagePerPageList: 20,
