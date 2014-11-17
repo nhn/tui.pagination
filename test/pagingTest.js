@@ -137,7 +137,7 @@ describe('페이징 객체의 동작을 테스트', function() {
         expect(itemCount).toBe(100);
     });
 
-    describe('커스텀 이벤트를 등록하고 이벤트가 동작하는 지 확인한다.', function() {
+    it('커스텀 이벤트를 등록하고 이벤트가 동작하는 지 확인한다.', function() {
 
         var isBeforeMoveFire1 = false,
             isAfterMoveFire1 = false,
