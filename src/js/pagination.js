@@ -5,9 +5,14 @@
  * @dependency jquery-1.11.1.min.js, type.js, CustomEvent.js, defineClass.js
  */
 
-
-var ne = ne || {};
-ne.component = ne.component || {};
+/* istanbul ignore if */
+if (!ne) {
+    ne = {};
+}
+/* istanbul ignore if */
+if (!ne.component) {
+    ne.component = {};
+}
 
 /**
  *
