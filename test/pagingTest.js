@@ -143,21 +143,20 @@ describe('페이징 객체의 동작을 테스트', function() {
             isAfterMoveFire1 = false,
             page;
 
-        paginationOption.attach('beforeMove', function() {
+        paginationOption.on('beforeMove', function() {
             isBeforeMoveFire1 = true;
-        }).attach('afterMove', function() {
+        });
+        paginationOption.on('afterMove', function() {
             isAfterMoveFire1 = true;
-            check();
         });
 
-        function check() {
-            paginationOption.movePageTo(3, true);
-            page = paginationOption.getCurrentPage();
+        paginationOption.movePageTo(3, true);
+        page = paginationOption.getCurrentPage();
 
-            expect(page).toBe(3);
-            expect(isBeforeMoveFire1).truthy();
-            expect(isAfterMoveFire1).truthy();
-        }
+        expect(page).toBe(3);
+        expect(isBeforeMoveFire1).toBeTruthy();
+        expect(isAfterMoveFire1).toBeTruthy();
+
     });
 
 });
