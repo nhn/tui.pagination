@@ -1,27 +1,38 @@
 describe('페이징 객체의 동작을 테스트', function() {
     // 객체 생성
-    var pagination = new ne.component.Pagination({
-    }, $('.paginate1'));
 
-    var paginationOption = new ne.component.Pagination({
-        itemCount: 500,
-        itemPerPage: 15,
-        pagePerPageList: 20,
-        page: 15,
-        moveUnit: 'page',
-        isCenterAlign: true,
-        insertTextNode: 'P',
-        classPrefix: 'paging',
-        firstItemClassName: 'left-child',
-        lastItemClassName: 'right-child',
-        pageTemplate: '<a href="#">{=page}Num</a>',
-        currentPageTemplate: '<strong>{=page}Sel</strong>'
-    }, $('.paginate2'));
+    jasmine.getFixtures().fixturesPath = "base/";
 
-    it('생성된 객체들이 옵션에 맞게 생성되었는지 확인', function() {
+    beforeEach(function() {
+        loadFixtures("test/fixture/pageview.html");
+    });
 
-        // pagination
+
+    var pagination,
+        paginationOption;
+
+    it('생성', function() {
+        pagination = new ne.component.Pagination({
+        }, $('.paginate3'));
+
+        paginationOption = new ne.component.Pagination({
+            itemCount: 500,
+            itemPerPage: 10,
+            pagePerPageList: 20,
+            page: 15,
+            moveUnit: 'page',
+            isCenterAlign: true,
+            classPrefix: 'paging-',
+            firstItemClassName: 'left-child',
+            lastItemClassName: 'right-child',
+            pageTemplate: '<a href="#">{=page}Num</a>',
+            currentPageTemplate: '<strong>{=page}Sel</strong>'
+        }, $('.paginate4'));
+
         expect(pagination).toBeDefined();
+        expect(paginationOption).toBeDefined();
+    });
+    it('생성된 객체들이 옵션에 맞게 생성되었는지 확인', function() {
 
         var itemCount = pagination._getOption('itemCount'),
             itemPerPage = pagination._getOption('itemPerPage'),
@@ -62,16 +73,13 @@ describe('페이징 객체의 동작을 테스트', function() {
         pageTemplate = paginationOption._getOption('pageTemplate');
         currentPageTeplate = paginationOption._getOption('currentPageTemplate');
 
-        expect(paginationOption).toBeDefined();
-
         expect(itemCount).toBe(500);
-        expect(itemPerPage).toBe(15);
+        expect(itemPerPage).toBe(10);
         expect(pagePerPageList).toBe(20);
         expect(page).toBe(15);
         expect(moveUnit).toBe('page');
         expect(isCenterAlign).toBe(true);
-        expect(insertTextNode).toBe('P');
-        expect(classPrefix).toBe('paging');
+        expect(classPrefix).toBe('paging-');
         expect(firstItemClass).toBe('left-child');
         expect(lastItemClass).toBe('right-child');
         expect(pageTemplate).toBe('<a href="#">{=page}Num</a>');
@@ -101,6 +109,24 @@ describe('페이징 객체의 동작을 테스트', function() {
         expect(page).toBe(1);
     });
 
+    it('getIndexOf first Item', function() {
+        var page = pagination.getIndexOfFirstItem(2);
+        expect(page).toBe(11);
+    });
+
+    it('getRelativePage, 연관 페이지', function() {
+        var result,
+            po = paginationOption;
+        result = po._getRelativePage('pre_end');
+        expect(result).toBe(1);
+        result = po._getRelativePage('next_end');
+        expect(result).toBe(50);
+        result = po._getRelativePage('pre');
+        expect(result).toBe(14);
+        result = po._getRelativePage('next');
+        expect(result).toBe(16);
+    });
+
     it('페이지 이동하고 현재페이지 체크', function() {
         pagination.movePageTo(1);
         var page1 = pagination.getCurrentPage();
@@ -123,6 +149,38 @@ describe('페이징 객체의 동작을 테스트', function() {
         expect(page4).toBe(4);
         expect(page5).toBe(10);
         expect(page6).toBe(lastPage);
+    });
+
+    it('페이지 이전, 다음, 마지막, 처음', function() {
+        var event,
+            currentPage1,
+            currentPage2,
+            currentPage3,
+            currentPage4,
+            po = paginationOption;
+        po._element = $('.paginate4');
+
+        po._options.$pre_endOn = $('.paginate4 a.paging-pre-end');
+        po._options.$preOn = $('.paginate4 a.paging-next');
+        po._options.$nextOn = $('.paginate4 a.paging-next-end');
+        po._options.$lastOn = $('.paginate4 a.paging-pre');
+
+        event = jQuery.Event('click', {target: $('.paginate4 .paging-pre-end')});
+        po._onClickPageList(event);
+        currentPage1 = po.getCurrentPage();
+        event = jQuery.Event('click', {target: $('.paginate4 .paging-next')});
+        po._onClickPageList(event);
+        currentPage2 = po.getCurrentPage();
+        event = jQuery.Event('click', {target: $('.paginate4 .paging-next-end')});
+        po._onClickPageList(event);
+        currentPage3 = po.getCurrentPage();
+        event = jQuery.Event('click', {target: $('.paginate4 .paging-pre')});
+        po._onClickPageList(event);
+        currentPage4 = po.getCurrentPage();
+        expect(currentPage1).toBe(1);
+        expect(currentPage2).toBe(1);
+        expect(currentPage3).toBe(2);
+        expect(currentPage4).toBe(50);
     });
 
     it('페이징을 다시그린다.', function() {
@@ -158,5 +216,6 @@ describe('페이징 객체의 동작을 테스트', function() {
         expect(isAfterMoveFire1).toBeTruthy();
 
     });
+
 
 });

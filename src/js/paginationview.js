@@ -46,6 +46,13 @@ ne.component.Pagination.PaginationView = ne.defineClass({
          * @private
          */
         this._eventData = {};
+        /**
+         * 페이지 아이템 리스트
+         *
+         * @type {Array}
+         * @private
+         */
+        this._pageItemList = [];
 
         $.extend(options, {
             $pre_endOn: options['$pre_endOn'] || $('a.' + this._wrapPrefix('pre_end'), this._element),
@@ -57,7 +64,6 @@ ne.component.Pagination.PaginationView = ne.defineClass({
             $nextOff: options['$nextOff'] || $('span.' + this._wrapPrefix('next'), this._element),
             $lastOff: options['$lastOff'] || $('span.' + this._wrapPrefix('next_end'), this._element)
         });
-
         this._element.addClass(this._wrapPrefix('loaded'));
     },
     /**
@@ -408,7 +414,6 @@ ne.component.Pagination.PaginationView = ne.defineClass({
                 $pageItem.addClass(this._wrapPrefix(options['lastItemClassName']));
             }
             this._element.append($pageItem);
-
             this._addTextNode();
         }
     }

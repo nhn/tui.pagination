@@ -82,7 +82,7 @@ ne.component.Pagination = ne.defineClass({
          * @type {PaginationView}
          * @private
          */
-        this._view = new ne.component.Pagination.PaginationView(this._options, $element);
+        this._view = new ne.component.Pagination.PaginationView(options, $element);
         this._view.attachEvent('click', $.proxy(this._onClickPageList, this));
         // 페이지 초기화(이동)
         this.movePageTo(this._getOption('page'), false);
@@ -141,9 +141,9 @@ ne.component.Pagination = ne.defineClass({
              * @param {Function} eventData.stop 페이지 이동을 정지한다
              * @example
              * paganation.on("beforeMove", function(eventData) {
-            // 사용자  클릭의 결과로 이동한 페이지
-            var currentPage = eventData.page;
-         });
+                // 사용자  클릭의 결과로 이동한 페이지
+                var currentPage = eventData.page;
+             });
              */
 
             if (!this.fire('beforeMove', { page: targetPage })) {
