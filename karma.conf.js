@@ -1,3 +1,5 @@
+// Karma configuration
+// Generated on Thu Nov 06 2014 20:12:47 GMT+0900 (JST)
 module.exports = function(config) {
     var webdriverConfig = {
         hostname: 'fe.nhnent.com',
@@ -8,42 +10,28 @@ module.exports = function(config) {
     config.set({
 
         // base path that will be used to resolve all patterns (eg. files, exclude)
-        // karma runner 의 웹 서버 root를 변경할 수 있음
-        basePath: '',
+        basePath: './',
 
 
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['jasmine'],
 
-
-        /*
-         karma runner 의 웹 서버에 포함될 파일들을 적어주세요.
-
-         included: false 가 아닌 항목은 전부 자동으로 테스트 페이지에 include 됩니다.
-
-         테스트 코드 파일들은 전부 포함되어야 합니다.
-         files: [
-            'lib/jquery/jquery.js', // JS 추가
-            'src/css/test.css',     // CSS 추가
-            { pattern: 'test/app/model/*.test.js', included: false }    // 웹서버에 포함은 하지만 테스트 페이지에 include안함
-            { pattern: 'test/fixtures/*.html', included: false }        // 웹서버에 올라가지만 jasmine.loadFixture 로 쓸것이므로 include안함.
-         ]
-         */
+        // list of files / patterns to load in the browser
         files: [
-            'src/lib/jquery-1.11.1.min.js',
+            'bower_components/jquery/jquery.js',
+            'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
             'src/js/common.js',
             'src/js/pagination.js',
             'src/js/paginationview.js',
-            'test/pagingTest.js'
+            'test/**/*Test.js',
+            {
+                pattern: 'test/fixture/**/*.html',
+                included: false
+            }
         ],
 
-
-        /*
-         무시할 파일들
-
-         특정 테스트를 제외하고 수행할 때 유용합니다.
-         */
+        // list of files to exclude
         exclude: [
         ],
 
@@ -90,12 +78,6 @@ module.exports = function(config) {
             'Firefox-WebDriver'
         ],
 
-
-        /*
-         사용가능한 테스트 브라우저 목록
-
-         추가를 원하시면 말씀주세요
-         */
         customLaunchers: {
             'IE7': {
                 base: 'WebDriver',
@@ -134,9 +116,9 @@ module.exports = function(config) {
             }
         },
 
-
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
         singleRun: true
     });
 };
+
