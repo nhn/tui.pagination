@@ -4,12 +4,12 @@
  * @author 이제인(jein.yi@nhnent.com)
  */
 /**
- * @constructor
+ * @constructor ne.component.Pagination.PaginationView
  * @param {Object} options 옵션 객체
  * @param {Object} $element 루트 엘리먼트
  *
  */
-ne.component.Pagination.PaginationView = ne.defineClass({
+ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.component.Pagination.PaginationView.prototype */{
     init: function(options, $element) {
         /**
          * 페이지네이션의 루트 엘리먼트

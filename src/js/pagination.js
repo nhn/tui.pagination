@@ -5,18 +5,15 @@
  * @dependency jquery-1.11.1.min.js, type.js, CustomEvent.js, defineClass.js
  */
 
-/* istanbul ignore if */
-if (!ne) {
-    ne = {};
-}
-/* istanbul ignore if */
+
+/* istanbul ignore next */
 if (!ne.component) {
     ne.component = {};
 }
 
 /**
  *
- * @constructor
+ * @constructor ne.component.Pagination
  * @param {DataObject} options 옵션 객체
  * 		@param {Number} [options.itemCount=10] 리스트의 전체 아이템 개수
  * 		@param {Number} [options.itemPerPage=10] 한 페이지에 표시 될 아이템의 개수를 정의한다.
@@ -45,7 +42,7 @@ if (!ne.component) {
  * @param {jQueryObject} $element 페이지목록을 생성할 jQuery객체가 랩핑된 엘리먼트
  *
  */
-ne.component.Pagination = ne.defineClass({
+ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.prototype */{
     init: function(options, $element) {
         // 기본옵션
         var defaultOption = {
@@ -82,7 +79,7 @@ ne.component.Pagination = ne.defineClass({
          * @type {PaginationView}
          * @private
          */
-        this._view = new ne.component.Pagination.PaginationView(options, $element);
+        this._view = new ne.component.Pagination.PaginationView(this._options, $element);
         this._view.attachEvent('click', $.proxy(this._onClickPageList, this));
         // 페이지 초기화(이동)
         this.movePageTo(this._getOption('page'), false);
@@ -94,7 +91,7 @@ ne.component.Pagination = ne.defineClass({
      */
     reset: function(itemCount) {
 
-        var isExist = (itemCount !== null) && (itemCount !== undefined);
+        var isExist = ne.util.isExisty((itemCount !== null) && (itemCount !== undefined));
 
         if (!isExist) {
             itemCount = this._getOption('itemCount');
@@ -146,7 +143,7 @@ ne.component.Pagination = ne.defineClass({
              });
              */
 
-            if (!this.fire('beforeMove', { page: targetPage })) {
+            if (!this.invoke('beforeMove', { page: targetPage })) {
                 return;
             }
         }
@@ -349,4 +346,4 @@ ne.component.Pagination = ne.defineClass({
     }
 });
 // 커스텀 이벤트 믹스인
-ne.CustomEvents.mixin(ne.component.Pagination);
+ne.util.CustomEvents.mixin(ne.component.Pagination);

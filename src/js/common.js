@@ -1,13 +1,16 @@
 /**
  * @fileoverview 클래스와 비슷한방식으로 생성자를 만들고 상속을 구현할 수 있는 메소드를 제공하는 모듈
  * @author FE개발팀
- * @dependency inheritance.js, object.js type.js
+ * @dependency inheritance.js, object.js
  */
 
 (function(ne) {
     'use strict';
     if (!ne) {
         ne = window.ne = {};
+    }
+    if (!ne.util) {
+        ne.util = window.ne.util = {};
     }
 
     /**
@@ -61,24 +64,25 @@
 
         obj = props.init || function(){};
 
-        parent && ne.inherit(obj, parent);
+        parent && ne.util.inherit(obj, parent);
 
         if (props.hasOwnProperty('static')) {
-            ne.extend(obj, props.static);
+            ne.util.extend(obj, props.static);
             delete props.static;
         }
 
-        ne.extend(obj.prototype, props);
+        ne.util.extend(obj.prototype, props);
 
         return obj;
     };
 
-    ne.defineClass = defineClass;
+    ne.util.defineClass = defineClass;
 
 })(window.ne);
 /**
  * @fileoverview 옵저버 패턴을 이용하여 객체 간 커스텀 이벤트를 전달할 수 있는 기능을 제공하는 모듈
  * @author FE개발팀
+ * @dependency type.js, collection.js object.js
  */
 
 (function(ne) {
@@ -86,6 +90,9 @@
     /* istanbul ignore if */
     if (!ne) {
         ne = window.ne = {};
+    }
+    if (!ne.util) {
+        ne.util = window.ne.util = {};
     }
 
     /**
@@ -150,7 +157,7 @@
          * instance.off();
          */
         off: function(types, fn, context) {
-            if (!ne.isDefined(types)) {
+            if (!ne.util.isExisty(types)) {
                 this._events = null;
                 return;
             }
@@ -171,14 +178,14 @@
             var methodName = isOn ? '_on' : '_off',
                 method = this[methodName];
 
-            if (ne.isObject(types)) {
-                ne.forEachOwnProperties(types, function(handler, type) {
+            if (ne.util.isObject(types)) {
+                ne.util.forEachOwnProperties(types, function(handler, type) {
                     method.call(this, type, handler, fn);
                 }, this);
             } else {
                 types = types.split(' ');
 
-                ne.forEach(types, function(type) {
+                ne.util.forEach(types, function(type) {
                     method.call(this, type, fn, context);
                 }, this);
             }
@@ -202,7 +209,7 @@
          */
         _on: function(type, fn, context) {
             var events = this._events = this._events || {},
-                contextId = context && (context !== this) && ne.stamp(context);
+                contextId = context && (context !== this) && ne.util.stamp(context);
 
             if (contextId) {
                 /*
@@ -213,7 +220,7 @@
                 var indexKey = type + '_idx',
                     indexLenKey = type + '_len',
                     typeIndex = events[indexKey] = events[indexKey] || {},
-                    id = ne.stamp(fn) + '_' + contextId; // 핸들러의 id + context의 id
+                    id = ne.util.stamp(fn) + '_' + contextId; // 핸들러의 id + context의 id
 
                 if (!typeIndex[id]) {
                     typeIndex[id] = {
@@ -247,31 +254,93 @@
                 return;
             }
 
-            var contextId = context && (context !== this) && ne.stamp(context),
+            var contextId = context && (context !== this) && ne.util.stamp(context),
                 listeners,
                 id;
 
             if (contextId) {
-                id = ne.stamp(fn) + '_' + contextId;
+                id = ne.util.stamp(fn) + '_' + contextId;
                 listeners = events[indexKey];
 
                 if (listeners && listeners[id]) {
                     listeners[id] = null;
-                    events[indexLenKey]--;
+                    events[indexLenKey] -= 1;
                 }
 
             } else {
                 listeners = events[type];
 
                 if (listeners) {
-                    ne.forEach(listeners, function(listener, arr, index) {
-                        if (ne.isDefined(listener) && (listener.fn === fn)) {
+                    ne.util.forEach(listeners, function(listener, index) {
+                        if (ne.util.isExisty(listener) && (listener.fn === fn)) {
                             listeners.splice(index, 1);
                             return true;
                         }
                     });
                 }
             }
+        },
+
+        /**
+         * 이벤트를 발생시키는 메서드
+         *
+         * 등록한 리스너들의 실행 결과를 boolean AND 연산하여
+         *
+         * 반환한다는 점에서 {@link CustomEvents#fire} 와 차이가 있다
+         *
+         * 보통 컴포넌트 레벨에서 before 이벤트로 사용자에게
+         *
+         * 이벤트를 취소할 수 있게 해 주는 기능에서 사용한다.
+         * @param {string} type
+         * @param {object} data
+         * @returns {*}
+         * @example
+         * // 확대 기능을 지원하는 컴포넌트 내부 코드라 가정
+         * if (this.invoke('beforeZoom')) {    // 사용자가 등록한 리스너 결과 체크
+         *     // 리스너의 실행결과가 true 일 경우
+         *     // doSomething
+         * }
+         *
+         * //
+         * // 아래는 사용자의 서비스 코드
+         * map.on({
+         *     'beforeZoom': function() {
+         *         if (that.disabled && this.getState()) {    //서비스 페이지에서 어떤 조건에 의해 이벤트를 취소해야한다
+         *             return false;
+         *         }
+         *         return true;
+         *     }
+         * });
+         */
+        invoke: function(type, data) {
+            if (!this.hasListener(type)) {
+                return this;
+            }
+
+            var event = ne.util.extend({}, data, {type: type, target: this}),
+                events = this._events;
+
+            if (!events) {
+                return;
+            }
+
+            var typeIndex = events[type + '_idx'],
+                listeners,
+                result = true;
+
+            if (events[type]) {
+                listeners = events[type].slice();
+
+                ne.util.forEach(listeners, function(listener) {
+                    result = result && !!listener.fn.call(this, event);
+                }, this);
+            }
+
+            ne.util.forEachOwnProperties(typeIndex, function(eventItem) {
+                result = result && !!eventItem.fn.call(eventItem.ctx, event);
+            });
+
+            return ne.util.isBoolean(result) ? result : false;
         },
 
         /**
@@ -288,32 +357,7 @@
          * });
          */
         fire: function(type, data) {
-            if (!this.hasListener(type)) {
-                return this;
-            }
-
-            var event = ne.extend({}, data, {type: type, target: this}),
-                events = this._events;
-
-            if (!events) {
-                return;
-            }
-
-            var typeIndex = events[type + '_idx'],
-                listeners;
-
-            if (events[type]) {
-                listeners = events[type].slice();
-
-                ne.forEach(listeners, function(listener) {
-                    listener.fn.call(this, event);
-                }, this);
-            }
-
-            ne.forEachOwnProperties(typeIndex, function(eventItem) {
-                eventItem.fn.call(eventItem.ctx, event);
-            });
-
+            this.invoke(type, data);
             return this;
         },
 
@@ -324,9 +368,34 @@
          */
         hasListener: function(type) {
             var events = this._events,
-                isDefineMethod = ne.isDefined;
+                existyFunc = ne.util.isExisty;
 
-            return isDefineMethod(events) && (isDefineMethod(events[type]) || events[type + '_len']);
+            return existyFunc(events) && (existyFunc(events[type]) || events[type + '_len']);
+        },
+
+        /**
+         * 등록된 이벤트 핸들러의 갯수 반환
+         * @param {string} type
+         * @returns {number}
+         */
+        getListenerLength: function(type) {
+            var events = this._events,
+                lenKey = type + '_len',
+                length = 0,
+                types,
+                len;
+
+            if (!ne.util.isExisty(events)) {
+                return 0;
+            }
+
+            types = events[type];
+            len = events[lenKey];
+
+            length += (ne.util.isExisty(types) && ne.util.isArray(types)) ? types.length : 0;
+            length += ne.util.isExisty(len) ? len : 0;
+
+            return length;
         },
 
         /**
@@ -338,9 +407,9 @@
         once: function(types, fn, context) {
             var that = this;
 
-            if (ne.isObject(types)) {
-                ne.forEachOwnProperties(types, function(type) {
-                    this.once(type, types[type], fn)
+            if (ne.util.isObject(types)) {
+                ne.util.forEachOwnProperties(types, function(type) {
+                    this.once(type, types[type], fn);
                 }, this);
 
                 return;
@@ -368,83 +437,17 @@
      * function Model() {}
      *
      * // 커스텀 이벤트 믹스인
-     * ne.CustomEvents.mixin(Model);
+     * ne.util.CustomEvents.mixin(Model);
      *
      * var model = new Model();
      *
      * model.on('changed', function() {}, this);
      */
     CustomEvents.mixin = function(func) {
-        ne.extend(func.prototype, CustomEventMethod);
+        ne.util.extend(func.prototype, CustomEventMethod);
     };
 
-    ne.CustomEvents = CustomEvents;
-
-})(window.ne);
-/**
- * @fileoverview 간단한 상속 시뮬레이션
- * @author FE개발팀
- */
-
-(function(ne) {
-    'use strict';
-    /* istanbul ignore if */
-    if (!ne) {
-        ne = window.ne = {};
-    }
-
-    /**
-     * 전달된 객체를 prototype으로 사용하는 객체를 만들어 반환하는 메서드
-     * @param {Object} obj
-     * @return {Object}
-     */
-    function createObject(){
-        function F() {}
-
-        return function(obj) {
-            F.prototype = obj;
-            return new F;
-        };
-    }
-
-    /**
-     * 단순 prototype 확장을 응용한 상속 메서드
-     *
-     * **주의점**
-     *
-     * 단순 프로토타입 확장 기능만 제공하므로 자식 생성자의 prototype을 덮어쓰면 안된다.
-     *
-     * @example
-     * function Animal(leg) {
-     *     this.leg = leg;
-     * }
-     *
-     * Animal.prototype.growl = function() {
-     *     // ...
-     * };
-     *
-     * function Person(name) {
-     *     this.name = name;
-     * }
-     *
-     * // 상속
-     * core.inherit(Person, Animal);
-     *
-     * // 이 이후부터는 프로퍼티 편집만으로 확장해야 한다.
-     * Person.prototype.walk = function(direction) {
-     *     // ...
-     * };
-     * @param {function} subType 자식 생성자 함수
-     * @param {function} superType 부모 생성자 함수
-     */
-    function inherit(subType, superType) {
-        var prototype = ne.createObject(superType.prototype);
-        prototype.constructor = subType;
-        subType.prototype = prototype;
-    }
-
-    ne.createObject = createObject();
-    ne.inherit = inherit;
+    ne.util.CustomEvents = CustomEvents;
 
 })(window.ne);
 /**
@@ -457,6 +460,9 @@
     /* istanbul ignore if */
     if (!ne) {
         ne = window.ne = {};
+    }
+    if (!ne.util) {
+        ne.util = window.ne.util = {};
     }
 
     /**
@@ -502,9 +508,97 @@
         lastId = 0;
     }
 
-    ne.extend = extend;
-    ne.stamp = stamp;
-    ne._resetLastId = resetLastId;
+    /**
+     * 객체를 전달받아 객체의 키목록을 배열로만들어 리턴해준다.
+     * @param obj
+     * @returns {Array}
+     */
+    var keys = function(obj) {
+        var keys = [],
+            key;
+
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                keys.push(key);
+            }
+        }
+
+        return keys;
+    };
+
+    ne.util.extend = extend;
+    ne.util.stamp = stamp;
+    ne.util._resetLastId = resetLastId;
+    ne.util.keys = Object.keys || keys;
+
+})(window.ne);
+/**
+ * @fileoverview 간단한 상속 시뮬레이션
+ * @author FE개발팀
+ */
+
+(function(ne) {
+    'use strict';
+    /* istanbul ignore if */
+    if (!ne) {
+        ne = window.ne = {};
+    }
+    if (!ne.util) {
+        ne.util = window.ne.util = {};
+    }
+
+    /**
+     * 전달된 객체를 prototype으로 사용하는 객체를 만들어 반환하는 메서드
+     * @param {Object} obj
+     * @return {Object}
+     */
+    function createObject() {
+        function F() {}
+
+        return function(obj) {
+            F.prototype = obj;
+            return new F;
+        };
+    }
+
+    /**
+     * 단순 prototype 확장을 응용한 상속 메서드
+     *
+     * **주의점**
+     *
+     * 단순 프로토타입 확장 기능만 제공하므로 자식 생성자의 prototype을 덮어쓰면 안된다.
+     *
+     * @example
+     * function Animal(leg) {
+     *     this.leg = leg;
+     * }
+     *
+     * Animal.prototype.growl = function() {
+     *     // ...
+     * };
+     *
+     * function Person(name) {
+     *     this.name = name;
+     * }
+     *
+     * // 상속
+     * core.inherit(Person, Animal);
+     *
+     * // 이 이후부터는 프로퍼티 편집만으로 확장해야 한다.
+     * Person.prototype.walk = function(direction) {
+     *     // ...
+     * };
+     * @param {function} subType 자식 생성자 함수
+     * @param {function} superType 부모 생성자 함수
+     */
+    function inherit(subType, superType) {
+        var prototype = ne.util.createObject(superType.prototype);
+        prototype.constructor = subType;
+        subType.prototype = prototype;
+    }
+
+    ne.util.createObject = createObject();
+    ne.util.inherit = inherit;
 
 })(window.ne);
 /**
@@ -518,18 +612,108 @@
     if (!ne) {
         ne = window.ne = {};
     }
+    if (!ne.util) {
+        ne.util = window.ne.util = {};
+    }
 
     /**
-     * 인자가 null 또는 undefined가 아닌지 확인하는 메서드
+     * 값이 정의되어 있는지 확인(null과 undefined가 아니면 true를 반환한다)
+     * @param {*} obj
+     * @param {(String|Array)} [key]
+     * @returns {boolean}
+     * @example
+     *
+     * var obj = {a: {b: {c: 1}}};
+     * a 가 존재하는지 확인한다(존재함, true반환)
+     * ne.util.isExisty(a);
+     * => true;
+     * a 에 속성 b 가 존재하는지 확인한다.(존재함, true반환)
+     * ne.util.isExisty(a, 'b');
+     * => true;
+     * a 의 속성 b에 c가 존재하는지 확인한다.(존재함, true반환)
+     * ne.util.isExisty(a, 'b.c');
+     * => true;
+     * a 의 속성 b에 d가 존재하는지 확인한다.(존재하지 않음, false반환)
+     * ne.util.isExisty(a, 'b.d');
+     * => false;
+     */
+    function isExisty(obj, key) {
+        if (arguments.length < 2) {
+            return !isNull(obj) && !isUndefined(obj);
+        }
+        if (!isObject(obj)) {
+            return false;
+        }
+
+        key = isString(key) ? key.split('.') : key;
+
+        if (!isArray(key)) {
+            return false;
+        }
+        key.unshift(obj);
+
+        var res = ne.util.reduce(key, function(acc, a) {
+            if (!acc) {
+                return;
+            }
+            return acc[a];
+        });
+        return !isNull(res) && !isUndefined(res);
+    }
+
+    /**
+     * 인자가 undefiend 인지 체크하는 메서드
+     * @param obj
+     * @returns {boolean}
+     */
+    function isUndefined(obj) {
+        return obj === undefined;
+    }
+
+    /**
+     * 인자가 null 인지 체크하는 메서드
+     * @param {*} obj
+     * @returns {boolean}
+     */
+    function isNull(obj) {
+        return obj === null;
+    }
+
+    /**
+     * 인자가 null, undefined, false가 아닌지 확인하는 메서드
+     * (0도 true로 간주한다)
+     *
      * @param {*} obj
      * @return {boolean}
      */
-    function isDefined(obj) {
-        return obj !== null && obj !== undefined;
+    function isTruthy(obj) {
+        return isExisty(obj) && obj !== false;
+    }
+
+    /**
+     * 인자가 null, undefined, false인지 확인하는 메서드
+     * (truthy의 반대값)
+     * @param {*} obj
+     * @return {boolean}
+     */
+    function isFalsy(obj) {
+        return !isTruthy(obj);
     }
 
 
     var toString = Object.prototype.toString;
+
+    /**
+     * 인자가 arguments 객체인지 확인
+     * @param {*} obj
+     * @return {boolean}
+     */
+    function isArguments(obj) {
+        var result = isExisty(obj) &&
+            ((toString.call(obj) === '[object Arguments]') || 'callee' in obj);
+
+        return result;
+    }
 
     /**
      * 인자가 배열인지 확인
@@ -549,9 +733,120 @@
         return obj === Object(obj);
     }
 
-    ne.isDefined = isDefined;
-    ne.isArray = Array.isArray || isArray;
-    ne.isObject = isObject;
+    /**
+     * 인자가 함수인지 확인하는 메서드
+     * @param {*} obj
+     * @return {boolean}
+     */
+    function isFunction(obj) {
+        return toString.call(obj) === '[object Function]';
+    }
+
+    /**
+     * 인자가 숫자인지 확인하는 메서드
+     * @param {*} obj
+     * @return {boolean}
+     */
+    function isNumber(obj) {
+        return toString.call(obj) === '[object Number]';
+    }
+
+    /**
+     * 인자가 문자열인지 확인하는 메서드
+     * @param obj
+     * @return {boolean}
+     */
+    function isString(obj) {
+        return toString.call(obj) === '[object String]';
+    }
+
+    /**
+     * 인자가 불리언 타입인지 확인하는 메서드
+     * @param {*} obj
+     * @return {boolean}
+     */
+    function isBoolean(obj) {
+        return toString.call(obj) === '[object Boolean]';
+    }
+
+    /**
+     * 인자가 HTML Node 인지 검사한다. (Text Node 도 포함)
+     * @param {HTMLElement} html
+     * @return {Boolean} HTMLElement 인지 여부
+     */
+    function isHTMLNode(html) {
+        if (typeof(HTMLElement) === 'object') {
+            return (html && (html instanceof HTMLElement || !!html.nodeType));
+        }
+        return !!(html && html.nodeType);
+    }
+    /**
+     * 인자가 HTML Tag 인지 검사한다. (Text Node 제외)
+     * @param {HTMLElement} html
+     * @return {Boolean} HTMLElement 인지 여부
+     */
+    function isHTMLTag(html) {
+        if (typeof(HTMLElement) === 'object') {
+            return (html && (html instanceof HTMLElement));
+        }
+        return !!(html && html.nodeType && html.nodeType === 1);
+    }
+    /**
+     * null, undefined 여부와 순회 가능한 객체의 순회가능 갯수가 0인지 체크한다.
+     * @param {*} obj 평가할 대상
+     * @return {boolean}
+     */
+    function isEmpty(obj) {
+        var key,
+            hasKey = false;
+
+        if (!isExisty(obj)) {
+            return true;
+        }
+
+        if (isArray(obj) || isArguments(obj)) {
+            return obj.length === 0;
+        }
+
+        if (isObject(obj) && !isFunction(obj)) {
+            ne.util.forEachOwnProperties(obj, function() {
+                hasKey = true;
+                return false;
+            });
+
+            return !hasKey;
+        }
+
+        return true;
+
+    }
+
+    /**
+     * isEmpty 메서드와 반대로 동작한다.
+     * @param {*} obj 평가할 대상
+     * @return {boolean}
+     */
+    function isNotEmpty(obj) {
+        return !isEmpty(obj);
+    }
+
+
+    ne.util.isExisty = isExisty;
+    ne.util.isUndefined = isUndefined;
+    ne.util.isNull = isNull;
+    ne.util.isTruthy = isTruthy;
+    ne.util.isFalsy = isFalsy;
+    ne.util.isArguments = isArguments;
+    ne.util.isArray = Array.isArray || isArray;
+    ne.util.isObject = isObject;
+    ne.util.isFunction = isFunction;
+    ne.util.isNumber = isNumber;
+    ne.util.isString = isString;
+    ne.util.isBoolean = isBoolean;
+    ne.util.isHTMLNode = isHTMLNode;
+    ne.util.isHTMLTag = isHTMLTag;
+    ne.util.isEmpty = isEmpty;
+    ne.util.isNotEmpty = isNotEmpty;
 
 })(window.ne);
 /**
@@ -562,41 +857,78 @@
 
 (function(ne) {
     'use strict';
-    /* istanbul ignore if */
     if (!ne) {
         ne = window.ne = {};
     }
+    if (!ne.util) {
+        ne.util = window.ne.util = {};
+    }
+
+    /**
+     * 배열나 유사배열를 순회하며 콜백함수에 전달한다.
+     * 콜백함수가 false를 리턴하면 순회를 종료한다.
+     * @param {Array} arr
+     * @param {Function} iteratee  값이 전달될 콜백함수
+     * @param {*} [context] 콜백함수의 컨텍스트
+     * @example
+     *
+     * var sum = 0;
+     *
+     * forEachArray([1,2,3], function(value){
+     *     sum += value;
+     * });
+     *
+     * => sum == 6
+     */
+    function forEachArray(arr, iteratee, context) {
+        var index = 0,
+            len = arr.length;
+
+        for (; index < len; index++) {
+            if (iteratee.call(context || null, arr[index], index, arr) === false) {
+                break;
+            }
+        }
+    }
+
 
     /**
      * obj에 상속된 프로퍼티를 제외한 obj의 고유의 프로퍼티만 순회하며 콜백함수에 전달한다.
+     * 콜백함수가 false를 리턴하면 순회를 중료한다.
      * @param {object} obj
      * @param {Function} iteratee  프로퍼티가 전달될 콜백함수
      * @param {*} [context] 콜백함수의 컨텍스트
      * @example
      * var sum = 0;
      *
-     * forEach({a:1,b:2,c:3}, function(value){
+     * forEachOwnProperties({a:1,b:2,c:3}, function(value){
      *     sum += value;
      * });
      *
      * => sum == 6
      **/
-    var forEachOwnProperties = function(obj, iteratee, context) {
+    function forEachOwnProperties(obj, iteratee, context) {
         var key;
 
-        for(key in obj) {
+        for (key in obj) {
             if (obj.hasOwnProperty(key)) {
-                iteratee.call(context || null, obj[key], key, obj);
+                if (iteratee.call(context || null, obj[key], key, obj) === false) {
+                    break;
+                }
             }
         }
-    };
+    }
 
     /**
-     * 파라메터로 전달된 객체나 어레이를 순회하며 데이터를 콜백함수에 전달한다.
+     * 파라메터로 전달된 객체나 배열를 순회하며 데이터를 콜백함수에 전달한다.
+     * 유사배열의 경우 배열로 전환후 사용해야함.(ex2 참고)
+     * 콜백함수가 false를 리턴하면 순회를 종료한다.
      * @param {*} obj 순회할 객체
      * @param {Function} iteratee 데이터가 전달될 콜백함수
      * @param {*} [context] 콜백함수의 컨텍스트
      * @example
+     *
+     * //ex1)
      * var sum = 0;
      *
      * forEach([1,2,3], function(value){
@@ -604,20 +936,126 @@
      * });
      *
      * => sum == 6
+     *
+     * //ex2) 유사 배열사용
+     * function sum(){
+     *     var factors = Array.prototype.slice.call(arguments); //arguments를 배열로 변환, arguments와 같은정보를 가진 새 배열 리턴
+     *
+     *     forEach(factors, function(value){
+     *          ......
+     *     });
+     * }
+     *
      **/
-    var forEach = function(obj, iteratee, context) {
+    function forEach(obj, iteratee, context) {
         var key,
             len;
 
-        if (ne.isArray(obj)) {
+        if (ne.util.isArray(obj)) {
             for (key = 0, len = obj.length; key < len; key++) {
                 iteratee.call(context || null, obj[key], key, obj);
             }
         } else {
-            ne.forEachOwnProperties(obj, iteratee, context);
+            ne.util.forEachOwnProperties(obj, iteratee, context);
         }
+    }
+
+    /**
+     * 파라메터로 전달된 객체나 배열를 순회하며 콜백을 실행한 리턴값을 배열로 만들어 리턴한다.
+     * 유사배열의 경우 배열로 전환후 사용해야함.(forEach example참고)
+     * @param {*} obj 순회할 객체
+     * @param {Function} iteratee 데이터가 전달될 콜백함수
+     * @param {*} [context] 콜백함수의 컨텍스트
+     * @returns {Array}
+     * @example
+     * map([0,1,2,3], function(value) {
+     *     return value + 1;
+     * });
+     *
+     * => [1,2,3,4];
+     */
+    function map(obj, iteratee, context) {
+        var resultArray = [];
+
+        ne.util.forEach(obj, function() {
+            resultArray.push(iteratee.apply(context || null, arguments));
+        });
+
+        return resultArray;
+    }
+
+    /**
+     * 파라메터로 전달된 객체나 배열를 순회하며 콜백을 실행한 리턴값을 다음 콜백의 첫번째 인자로 넘겨준다.
+     * 유사배열의 경우 배열로 전환후 사용해야함.(forEach example참고)
+     * @param {*} obj 순회할 객체
+     * @param {Function} iteratee 데이터가 전달될 콜백함수
+     * @param {*} [context] 콜백함수의 컨텍스트
+     * @returns {*}
+     * @example
+     * reduce([0,1,2,3], function(stored, value) {
+     *     return stored + value;
+     * });
+     *
+     * => 6;
+     */
+    function reduce(obj, iteratee, context) {
+        var keys,
+            index = 0,
+            length,
+            store;
+
+
+        if (!ne.util.isArray(obj)) {
+            keys = ne.util.keys(obj);
+        }
+
+        length = keys ? keys.length : obj.length;
+
+        store = obj[keys ? keys[index++] : index++];
+
+        for (; index < length; index++) {
+            store = iteratee.call(context || null, store, obj[keys ? keys[index] : index]);
+        }
+
+        return store;
+    }
+    /**
+     * 유사배열을 배열 형태로 변환한다.
+     * - IE 8 이하 버전에서 Array.prototype.slice.call 이 오류가 나는 경우가 있어 try-catch 로 예외 처리를 한다.
+     * @param {*} arrayLike 유사배열
+     * @return {Array}
+     * @example
+
+
+     var arrayLike = {
+        0: 'one',
+        1: 'two',
+        2: 'three',
+        3: 'four',
+        length: 4
     };
-    ne.forEachOwnProperties = forEachOwnProperties;
-    ne.forEach = forEach;
+     var result = toArray(arrayLike);
+
+     => ['one', 'two', 'three', 'four'];
+     */
+    function toArray(arrayLike) {
+        var arr;
+        try {
+            arr = Array.prototype.slice.call(arrayLike);
+        } catch (e) {
+            arr = [];
+            forEachArray(arrayLike, function(value) {
+                arr.push(value);
+            });
+        }
+        return arr;
+    }
+
+    ne.util.forEachOwnProperties = forEachOwnProperties;
+    ne.util.forEachArray = forEachArray;
+    ne.util.forEach = forEach;
+    ne.util.toArray = toArray;
+    ne.util.map = map;
+    ne.util.reduce = reduce;
 
 })(window.ne);
