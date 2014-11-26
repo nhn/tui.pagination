@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="src/lib/jquery-1.11.1.min.js"></script>
+    <script src="src/js/pagenationview.js"></script>
+    <script src="src/js/pagination.js"></script>
+    <link rel="stylesheet" href="src/css/common.css">
+    <style>
+        .pagination .pre_end, .pagination .pre, .pagination .next, .pagination .next_end {
+            font-size:11px;
+            line-height: 1.0em;
+        }
+    </style>
+    <title></title>
+</head>
+<body>
+<div>
+    <div class="paginate1 pagination">
+        <a href="#" class="pre_end">처음</a>
+        <a href="#" class="pre">이전</a>
+        <a href="#" class="next">다음</a>
+        <a href="#" class="next_end">마지</a>
+    </div>
+
+</div>
+<script>
+    var pagination = new Pagination({
+        "itemCount": 500,
+        "itemPerPage": 10,
+        "pagePerPageList": 10
+    }, $('.paginate1'));
+    pagination.attach('beforeMove', function(eventData) {
+        console.log('beforeMove', eventData);
+    }).attach('afterMove', function(eventData) {
+        console.log('afterMove', eventData);
+    }).attach('afterMove', function(eventData) {
+        console.log('after', 't1');
+    });
+
+</script>
+</body>
+</html>
