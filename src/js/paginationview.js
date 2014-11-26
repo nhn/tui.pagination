@@ -40,13 +40,6 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
          */
         this._cachedElement = {};
         /**
-         * 발생한 이벤트를 캐싱하는 데이터
-         *
-         * @type {Object}
-         * @private
-         */
-        this._eventData = {};
-        /**
          * 페이지 아이템 리스트
          *
          * @type {Array}
@@ -165,12 +158,9 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
     },
     /**
      * targetElement 엘리먼트에 eventType 이벤트의 콜백함수로 callback 함수를 등록한다.
-     * - 컴포넌트 내에서 _attachEventHandler() 메서드를 이용하여 이벤트를 등록하는 경우, 내부에 해당 이벤트 정보들을 저장하게 되며,
-     *   추후 컴포넌트의 destroy 시에 이 정보를 이용하여 자동으로 이벤트 해제를 수행하게 된다.
      *
      * @param {String} eventType 등록할 이벤트 명
      * @param {Function} callback 해당 이벤트가 발생 시에 호출할 콜백함수
-     * @return {String} eventType 과 random 값이 "_" 로 연결된 유일한 key 값.
      */
     attachEvent: function(eventType, callback) {
 
@@ -182,18 +172,7 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         }
 
         if (targetElement && eventType && callback) {
-
-            var key = eventType + '_' + parseInt(Math.random() * 10000000, 10);
-
             $(targetElement).bind(eventType, null, callback);
-
-            this._eventData[key] = {
-                targetElement: targetElement,
-                eventType: eventType,
-                callback: callback
-            };
-
-            return key;
         }
     },
     /**
