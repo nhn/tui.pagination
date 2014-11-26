@@ -118,17 +118,15 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
      * 이동하기 전엔 beforeMove라는 커스텀 이벤트를 발생시키고, 이동후에는 afterMove라는 커스텀 이벤터를 발생시킨다.
      *
      * @param {Number} targetPage 이동할 페이지
-     * @param {Boolean} isRunCustomEvent [isRunCustomEvent=true] 커스텀 이벤트의 발생 여부
+     * @param {Boolean} isNotRunCustomEvent [isNotRunCustomEvent=true] 커스텀 이벤트의 발생 여부
      */
-    movePageTo: function(targetPage, isRunCustomEvent) {
-
-        isRunCustomEvent = !!(isRunCustomEvent || ne.util.isUndefined(isRunCustomEvent));
+    movePageTo: function(targetPage, isNotRunCustomEvent) {
 
         targetPage = this._convertToAvailPage(targetPage);
 
         this._currentPage = targetPage;
 
-        if (isRunCustomEvent) {
+        if (!isNotRunCustomEvent) {
             /**
              * 페이지 이동이 수행되기 직전에 발생
              *
@@ -150,7 +148,7 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
 
         this._paginate(targetPage);
 
-        if (isRunCustomEvent) {
+        if (isNotRunCustomEvent) {
             /**
              * 페이지 이동이 완료된 시점에서 발생
              *
@@ -240,24 +238,11 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
         var page = null,
             isMovePage = this.getOption('moveUnit') === 'page',
             currentPageIndex = this._getPageIndex(this.getCurrentPage());
-        switch (relativeName) {
-            case 'pre_end' :
-                page = 1;
-                break;
-
-            case 'next_end' :
-                page = this._getLastPage();
-                break;
-
-            case 'pre':
-                page = isMovePage ? this.getCurrentPage() - 1 : (currentPageIndex - 1) * this.getOption('pagePerPageList');
-                break;
-
-            case 'next':
-                page = isMovePage ? this.getCurrentPage() + 1 : (currentPageIndex) * this.getOption('pagePerPageList') + 1;
-                break;
+        if (relativeName === 'pre') {
+            page = isMovePage ? this.getCurrentPage() - 1 : (currentPageIndex - 1) * this.getOption('pagePerPageList');
+        } else {
+            page = isMovePage ? this.getCurrentPage() + 1 : (currentPageIndex) * this.getOption('pagePerPageList') + 1;
         }
-
         return page;
     },
     /**
@@ -309,13 +294,13 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
             targetPage;
 
         if (this._view.isIn(targetElement, this.getOption('$pre_endOn'))) {
-            page = this._getRelativePage('pre_end');
+            page = 1;
+        } else if (this._view.isIn(targetElement, this.getOption('$lastOn'))) {
+            page = this._getLastPage();
         } else if (this._view.isIn(targetElement, this.getOption('$preOn'))) {
             page = this._getRelativePage('pre');
         } else if (this._view.isIn(targetElement, this.getOption('$nextOn'))) {
             page = this._getRelativePage('next');
-        } else if (this._view.isIn(targetElement, this.getOption('$lastOn'))) {
-            page = this._getRelativePage('next_end');
         } else {
 
             targetPage = this._view.getPageElement(targetElement);

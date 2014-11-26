@@ -39,18 +39,18 @@ describe('페이징 객체의 동작을 테스트', function() {
         });
         it('생성된 객체들이 옵션에 맞게 생성되었는지 확인', function() {
 
-            var itemCount = pagination._getOption('itemCount'),
-                itemPerPage = pagination._getOption('itemPerPage'),
-                pagePerPageList = pagination._getOption('pagePerPageList'),
-                page =  pagination._getOption('page'),
-                moveUnit = pagination._getOption('moveUnit'),
-                isCenterAlign =  pagination._getOption('isCenterAlign'),
-                insertTextNode = pagination._getOption('insertTextNode'),
-                classPrefix = pagination._getOption('classPrefix'),
-                firstItemClass = pagination._getOption('firstItemClassName'),
-                lastItemClass = pagination._getOption('lastItemClassName'),
-                pageTemplate = pagination._getOption('pageTemplate'),
-                currentPageTeplate = pagination._getOption('currentPageTemplate');
+            var itemCount = pagination.getOption('itemCount'),
+                itemPerPage = pagination.getOption('itemPerPage'),
+                pagePerPageList = pagination.getOption('pagePerPageList'),
+                page =  pagination.getOption('page'),
+                moveUnit = pagination.getOption('moveUnit'),
+                isCenterAlign =  pagination.getOption('isCenterAlign'),
+                insertTextNode = pagination.getOption('insertTextNode'),
+                classPrefix = pagination.getOption('classPrefix'),
+                firstItemClass = pagination.getOption('firstItemClassName'),
+                lastItemClass = pagination.getOption('lastItemClassName'),
+                pageTemplate = pagination.getOption('pageTemplate'),
+                currentPageTeplate = pagination.getOption('currentPageTemplate');
 
             expect(pagePerPageList).toBe(10);
             expect(page).toBe(1);
@@ -63,18 +63,18 @@ describe('페이징 객체의 동작을 테스트', function() {
             expect(pageTemplate).toBe('<a href="#">{=page}</a>');
             expect(currentPageTeplate).toBe('<strong>{=page}</strong>');
 
-            itemCount = paginationOption._getOption('itemCount');
-            itemPerPage = paginationOption._getOption('itemPerPage');
-            pagePerPageList = paginationOption._getOption('pagePerPageList');
-            page =  paginationOption._getOption('page');
-            moveUnit = paginationOption._getOption('moveUnit');
-            isCenterAlign =  paginationOption._getOption('isCenterAlign');
-            insertTextNode = paginationOption._getOption('insertTextNode');
-            classPrefix = paginationOption._getOption('classPrefix');
-            firstItemClass = paginationOption._getOption('firstItemClassName');
-            lastItemClass = paginationOption._getOption('lastItemClassName');
-            pageTemplate = paginationOption._getOption('pageTemplate');
-            currentPageTeplate = paginationOption._getOption('currentPageTemplate');
+            itemCount = paginationOption.getOption('itemCount');
+            itemPerPage = paginationOption.getOption('itemPerPage');
+            pagePerPageList = paginationOption.getOption('pagePerPageList');
+            page =  paginationOption.getOption('page');
+            moveUnit = paginationOption.getOption('moveUnit');
+            isCenterAlign =  paginationOption.getOption('isCenterAlign');
+            insertTextNode = paginationOption.getOption('insertTextNode');
+            classPrefix = paginationOption.getOption('classPrefix');
+            firstItemClass = paginationOption.getOption('firstItemClassName');
+            lastItemClass = paginationOption.getOption('lastItemClassName');
+            pageTemplate = paginationOption.getOption('pageTemplate');
+            currentPageTeplate = paginationOption.getOption('currentPageTemplate');
 
             expect(itemCount).toBe(500);
             expect(itemPerPage).toBe(10);
@@ -98,13 +98,13 @@ describe('페이징 객체의 동작을 테스트', function() {
         });
 
 
-        it('옵션 변경을 테스트한다. _setOption & _getOption itemCount', function() {
-            pagination._setOption('itemCount', 100);
-            expect(pagination._getOption('itemCount')).toBe(100);
-            pagination._setOption('itemCount', 500);
-            expect(pagination._getOption('itemCount')).toBe(500);
-            pagination._setOption('isCenterAlign', true);
-            expect(pagination._getOption('isCenterAlign')).toBe(true);
+        it('옵션 변경을 테스트한다. setOption & getOption itemCount', function() {
+            pagination.setOption('itemCount', 100);
+            expect(pagination.getOption('itemCount')).toBe(100);
+            pagination.setOption('itemCount', 500);
+            expect(pagination.getOption('itemCount')).toBe(500);
+            pagination.setOption('isCenterAlign', true);
+            expect(pagination.getOption('isCenterAlign')).toBe(true);
         });
 
         it('현재 페이지를 확인한다', function() {
@@ -120,10 +120,6 @@ describe('페이징 객체의 동작을 테스트', function() {
         it('getRelativePage, 연관 페이지', function() {
             var result,
                 po = paginationOption;
-            result = po._getRelativePage('pre_end');
-            expect(result).toBe(1);
-            result = po._getRelativePage('next_end');
-            expect(result).toBe(50);
             result = po._getRelativePage('pre');
             expect(result).toBe(14);
             result = po._getRelativePage('next');
@@ -188,7 +184,7 @@ describe('페이징 객체의 동작을 테스트', function() {
 
         it('페이징을 다시 그린다. 아이템 카운트 재설정을 함께 한다.', function() {
             pagination.reset(100);
-            var itemCount = pagination._getOption('itemCount');
+            var itemCount = pagination.getOption('itemCount');
             expect(itemCount).toBe(100);
         });
 
@@ -201,7 +197,7 @@ describe('페이징 객체의 동작을 테스트', function() {
                 isBeforeMoveFire1 = true;
             });
 
-            paginationOption.movePageTo(13, true);
+            paginationOption.movePageTo(13, false);
             page = paginationOption.getCurrentPage();
 
             expect(page).toBe(13);
