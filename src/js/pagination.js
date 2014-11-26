@@ -2,7 +2,7 @@
  * @fileoverview 페이지네이션의 뷰를 생성하고, 이벤트를 건다.
  * (pug.Pagination 에서 분리)
  * @author 이제인(jein.yi@nhnent.com)
- * @dependency jquery-1.11.1.min.js, type.js, CustomEvent.js, defineClass.js
+ * @dependency jquery-1.11.1.min.js, common.js
  */
 
 
@@ -337,7 +337,7 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
 
          **/
 
-        var isFired = this.fire("click", {"page" : page});
+        var isFired = this.invoke("click", {"page" : page});
         if (!isFired) {
             return;
         }
