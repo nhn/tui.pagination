@@ -82,7 +82,7 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
         this._view = new ne.component.Pagination.PaginationView(this._options, $element);
         this._view.attachEvent('click', ne.util.bind(this._onClickPageList, this));
         // 페이지 초기화(이동)
-        this.movePageTo(this._getOption('page'), false);
+        this.movePageTo(this.getOption('page'), false);
     },
     /**
      * 페이징을 다시 그린다
@@ -94,10 +94,10 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
         var isExist = ne.util.isExisty((itemCount !== null) && (itemCount !== undefined));
 
         if (!isExist) {
-            itemCount = this._getOption('itemCount');
+            itemCount = this.getOption('itemCount');
         }
 
-        this._setOption('itemCount', itemCount);
+        this.setOption('itemCount', itemCount);
         this.movePageTo(1, false);
     },
     /**
@@ -108,7 +108,7 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
      * @returns {*}
      *
      */
-    _getOption: function(optionKey) {
+    getOption: function(optionKey) {
 
         return this._options[optionKey];
 
@@ -118,11 +118,11 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
      * 이동하기 전엔 beforeMove라는 커스텀 이벤트를 발생시키고, 이동후에는 afterMove라는 커스텀 이벤터를 발생시킨다.
      *
      * @param {Number} targetPage 이동할 페이지
-     * @param {Boolean} isisRunCustomEvent [isisRunCustomEvent=true] 커스텀 이벤트의 발생 여부
+     * @param {Boolean} isRunCustomEvent [isRunCustomEvent=true] 커스텀 이벤트의 발생 여부
      */
     movePageTo: function(targetPage, isRunCustomEvent) {
 
-        isRunCustomEvent = !!(isRunCustomEvent || isRunCustomEvent === undefined);
+        isRunCustomEvent = !!(isRunCustomEvent || ne.util.isUndefined(isRunCustomEvent));
 
         targetPage = this._convertToAvailPage(targetPage);
 
@@ -173,7 +173,7 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
      * @param {*} optionValue 변경할 옵션 값
      * @private
      */
-    _setOption: function(optionKey, optionValue) {
+    setOption: function(optionKey, optionValue) {
 
         this._options[optionKey] = optionValue;
 
@@ -196,7 +196,7 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
      */
     getIndexOfFirstItem: function(pageNumber) {
 
-        return this._getOption('itemPerPage') * (pageNumber - 1) + 1;
+        return this.getOption('itemPerPage') * (pageNumber - 1) + 1;
 
     },
     /**
@@ -206,7 +206,7 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
      * @private
      */
     _getLastPage: function() {
-        return Math.ceil(this._getOption('itemCount') / this._getOption('itemPerPage'));
+        return Math.ceil(this.getOption('itemCount') / this.getOption('itemPerPage'));
 
     },
     /**
@@ -218,15 +218,15 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
      */
     _getPageIndex: function(pageNumber) {
         //현재 페이지 리스트가 중앙에 와야할때
-        if (this._getOption('isCenterAlign')) {
-            var left = Math.floor(this._getOption('pagePerPageList') / 2),
+        if (this.getOption('isCenterAlign')) {
+            var left = Math.floor(this.getOption('pagePerPageList') / 2),
                 pageIndex = pageNumber - left;
 
             pageIndex = Math.max(pageIndex, 1);
             pageIndex = Math.min(pageIndex, this._getLastPage());
             return pageIndex;
         }
-        return Math.ceil(pageNumber / this._getOption("pagePerPageList"));
+        return Math.ceil(pageNumber / this.getOption("pagePerPageList"));
     },
     /**
      * 이전, 다음 버튼을 클릭할 때 제공받을 페이지 숫자를 구한다
@@ -238,7 +238,7 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
      */
     _getRelativePage: function(relativeName) {
         var page = null,
-            isMovePage = this._getOption('moveUnit') === 'page',
+            isMovePage = this.getOption('moveUnit') === 'page',
             currentPageIndex = this._getPageIndex(this.getCurrentPage());
         switch (relativeName) {
             case 'pre_end' :
@@ -250,11 +250,11 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
                 break;
 
             case 'pre':
-                page = isMovePage ? this.getCurrentPage() - 1 : (currentPageIndex - 1) * this._getOption('pagePerPageList');
+                page = isMovePage ? this.getCurrentPage() - 1 : (currentPageIndex - 1) * this.getOption('pagePerPageList');
                 break;
 
             case 'next':
-                page = isMovePage ? this.getCurrentPage() + 1 : (currentPageIndex) * this._getOption('pagePerPageList') + 1;
+                page = isMovePage ? this.getCurrentPage() + 1 : (currentPageIndex) * this.getOption('pagePerPageList') + 1;
                 break;
         }
 
@@ -308,13 +308,13 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
             targetElement = $(event.target),
             targetPage;
 
-        if (this._view.isIn(targetElement, this._getOption('$pre_endOn'))) {
+        if (this._view.isIn(targetElement, this.getOption('$pre_endOn'))) {
             page = this._getRelativePage('pre_end');
-        } else if (this._view.isIn(targetElement, this._getOption('$preOn'))) {
+        } else if (this._view.isIn(targetElement, this.getOption('$preOn'))) {
             page = this._getRelativePage('pre');
-        } else if (this._view.isIn(targetElement, this._getOption('$nextOn'))) {
+        } else if (this._view.isIn(targetElement, this.getOption('$nextOn'))) {
             page = this._getRelativePage('next');
-        } else if (this._view.isIn(targetElement, this._getOption('$lastOn'))) {
+        } else if (this._view.isIn(targetElement, this.getOption('$lastOn'))) {
             page = this._getRelativePage('next_end');
         } else {
 

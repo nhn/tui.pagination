@@ -21,7 +21,7 @@ module.exports = function(config) {
         files: [
             'bower_components/jquery/jquery.js',
             'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
-            'src/js/common.js',
+            'src/common/common.js',
             'src/js/pagination.js',
             'src/js/paginationview.js',
             'test/**/*Test.js',
@@ -39,7 +39,7 @@ module.exports = function(config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'src/**/*.js': ['coverage']
+            'src/js/*.js': ['coverage']
         },
 
 
