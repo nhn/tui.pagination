@@ -64,7 +64,7 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
          * @type {Object}
          * @private
          */
-        this._options = $.extend(defaultOption, options);
+        this._options = ne.util.extend(defaultOption, options);
         /**
          * 이벤트 핸들러 저장객체
          *
@@ -80,7 +80,7 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
          * @private
          */
         this._view = new ne.component.Pagination.PaginationView(this._options, $element);
-        this._view.attachEvent('click', $.proxy(this._onClickPageList, this));
+        this._view.attachEvent('click', ne.util.bind(this._onClickPageList, this));
         // 페이지 초기화(이동)
         this.movePageTo(this._getOption('page'), false);
     },

@@ -54,7 +54,7 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
          */
         this._pageItemList = [];
 
-        $.extend(options, {
+        ne.util.extend(options, {
             $pre_endOn: options['$pre_endOn'] || $('a.' + this._wrapPrefix('pre_end'), this._element),
             $preOn: options['$preOn'] || $('a.' + this._wrapPrefix('pre'), this._element),
             $nextOn: options['$nextOn'] || $('a.' + this._wrapPrefix('next'), this._element),
@@ -175,7 +175,7 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
     attachEvent: function(eventType, callback) {
 
         var targetElement = this._element,
-            isSavedElement = typeof(targetElement) === 'string' && this._elementSelector[targetElement];
+            isSavedElement = ne.util.isString(targetElement) && this._elementSelector[targetElement];
 
         if (isSavedElement) {
             targetElement = this._getElement(targetElement, true);
@@ -400,17 +400,17 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
             i;
 
         for (i = firstPage; i <= lastPage; i++) {
-            if (i == viewSet.page) {
+            if (i === viewSet.page) {
                 $pageItem = $(options.currentPageTemplate.replace('{=page}', i.toString()));
             } else {
                 $pageItem = $(options.pageTemplate.replace('{=page}', i.toString()));
                 this._pageItemList.push($pageItem);
             }
 
-            if (i == firstPage) {
+            if (i === firstPage) {
                 $pageItem.addClass(this._wrapPrefix(options['firstItemClassName']));
             }
-            if (i == lastPage) {
+            if (i === lastPage) {
                 $pageItem.addClass(this._wrapPrefix(options['lastItemClassName']));
             }
             this._element.append($pageItem);
