@@ -16,11 +16,11 @@ FE 개발팀 이제인 <jein.yi@nhnent.com>
 - 페이지 이동 전 후 실행할 커스텀 이벤트를 등록 할 수 있다.
 
 ## 샘플 페이지
-http://fetech.nhnent.com/svnrun/fetech/components/Pagination/sample/
+https://github.nhnent.com/pages/FE/Component-Pagination/sample/
 
 ## 다운로드
-http://fetech.nhnent.com/svnrun/fetech/components/Pagination/dist/
+https://github.nhnent.com/FE/Component-Pagination/tree/dist
 
 ## API 문서
-http://fetech.nhnent.com/svnrun/fetech/components/Pagination/doc/index.html
+https://github.nhnent.com/pages/FE/Component-Pagination/
 
