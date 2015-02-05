@@ -24,7 +24,7 @@ module.exports = function(grunt) {
                 // Notice the wildcard, which is automatically expanded.
                 src: [
                     'src/common/*.js',
-                    'src/js/pageination.js',
+                    'src/js/pagination.js',
                     'src/js/*.js'
                 ],
                 // The destination file:
@@ -39,7 +39,7 @@ module.exports = function(grunt) {
                 // The files to concatenate:
                 // Notice the wildcard, which is automatically expanded.
                 src: [
-                    'src/js/pageination.js',
+                    'src/js/pagination.js',
                     'src/js/*.js'
                 ],
                 // The destination file:
