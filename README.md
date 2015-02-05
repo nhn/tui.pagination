@@ -17,7 +17,7 @@ Component-Pagination
 * **CI** - <http://fe.nhnent.com:8080/jenkins/job/Component-Pagination/>
 
 ## Download/Install
-* Bower: `bower install "git+http://3c672057a1ac16c4e6f1baaba73e24d5270ef453:x-oauth-basic@github.nhnent.com/FE/Component-Pagination.git#dist"`
+* Bower: `bower install "git+http://3c672057a1ac16c4e6f1baaba73e24d5270ef453:x-oauth-basic@github.nhnent.com/FE/Component-Pagination.git#version"`
 * Download: <https://github.nhnent.com/FE/Component-Pagination/tree/dist>
 
 ## History
