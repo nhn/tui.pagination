@@ -1,17 +1,21 @@
+body {
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif, Dotum, '돋움', AppleSDGothicNeo;
+}
+
 #wrap {
     position: relative;
     overflow:hidden;
 }
 
 .header {
-    background-color: #4a95e5;
-    border-bottom: 1px solid #4082c7;
+    background-color: #398df0;
+    border-bottom: 1px solid #196fc2;
     height: 50px;
 }
 
 .header a,
 .header small{
-    color: #fff;
+    color: #f9f9f9;
 }
 
 .navigation {
@@ -103,44 +107,55 @@
 }
 
 .main section header {
-    border-bottom: 1px solid #999;
-}
-
-.main section header h2 {
-    border-left: 5px solid #4a95e5;
-    padding-left : 5px;
-}
-
-.main section article {
-    padding: 10px;
-}
-
-.main {
-    padding: 20px;
-    margin-left: 250px;
-}
-
-.main section header {
     padding-top: 20px;
     border-bottom: 1px solid #999;
 }
 
 .main section header h2 {
-    border-left: 5px solid #4a95e5;
     padding-left : 5px;
+    border-left: 5px solid #4a95e5;
 }
 
 .main section article {
     padding: 10px;
 }
 
-.main section article .readme h2 {
-    padding: 0 15px;
-    font-size: 15pt;
+.main section article .readme {
+    background-color: #f9f9f9;
+    border: 1px solid #428bca;
+    border-radius: 4px;
+}
+
+.main section article .readme h1 {
+    margin: 5px 20px;
+    padding: 24px 0 5px 0;
+    border-bottom: 1px solid #428bca;
 }
 
 .main section article .readme p {
-    padding: 0 45px;
+    padding: 5px 30px;
+    color: #0082c6;
+}
+
+.main section article .readme h2 {
+    margin: 5px 20px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #dedede;
+    font-size: 13pt;
+}
+
+.main section article .readme ul {
+    padding: 5px 30px 20px;
+}
+
+.main section article .readme table {
+    margin: 5px 30px 20px;
+}
+
+.main section article .readme table th,
+.main section article .readme table td {
+    padding: 2px 20px 2px 5px;
+    border-bottom: 1px solid #dedede;
 }
 
 .main section article .container-overview {
