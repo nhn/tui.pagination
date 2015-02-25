@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="./js/jquery.js"></script>
+    <script src="./js/Component-Pagination.js"></script>
+    <link rel="stylesheet" href="./css/common.css">
+    <title>옵션적용</title>
+</head>
+<body>
+<div class="paginate1 pagination">
+    <a href="#" class="pre_end">처음</a>
+    <a href="#" class="pre">이전</a>
+    <a href="#" class="next">다음</a>
+    <a href="#" class="next_end">마지</a>
+</div>
+
+</div>
+<script>
+    var pagination = new ne.component.Pagination({
+        itemCount: 500,
+        itemPerPage : 20,
+        pagePerPageList: 10,
+        page: 12,
+        moveUnit: 'page',
+        isCenterAlign: true,
+        insertTextNode: '',
+        classPrefix: '',
+        firstItemClassName: 'first-child',
+        lastItemClassName: 'last-child',
+        pageTemplate: '<a href="#">{=page}</a>',
+        currentPageTemplate: '<strong>{=page}</strong>'
+    }, $('.paginate1'));
+
+</script>
+<div class="code-layer">
+<xmp>
+// 실행코드
+var pagination = new ne.component.Pagination({
+    itemCount: 500,
+    itemPerPage : 20,
+    pagePerPageList: 10,
+    page: 12,
+    moveUnit: 'page',
+    isCenterAlign: true,
+    insertTextNode: '',
+    classPrefix: '',
+    firstItemClassName: 'first-child',
+    lastItemClassName: 'last-child',
+    pageTemplate: '<a href="#">{=page}</a>',
+    currentPageTemplate: '<strong>{=page}</strong>'
+}, $('.paginate1'));
+</xmp>
+</div>
+</body>
+</html>
