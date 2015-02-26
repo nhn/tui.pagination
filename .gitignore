@@ -4,3 +4,7 @@ doc
 bu
 .idea
 .gitignore
+*.html
+tutorials
+styles
+scripts
