@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Index</title>
+    <title>JSDoc: Tutorial: 사용자이벤트추가</title>
     <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
@@ -22,282 +22,33 @@
 
     <div class="body">
         <div id="navigation" class="navigation"><h3>Samples</h3><ul class="list samples"><li class="item"><a href="tutorial-sample1.html">기본페이지네이션</a></li><li class="item"><a href="tutorial-sample2.html">사용자이벤트추가</a></li><li class="item"><a href="tutorial-sample3.html">옵션추가</a></li></ul><h3>Classes</h3><ul class="list classes"><li class="item" id="ne.component.Pagination"><span class="title"><span class="p-item">ne.component.</span><a href="ne.component.Pagination.html">Pagination</a></span><span class="icon blue static">static</span><ul class="sublist methods ne.component.Pagination"><span class="subtitle">Methods</span><li><a href="ne.component.Pagination.html#getCurrentPage">getCurrentPage</a></li><li><a href="ne.component.Pagination.html#getIndexOfFirstItem">getIndexOfFirstItem</a></li><li><a href="ne.component.Pagination.html#movePageTo">movePageTo</a></li><li><a href="ne.component.Pagination.html#reset">reset</a></li></ul></li><li class="item" id="ne.component.Pagination.PaginationView"><span class="title"><span class="p-item">ne.component.Pagination.</span><a href="ne.component.Pagination.PaginationView.html">PaginationView</a></span><span class="icon blue static">static</span><ul class="sublist methods ne.component.Pagination.PaginationView"><span class="subtitle">Methods</span><li><a href="ne.component.Pagination.PaginationView.html#attachEvent">attachEvent</a></li><li><a href="ne.component.Pagination.PaginationView.html#empty">empty</a></li><li><a href="ne.component.Pagination.PaginationView.html#getBaseElement">getBaseElement</a></li><li><a href="ne.component.Pagination.PaginationView.html#getElement">getElement</a></li><li><a href="ne.component.Pagination.PaginationView.html#getPageElement">getPageElement</a></li><li><a href="ne.component.Pagination.PaginationView.html#isIn">isIn</a></li><li><a href="ne.component.Pagination.PaginationView.html#update">update</a></li></ul></li></ul></div>
-        <div id="main" class="main">
-
-
-
-    
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-    <section>
-        <article><div class="readme"><h1>Component-Pagination</h1><p>페이지네이션 기능을 지원하는 컴포넌트.</p>
-<h2>Feature</h2><ul>
-<li>이전페이지로 이동할 수 있다.</li>
-<li>다음페이지로 이동할 수 있다.</li>
-<li>처음페이지로 이동할 수 있다.</li>
-<li>마지막페이지로 이동할 수 있다.</li>
-<li>특정페이지로 이동 할 수 있다.</li>
-<li>페이지 이동 전 후 실행할 커스텀 이벤트를 등록 할 수 있다.</li>
-</ul>
-<h2>Documentation</h2><ul>
-<li><strong>API</strong> - https://github.nhnent.com/pages/fe/component-pagination/</li>
-<li><strong>CI</strong> - http://fe.nhnent.com:8080/jenkins/job/component-pagination/</li>
-<li><strong>Samples</strong> - https://github.nhnent.com/pages/fe/component-pagination/tutorial-default.html</li>
-</ul>
-<h2>Download/Install</h2><ul>
-<li>Bower: <code>bower install &quot;git+http://3c672057a1ac16c4e6f1baaba73e24d5270ef453:x-oauth-basic@github.nhnent.com/fe/component-pagination.git#version&quot;</code></li>
-</ul>
-<h2>History</h2><table>
-<thead>
-<tr>
-<th>Version</th>
-<th>Description</th>
-<th>Date</th>
-<th>Developer</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0.0.1</td>
-<td>최초개발</td>
-<td>2014.11</td>
-<td>FE 개발팀 이제인 <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#x6a;&#101;&#105;&#x6e;&#46;&#x79;&#105;&#x40;&#110;&#x68;&#x6e;&#101;&#x6e;&#116;&#46;&#x63;&#111;&#x6d;">&#x6a;&#101;&#105;&#x6e;&#46;&#x79;&#105;&#x40;&#110;&#x68;&#x6e;&#101;&#x6e;&#116;&#46;&#x63;&#111;&#x6d;</a></td>
-</tr>
-</tbody>
-</table></div></article>
-    </section>
-
-
-
-
-
-
-
-
-
-<section>
-
+        <div id="main" class="main"><section>
 <header>
     
-        <h2>
-        
-        pagination.js
-        
-        
-        </h2>
-        
-    
+
+    <h2>사용자이벤트추가</h2>
 </header>
 
 <article>
-    
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>페이지네이션의 뷰를 생성하고, 이벤트를 건다.
-(pug.Pagination 에서 분리)</p></div>
-        
-
-        
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>이제인(jein.yi@nhnent.com)</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-        <dd class="tag-source"><ul class="dummy"><li>
-            <a href="pagination.js.html">pagination.js</a>, <a href="pagination.js.html#line1">line 1</a>
-        </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-        
-    
-    </div>
-    
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
+	
+    <iframe id="exampleFrame" width="500" height="700" frameborder="0" src="tutorials/sample2.html" onload="autoResize()"></iframe>
 </article>
+<script>
+function autoResize() {
+    var ef = document.getElementById('exampleFrame'),
+    doc;
 
-</section>
+    if(ef.contentDocument) {
+        doc = ef.contentDocument;
+    } else {
+        doc = ef.contentWindow.document;
+    }
+    ef.width = document.getElementById('main').clientWidth - 40;
+    ef.height = doc.body.clientHeight + 40;
+}
+</script>
 
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        
-        paginationview.js
-        
-        
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>페이지네이션, 화면에 그려지는 요소들을 관리한다
-(pug.Pagination 에서 분리)</p></div>
-        
-
-        
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>이제인(jein.yi@nhnent.com)</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-        <dd class="tag-source"><ul class="dummy"><li>
-            <a href="paginationview.js.html">paginationview.js</a>, <a href="paginationview.js.html#line1">line 1</a>
-        </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-        
-    
-    </div>
-    
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-</div>
+</section></div>
         <div class="clearfix"></div>
     </div>
 
