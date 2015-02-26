@@ -12,11 +12,12 @@ Component-Pagination
 
 
 ## Documentation
-* **API** - https://github.nhnent.com/pages/FE/Component-Pagination/
-* **CI** - http://fe.nhnent.com:8080/jenkins/job/Component-Pagination/
+* **API** - https://github.nhnent.com/pages/fe/component-pagination/
+* **CI** - http://fe.nhnent.com:8080/jenkins/job/component-pagination/
+* **Samples** - https://github.nhnent.com/pages/fe/component-pagination/tutorial-default.html
 
 ## Download/Install
-* Bower: `bower install "git+http://3c672057a1ac16c4e6f1baaba73e24d5270ef453:x-oauth-basic@github.nhnent.com/FE/Component-Pagination.git#version"`
+* Bower: `bower install "git+http://3c672057a1ac16c4e6f1baaba73e24d5270ef453:x-oauth-basic@github.nhnent.com/fe/component-pagination.git#version"`
 
 ## History
 | Version | Description | Date | Developer |
