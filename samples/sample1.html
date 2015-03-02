@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="js/jquery.js"></script>
+    <script src="js/Component-Pagination.js"></script>
+    <link rel="stylesheet" href="css/common.css">
+    <title></title>
+</head>
+<body>
+<div>
+    <h3>페이지 네이션</h3>
+    <p>- 전체 아이템 : 500</p>
+    <p>(기본옵션이 적용 된다)</p>
+
+    <div class="paginate1 pagination">
+        <a href="#" class="pre_end">처음</a>
+        <a href="#" class="pre">이전</a>
+        <a href="#" class="next">다음</a>
+        <a href="#" class="next_end">마지</a>
+    </div>
+
+</div>
+<script>
+
+    // 생성
+    var pagination = new ne.component.Pagination({
+        itemCount: 500
+    }, $('.paginate1'));
+
+</script>
+</body>
+</html>

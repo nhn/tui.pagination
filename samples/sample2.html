@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="js/jquery.js"></script>
+    <script src="js/Component-Pagination.js"></script>
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        h3 ,p { margin-left:30px; }
+        h3 {margin-top:20px;}
+        .pagination .pre_end, .pagination .pre, .pagination .next, .pagination .next_end {
+            font-size:11px;
+            line-height: 1.0em;
+        }
+    </style>
+    <title></title>
+</head>
+<body>
+<div>
+    <h3>페이지 네이션</h3>
+    <p>- 전체 아이템 : 500</p>
+    <p>- 기타기본 옵션 적용</p>
+    <p>- 페이지 이동 전에 발생되는 beforeMove와, 페이지 이동후에 발생하는 afterMove를 등록한다</p>
+
+    <div class="paginate1 pagination">
+        <a href="#" class="pre_end">처음</a>
+        <a href="#" class="pre">이전</a>
+        <a href="#" class="next">다음</a>
+        <a href="#" class="next_end">마지</a>
+    </div>
+
+</div>
+<script>
+    // 생성
+    var pagination = new ne.component.Pagination({
+        "itemCount": 500,
+        isCenterAlign: true
+    }, $('.paginate1'));
+
+    // 이벤트 등록
+    pagination.on('beforeMove', function(eventData) {
+        console.log('beforeMove', eventData);
+    }).on('afterMove', function(eventData) {
+        console.log('afterMove', eventData);
+    });
+</script>
+</body>
+</html>

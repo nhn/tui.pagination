@@ -1,10 +1,8 @@
-build.sh
 node_modules
 doc
 bu
 .idea
 .gitignore
-*.html
 tutorials
 styles
 scripts
