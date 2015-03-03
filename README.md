@@ -15,8 +15,8 @@ Component-Pagination
 
 ## Documentation
 * **API** - https://github.nhnent.com/pages/fe/component-pagination/
-* **CI** - http://fe.nhnent.com:8080/jenkins/job/component-pagination/
 * **Samples** - https://github.nhnent.com/pages/fe/component-pagination/tutorial-default.html
+* **CI** - http://fe.nhnent.com:8080/jenkins/job/component-pagination/
 
 ## Download/Install
 * Bower: `bower install "git+http://3c672057a1ac16c4e6f1baaba73e24d5270ef453:x-oauth-basic@github.nhnent.com/fe/component-pagination.git#version"`
