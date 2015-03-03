@@ -8,10 +8,6 @@
     <style>
         h3 ,p { margin-left:30px; }
         h3 {margin-top:20px;}
-        .pagination .pre_end, .pagination .pre, .pagination .next, .pagination .next_end {
-            font-size:11px;
-            line-height: 1.0em;
-        }
     </style>
     <title></title>
 </head>
@@ -33,14 +29,14 @@
 <script>
     // 생성
     var pagination = new ne.component.Pagination({
-        "itemCount": 500,
-        isCenterAlign: true
+        "itemCount": 500
     }, $('.paginate1'));
 
     // 이벤트 등록
     pagination.on('beforeMove', function(eventData) {
         console.log('beforeMove', eventData);
-    }).on('afterMove', function(eventData) {
+    });
+    pagination.on('afterMove', function(eventData) {
         console.log('afterMove', eventData);
     });
 </script>
