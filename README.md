@@ -11,8 +11,7 @@ Component-Pagination
 * 페이지 이동 전 후 실행할 커스텀 이벤트를 등록 할 수 있다.
 
 ## Sample Image
-* 페이징 샘플이미지<br>
-![alt tag](https://github.nhnent.com/pages/fe/component-pagination/paging.png)<br><br>
+* ![alt tag](https://github.nhnent.com/pages/fe/component-pagination/paging.png)<br><br>
 
 ## Documentation
 * **API** - https://github.nhnent.com/pages/fe/component-pagination/
