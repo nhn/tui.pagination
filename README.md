@@ -17,6 +17,10 @@ Pagination
 * **Samples** - https://github.nhnent.com/pages/fe/component-pagination/tutorial-default.html
 * **CI** - http://fe.nhnent.com:8080/jenkins/job/component-pagination/
 
+## Dependency
+* code-snippet : https://github.nhnent.com/fe/share-code-snippet
+* jquery1.8.3
+
 ## Download/Install
 * Bower: `bower install "git+http://3c672057a1ac16c4e6f1baaba73e24d5270ef453:x-oauth-basic@github.nhnent.com/fe/component-pagination.git#version"`
 * Download: https://github.nhnent.com/fe/component-pagination/
