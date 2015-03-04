@@ -24,12 +24,11 @@ Pagination
 ## Download/Install
 * Bower: `bower install "git+http://3c672057a1ac16c4e6f1baaba73e24d5270ef453:x-oauth-basic@github.nhnent.com/fe/component-pagination.git#version"`
 * Download: https://github.nhnent.com/fe/component-pagination/
-  * Component-Pagination.js(FE common code snippets 포함)
-  * Component-Pagination.core.js(FE common code snippets 미포함)
 
 ## History
 | Version | Description | Date | Developer |
 | ---- | ---- | ---- | ---- |
+| 1.0.0 | 배포 | 2015.03 | FE 개발팀 이제인 <jein.yi@nhnent.com> |
 | 0.0.1 | 최초개발 | 2014.11 | FE 개발팀 이제인 <jein.yi@nhnent.com> |
 
 
