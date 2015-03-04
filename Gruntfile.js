@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         // You can set arbitrary key-value pairs.
         distFolder: 'dist',
-        name: 'calendar',
+        name: 'pagination',
         // You can also set the value of a key as parsed JSON.
         // Allows us to reference properties we declared in package.json.
         pkg: grunt.file.readJSON('package.json'),
