@@ -1,6 +1,6 @@
 h3 ,p { margin-left:30px; }
 h3 {margin-top:20px;}
-body {font-size: 12px;font-family: malgun gothic, verdana, consolas;}
+body {font-size: 12px;font-family: malgun gothic, verdana, consolas; min-width:900px;}
 /* grid 내부 */
 .pagination{height:26px;margin:14px 0 12px;line-height:normal;text-align:center}
 .pagination a,.pagination strong{
