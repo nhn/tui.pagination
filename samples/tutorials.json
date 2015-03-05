@@ -1,11 +1,11 @@
 {
   "sample1": {
-    "title": "기본"
+    "title": "기본 예제"
   },
   "sample2": {
-    "title": "사용자이벤트"
+    "title": "사용자이벤트 예제"
   },
   "sample3": {
-    "title": "옵션추가"
+    "title": "옵션추가 예제"
   }
 }
