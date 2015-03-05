@@ -12,17 +12,20 @@
     <title></title>
 </head>
 <body>
-<div>
-    <h3>페이지네이션</h3>
-    <p>- 전체 아이템 : 500</p>
-    <p>- 기타기본 옵션 적용</p>
-    <p>- 페이지 이동 전에 발생되는 beforeMove와, 페이지 이동후에 발생하는 afterMove를 등록한다</p>
-
-    <div class="paginate1 pagination">
-        <a href="#" class="pre_end">처음</a>
-        <a href="#" class="pre">이전</a>
-        <a href="#" class="next">다음</a>
-        <a href="#" class="next_end">마지</a>
+<div class="examwrap">
+    <div class="example">
+        <div class="paginate1 pagination">
+            <a href="#" class="pre_end">처음</a>
+            <a href="#" class="pre">이전</a>
+            <a href="#" class="next">다음</a>
+            <a href="#" class="next_end">마지</a>
+        </div>
+    </div>
+    <div class="explain">
+        <p>- 전체 아이템 : 500</p>
+        <p>- 기타기본 옵션 적용</p>
+        <p>- 페이지 이동 전에 발생되는 beforeMove를 등록한다.</p>
+        <textarea type="text" id="state"></textarea>
     </div>
 
 </div>
@@ -34,10 +37,7 @@
 
     // 이벤트 등록
     pagination.on('beforeMove', function(eventData) {
-        console.log('beforeMove', eventData);
-    });
-    pagination.on('afterMove', function(eventData) {
-        console.log('afterMove', eventData);
+        $('#state').val(eventData.page + '로 이동합니다.\n' + $('#state').val());
     });
 </script>
 </body>

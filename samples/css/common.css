@@ -36,3 +36,11 @@ body {font-size: 12px;font-family: malgun gothic, verdana, consolas;}
 .pagination .next_end{background-position:-76px 0}
 
 .code-layer {border-rㅡadius: 10px; border:1px solid #e3e3e3; padding:20px;color:#666; }
+
+.examwrap { height: 200px; }
+.explain, .example {float:left; border:1px solid #eee; }
+.example { width:480px; height:200px; }
+.expend .example { width:480px; height:500px; }
+.expend .explain  { width:400px; height:500px; margin-left:15px; }
+.explain { width:400px; height:200px; margin-left:15px; }
+#state { width:380px; margin:0 auto; display:block; height:90px; }
