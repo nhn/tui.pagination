@@ -38,6 +38,7 @@ body {font-size: 12px;font-family: malgun gothic, verdana, consolas;}
 .code-layer {border-rㅡadius: 10px; border:1px solid #e3e3e3; padding:20px;color:#666; }
 
 .examwrap { height: 200px; }
+.examwrap.expend {height:500px; }
 .explain, .example {float:left; border:1px solid #eee; }
 .example { width:480px; height:200px; }
 .expend .example { width:480px; height:500px; }
