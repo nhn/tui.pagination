@@ -14,7 +14,7 @@ Pagination
 
 ## Documentation
 * **API** - https://github.nhnent.com/pages/fe/component-pagination/
-* **Samples** - https://github.nhnent.com/pages/fe/component-pagination/tutorial-default.html
+* **Samples** - https://github.nhnent.com/pages/fe/component-pagination/tutorial-sample1.html
 * **CI** - http://fe.nhnent.com:8080/jenkins/job/component-pagination/
 
 ## Dependency
