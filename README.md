@@ -28,6 +28,7 @@ Pagination
 ## History
 | Version | Description | Date | Developer |
 | ---- | ---- | ---- | ---- |
+| 1.0.1 | 버그(가운데정렬 페이징 오류)수정 | 2015.04 | FE 개발팀 이제인 <jein.yi@nhnent.com> |
 | 1.0.0 | 배포 | 2015.03 | FE 개발팀 이제인 <jein.yi@nhnent.com> |
 | 0.1.0 | 최초개발 | 2014.11 | FE 개발팀 이제인 <jein.yi@nhnent.com> |
 
