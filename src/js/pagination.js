@@ -123,7 +123,6 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
     movePageTo: function(targetPage, isNotRunCustomEvent) {
 
         targetPage = this._convertToAvailPage(targetPage);
-
         this._currentPage = targetPage;
 
         if (!isNotRunCustomEvent) {
@@ -182,7 +181,6 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
      * @returns {Number} 현재 페이지
      */
     getCurrentPage: function() {
-
         return this._currentPage || this._options['page'];
 
     },
@@ -219,9 +217,8 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
         if (this.getOption('isCenterAlign')) {
             var left = Math.floor(this.getOption('pagePerPageList') / 2),
                 pageIndex = pageNumber - left;
-
             pageIndex = Math.max(pageIndex, 1);
-            pageIndex = Math.min(pageIndex, this._getLastPage());
+            pageIndex = Math.min(pageIndex, this._getLastPage() - this.getOption('pagePerPageList') + 1);
             return pageIndex;
         }
         return Math.ceil(pageNumber / this.getOption("pagePerPageList"));
@@ -238,10 +235,18 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
         var page = null,
             isMovePage = this.getOption('moveUnit') === 'page',
             currentPageIndex = this._getPageIndex(this.getCurrentPage());
-        if (relativeName === 'pre') {
-            page = isMovePage ? this.getCurrentPage() - 1 : (currentPageIndex - 1) * this.getOption('pagePerPageList');
+        if(this.getOption('isCenterAlign')) {
+            if (relativeName === 'pre') {
+                page = isMovePage ? this.getCurrentPage() - 1 : currentPageIndex - 1;
+            } else {
+                page = isMovePage ? this.getCurrentPage() + 1 : currentPageIndex + this.getOption('pagePerPageList');
+            }
         } else {
-            page = isMovePage ? this.getCurrentPage() + 1 : (currentPageIndex) * this.getOption('pagePerPageList') + 1;
+            if (relativeName === 'pre') {
+                page = isMovePage ? this.getCurrentPage() - 1 : (currentPageIndex - 1) * this.getOption('pagePerPageList');
+            } else {
+                page = isMovePage ? this.getCurrentPage() + 1 : currentPageIndex * this.getOption('pagePerPageList') + 1;
+            }
         }
         return page;
     },
@@ -288,7 +293,6 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
     _onClickPageList: function(event) {
 
         event.preventDefault();
-
         var page = null,
             targetElement = $(event.target),
             targetPage;
