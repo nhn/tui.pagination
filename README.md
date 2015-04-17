@@ -13,8 +13,8 @@ Pagination
 ![alt tag](https://github.nhnent.com/pages/fe/component-pagination/paging.png)<br><br>
 
 ## Documentation
-* **API** - https://github.nhnent.com/pages/fe/component-pagination/
-* **Samples** - https://github.nhnent.com/pages/fe/component-pagination/tutorial-sample1.html
+* **API** - https://github.nhnent.com/pages/fe/component-pagination/1.0.0/
+* **Samples** - https://github.nhnent.com/pages/fe/component-pagination/1.0.0/tutorial-sample1.html
 * **CI** - http://fe.nhnent.com:8080/jenkins/job/component-pagination/
 
 ## Dependency
@@ -22,7 +22,7 @@ Pagination
 * jquery1.8.3 - https://github.com/jquery/jquery/tree/1.8.3
 
 ## Download/Install
-* Bower: `bower install "git+http://3c672057a1ac16c4e6f1baaba73e24d5270ef453:x-oauth-basic@github.nhnent.com/fe/component-pagination.git#version"`
+* Bower: `bower install "git+http://3c672057a1ac16c4e6f1baaba73e24d5270ef453:x-oauth-basic@github.nhnent.com/fe/component-pagination.git#master"`
 * Download: https://github.nhnent.com/fe/component-pagination/
 
 ## History
