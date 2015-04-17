@@ -13,8 +13,8 @@ Pagination
 ![alt tag](https://github.nhnent.com/pages/fe/component-pagination/paging.png)<br><br>
 
 ## Documentation
-* **API** - https://github.nhnent.com/pages/fe/component-pagination/
-* **Samples** - https://github.nhnent.com/pages/fe/component-pagination/tutorial-sample1.html
+* **API** - https://github.nhnent.com/pages/fe/component-pagination/1.0.0/
+* **Samples** - https://github.nhnent.com/pages/fe/component-pagination/1.0.0/tutorial-sample1.html
 * **CI** - http://fe.nhnent.com:8080/jenkins/job/component-pagination/
 
 ## Dependency
