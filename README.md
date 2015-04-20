@@ -23,7 +23,9 @@ Pagination
 * jquery1.8.3 - https://github.com/jquery/jquery/tree/1.8.3
 
 ## Download/Install
-* Bower: `bower install "git+http://3c672057a1ac16c4e6f1baaba73e24d5270ef453:x-oauth-basic@github.nhnent.com/fe/component-pagination.git#master"`
+* Bower: 
+   * 최신버전 : `bower install "git+http://3c672057a1ac16c4e6f1baaba73e24d5270ef453:x-oauth-basic@github.nhnent.com/fe/component-pagination.git#master"`
+   * 특정버전 : `bower install "git+http://3c672057a1ac16c4e6f1baaba73e24d5270ef453:x-oauth-basic@github.nhnent.com/fe/component-pagination.git[# tag]"`
 * Download: https://github.nhnent.com/fe/component-pagination/
 
 ## History
