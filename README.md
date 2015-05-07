@@ -10,35 +10,32 @@ Pagination
 * 페이지 이동시 커스텀 이벤트를 지원
 
 ## Sample Image
-![alt tag](https://github.nhnent.com/pages/fe/component-pagination/paging.png)<br><br>
+![alt tag](https://nhnent.github.io/fe.component-pagination/paging.png)<br><br>
 
 ## Documentation
-* **API** - https://github.nhnent.com/pages/fe/component-pagination/1.0.0/
-* **Samples** - https://github.nhnent.com/pages/fe/component-pagination/1.0.0/tutorial-sample1.html
-* **Tutorial** - https://github.nhnent.com/fe/component-pagination/wiki/%ED%8E%98%EC%9D%B4%EC%A7%80%EB%84%A4%EC%9D%B4%EC%85%98-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%EC%A0%81%EC%9A%A9%EB%B0%A9%EB%B2%95
-* **CI** - http://fe.nhnent.com:8080/jenkins/job/component-pagination/
+* **API** - https://nhnent.github.io/fe.component-pagination/1.0.0/
+* **Samples** - https://nhnent.github.io/fe.component-pagination/1.0.0/tutorial-sample1.html
+* **Tutorial** - https://github.com/nhnent/fe.component-pagination/wiki/페이지네이션-컴포넌트-적용방법
 
 ## Dependency
-* code-snippet - https://github.nhnent.com/fe/share-code-snippet
+* code-snippet - https://github.com/nhnent/fe.code-snippet
 * jquery1.8.3 - https://github.com/jquery/jquery/tree/1.8.3
 
 ## Test environment
-* browser : 
+* browser :
    * IE7~11
    * Chrome
    * Firefox
 
 ## Download/Install
-* Bower: 
-   * 최신버전 : `bower install "git+http://70327b4564c7a80eb61724056876b960290946dd:x-oauth-basic@github.nhnent.com/fe/component-pagination.git#master"`
-   * 특정버전 : `bower install "git+http://70327b4564c7a80eb61724056876b960290946dd:x-oauth-basic@github.nhnent.com/fe/component-pagination.git[# tag]"`
-* Download: https://github.nhnent.com/fe/component-pagination/
+* Bower:
+   * 최신버전 : `bower install ne-component-pagination#master`
+   * 특정버전 : `bower install ne-component-pagination[#tag]`
+* Download: https://github.com/nhnent/fe.component-pagination
 
 ## History
 | Version | Description | Date | Developer |
 | ---- | ---- | ---- | ---- |
-| <a href="https://github.nhnent.com/pages/fe/component-pagination/1.0.0/">1.0.0</a> | 배포 | 2015.03 | FE 개발팀 이제인 <jein.yi@nhnent.com> |
+| 1.0.1 | 버그(가운데정렬 페이징 오류)수정 | 2015.04 | FE 개발팀 이제인 <jein.yi@nhnent.com> |
+| <a href="https://nhnent.github.io/fe.component-pagination/1.0.0/">1.0.0</a> | 배포 | 2015.03 | FE 개발팀 이제인 <jein.yi@nhnent.com> |
 | 0.1.0 | 최초개발 | 2014.11 | FE 개발팀 이제인 <jein.yi@nhnent.com> |
-
-
-
