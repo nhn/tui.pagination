@@ -1,10 +1,11 @@
 {
     "name": "ne-component-pagination",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "authors": [
         "FE개발팀 이제인<jein.yi@nhnent.com>"
     ],
     "license": "MIT",
+    "main": "pagination.js",
     "ignore": [
         "**/.*",
         ".*",
