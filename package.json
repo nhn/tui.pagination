@@ -52,6 +52,11 @@
     "doc": "./node_modules/.bin/jsdoc -c conf.json"
   },
   "history": {
+    "1.0.1a": {
+      "content": "defineNamespace적용",
+      "date" : "2015.05",
+      "author" : "이제인 <jein.yi@nhnent.com>"
+    },
     "1.0.1": {
       "content": "버그(가운데정렬 페이징 오류)수정",
       "date" : "2015.04",

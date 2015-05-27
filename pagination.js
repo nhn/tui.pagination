@@ -1,4 +1,4 @@
-/*!Component-Pagination v1.0.0 | NHN Entertainment*/
+/*!component-pagination v1.0.1 | NHN Entertainment*/
 (function() {
 /**
  * @fileoverview 페이지네이션의 뷰를 생성하고, 이벤트를 건다.
