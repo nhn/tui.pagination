@@ -46,27 +46,42 @@
 
 
     <section>
-        <article><div class="readme"><h1>Pagination</h1><p>페이지네이션 컴포넌트<br>
-리스트에 페이지 목록 만들고 페이지에 따른 네비게이션을 구현한 컴포넌트입니다.</p>
+        <article><div class="readme"><h1>Pagination</h1><p>페이지네이션 컴포넌트<br>리스트에 페이지 목록 만들고 페이지에 따른 네비게이션을 제공한다.</p>
 <h2>Feature</h2><ul>
 <li>이전페이지, 다음페이지로 이동 가능</li>
 <li>처음페이지, 마지막페이지로 이동 가능</li>
 <li>특정페이지로 이동 가능</li>
 <li>페이지 이동시 커스텀 이벤트를 지원</li>
 </ul>
-<h2>Sample Image</h2><p><img src="https://github.nhnent.com/pages/fe/component-pagination/paging.png" alt="alt tag"><br><br></p>
 <h2>Documentation</h2><ul>
-<li><strong>API</strong> - https://github.nhnent.com/pages/fe/component-pagination/1.0.0/</li>
-<li><strong>Samples</strong> - https://github.nhnent.com/pages/fe/component-pagination/1.0.0/tutorial-sample1.html</li>
-<li><strong>CI</strong> - http://fe.nhnent.com:8080/jenkins/job/component-pagination/</li>
+<li><strong>API</strong> : https://github.nhnent.com/pages/fe/component-pagination/1.0.0</li>
+<li><strong>Tutorial</strong> : https://github.nhnent.com/fe/component-pagination/wiki/페이지네이션-컴포넌트-적용방법</li>
+<li><strong>Sample</strong> - https://github.nhnent.com/pages/fe/component-pagination/1.0.0/tutorial-sample1.html</li>
+<li><strong>CI</strong> : http://fe.nhnent.com:8080/jenkins/job/component-pagination/</li>
+</ul>
+<h2>Sample Image</h2><ul>
+<li>샘플1<br>
+<img src="https://github.nhnent.com/pages/fe/component-pagination/paging.png" alt="alt tag"></li>
 </ul>
 <h2>Dependency</h2><ul>
-<li>code-snippet - https://github.nhnent.com/fe/share-code-snippet</li>
-<li>jquery1.8.3 - https://github.com/jquery/jquery/tree/1.8.3</li>
+<li>jquery: ~1.8.3</li>
+<li>ne-code-snippet: ~1.0.2</li>
+</ul>
+<h2>Test environment</h2><ul>
+<li>PC<ul>
+<li>IE7~11</li>
+<li>Chrome</li>
+<li>Firefox</li>
+</ul>
+</li>
 </ul>
 <h2>Download/Install</h2><ul>
-<li>Bower: <code>bower install &quot;git+http://3c672057a1ac16c4e6f1baaba73e24d5270ef453:x-oauth-basic@github.nhnent.com/fe/component-pagination.git#master&quot;</code></li>
-<li>Download: https://github.nhnent.com/fe/component-pagination/</li>
+<li>Bower:<ul>
+<li>최신버전 : <code>bower install &quot;git+http://70327b4564c7a80eb61724056876b960290946dd:x-oauth-basic@github.nhnent.com/fe/component-pagination.git#master&quot;</code></li>
+<li>특정버전 : <code>bower install &quot;git+http://70327b4564c7a80eb61724056876b960290946dd:x-oauth-basic@github.nhnent.com/fe/component-pagination.git[#tag]&quot;</code></li>
+</ul>
+</li>
+<li>Download: https://github.nhnent.com/fe/component-pagination</li>
 </ul>
 <h2>History</h2><table>
 <thead>
@@ -79,22 +94,28 @@
 </thead>
 <tbody>
 <tr>
+<td>1.0.1a</td>
+<td>defineNamespace적용</td>
+<td>2015.05</td>
+<td>FE개발팀 이제인 <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#106;&#101;&#105;&#x6e;&#46;&#x79;&#x69;&#x40;&#110;&#104;&#110;&#101;&#110;&#x74;&#x2e;&#x63;&#111;&#109;">&#106;&#101;&#105;&#x6e;&#46;&#x79;&#x69;&#x40;&#110;&#104;&#110;&#101;&#110;&#x74;&#x2e;&#x63;&#111;&#109;</a></td>
+</tr>
+<tr>
 <td>1.0.1</td>
 <td>버그(가운데정렬 페이징 오류)수정</td>
 <td>2015.04</td>
-<td>FE 개발팀 이제인 <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#106;&#x65;&#105;&#110;&#x2e;&#121;&#105;&#64;&#110;&#x68;&#x6e;&#101;&#110;&#x74;&#46;&#99;&#x6f;&#109;">&#106;&#x65;&#105;&#110;&#x2e;&#121;&#105;&#64;&#110;&#x68;&#x6e;&#101;&#110;&#x74;&#46;&#99;&#x6f;&#109;</a></td>
+<td>FE개발팀 이제인 <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#x6a;&#101;&#105;&#x6e;&#46;&#x79;&#x69;&#64;&#x6e;&#x68;&#110;&#101;&#110;&#116;&#x2e;&#99;&#111;&#109;">&#x6a;&#101;&#105;&#x6e;&#46;&#x79;&#x69;&#64;&#x6e;&#x68;&#110;&#101;&#110;&#116;&#x2e;&#99;&#111;&#109;</a></td>
 </tr>
 <tr>
-<td>1.0.0</td>
+<td><a href="https://github.nhnent.com/pages/fe/component-pagination/1.0.0">1.0.0</a></td>
 <td>배포</td>
 <td>2015.03</td>
-<td>FE 개발팀 이제인 <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#106;&#x65;&#x69;&#x6e;&#x2e;&#121;&#x69;&#64;&#110;&#104;&#110;&#101;&#x6e;&#x74;&#46;&#99;&#x6f;&#109;">&#106;&#x65;&#x69;&#x6e;&#x2e;&#121;&#x69;&#64;&#110;&#104;&#110;&#101;&#x6e;&#x74;&#46;&#99;&#x6f;&#109;</a></td>
+<td>FE개발팀 이제인 <a href="&#x6d;&#97;&#105;&#108;&#116;&#x6f;&#58;&#x6a;&#101;&#105;&#110;&#46;&#x79;&#105;&#x40;&#x6e;&#104;&#110;&#101;&#x6e;&#116;&#x2e;&#x63;&#x6f;&#x6d;">&#x6a;&#101;&#105;&#110;&#46;&#x79;&#105;&#x40;&#x6e;&#104;&#110;&#101;&#x6e;&#116;&#x2e;&#x63;&#x6f;&#x6d;</a></td>
 </tr>
 <tr>
 <td>0.1.0</td>
 <td>최초개발</td>
 <td>2014.11</td>
-<td>FE 개발팀 이제인 <a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#58;&#x6a;&#x65;&#x69;&#x6e;&#46;&#x79;&#x69;&#64;&#110;&#x68;&#110;&#101;&#110;&#116;&#x2e;&#99;&#x6f;&#x6d;">&#x6a;&#x65;&#x69;&#x6e;&#46;&#x79;&#x69;&#64;&#110;&#x68;&#110;&#101;&#110;&#116;&#x2e;&#99;&#x6f;&#x6d;</a></td>
+<td>FE개발팀 이제인 <a href="&#x6d;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x6a;&#101;&#105;&#110;&#x2e;&#121;&#105;&#64;&#110;&#104;&#x6e;&#x65;&#110;&#116;&#x2e;&#99;&#x6f;&#x6d;">&#x6a;&#101;&#105;&#110;&#x2e;&#121;&#105;&#64;&#110;&#104;&#x6e;&#x65;&#110;&#116;&#x2e;&#99;&#x6f;&#x6d;</a></td>
 </tr>
 </tbody>
 </table></div></article>
