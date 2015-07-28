@@ -22,7 +22,7 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
      * @param {DataObject} options Option object
      * 		@param {Number} [options.itemCount=10] Total item count
      * 		@param {Number} [options.itemPerPage=10] Item count per page
-     * 		@param {Number} [options.pagePerPageList=10] Page list count
+     * 		@param {Number} [options.pagePerPageList=10] Display page link count
      * 		@param {Number} [options.page=1] Pagination Display page after pagination draw.
      * 		@param {String} [options.moveUnit="pagelist"] Page move unit.
      * 			<ul>
@@ -33,7 +33,7 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
      * 		@param {String} [options.insertTextNode=""] Page links markup coupler
      * 		@param {String} [options.classPrefix=""] Class name prefix
      * 		@param {String} [options.firstItemClassName="first-child"] Class name is granted first page link item
-     * 		@param {String} [options.lastItemClassName="last-child"] Class name is granted last page link item
+     * 		@param {String} [options.lastItemClassName="last-child"] Class name is granted first page link item
      * 		@param {String} [options.pageTemplate="<a href='#'>{=page}</a>"] Set markup to show page item such as 1, 2, 3, .. {=page} will be changed each page number.
      * 		@param {String} [options.currentPageTemplate="<strong>{=page}</strong>"] Set markup current page {=page} will be changed current page number.
      * 		@param {jQueryObject} [options.$pre_endOn] The button element to move first page. If this option is not exist and the element that has class 'pre_end', component do not create this button.
