@@ -231,7 +231,7 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
 
     /**
      * Get each edge page
-     * @param {object} viewSet All of view set
+     * @param {object} viewSet Pagination view elements set
      * @returns {{left: *, right: *}}
      * @private
      */
@@ -271,7 +271,7 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
 
     /**
      * Decide to show first page link by whether first page or not
-     * @param {object} viewSet All of view set
+     * @param {object} viewSet Pagination view elements set
      * @private
      */
     _setFirst: function(viewSet) {
@@ -292,7 +292,7 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
 
     /**
      * Decide to show previous page link by whether first page or not
-     * @param {object} viewSet All of view set
+     * @param {object} viewSet Pagination view elements set
      * @private
      */
     _setPrev: function(viewSet) {
@@ -312,7 +312,7 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
     },
     /**
      * Decide to show next page link by whether first page or not
-     * @param {object} viewSet All of view set
+     * @param {object} viewSet Pagination view elements set
      * @private
      */
     _setNext: function(viewSet) {
@@ -333,7 +333,7 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
     },
     /**
      * Decide to show last page link by whether first page or not
-     * @param {object} viewSet All of view set
+     * @param {object} viewSet Pagination view elements set
      * @private
      */
     _setLast: function(viewSet) {
@@ -355,7 +355,7 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
     },
     /**
      * Set page number that will be drawn
-     * @param {object} viewSet All of view set
+     * @param {object} viewSet Pagination view elements set
      * @private
      */
     _setPageNumbers: function(viewSet) {
