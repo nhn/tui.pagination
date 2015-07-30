@@ -1,18 +1,18 @@
 Pagination
 ===============
 Pagination component<br>
-Make page list and support indicator.
+Make page list and provide indicator of pages.
 
 ## Feature
-* Move first page, list page
+* Move first page, last page
 * Move previous page, next page 
 * Move specific page
 * Supprt to custom event before or after move page
 
 ## Documentation
-* **API** : https://nhnent.github.io/fe.component-pagination/1.0.0
+* **API** : https://nhnent.github.io/fe.component-pagination/latest
 * **Tutorial** : https://github.com/nhnent/fe.component-pagination/wiki/Pagination-tutorial
-* **Sample** - https://nhnent.github.io/fe.component-pagination/1.0.0/tutorial-sample1.html
+* **Sample** - https://nhnent.github.io/fe.component-pagination/latest/tutorial-sample1.html
 
 
 ## Sample Image
@@ -31,7 +31,7 @@ Make page list and support indicator.
 
 ## Download/Install
 * Bower:
-   * lastest : `bower install ne-component-pagination#master`
+   * latest : `bower install ne-component-pagination#master`
    * each version : `bower install ne-component-pagination[#tag]`
 * Download: https://github.com/nhnent/fe.component-pagination
 
