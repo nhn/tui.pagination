@@ -1,47 +1,40 @@
 /**
- * @fileoverview 페이지네이션, 화면에 그려지는 요소들을 관리한다
- * (pug.Pagination 에서 분리)
- * @author 이제인(jein.yi@nhnent.com)
+ * @fileoverview Pagination view manage all of draw elements
+ * (from pug.Pagination)
+ * @author NHN entertainment FE dev team Jein Yi(jein.yi@nhnent.com)
+ * @dependency pagination.js
  */
 /**
  * @constructor ne.component.Pagination.PaginationView
- * @param {Object} options 옵션 객체
- * @param {Object} $element 루트 엘리먼트
+ * @param {Object} options Option object
+ * @param {Object} $element Container element
  *
  */
 ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.component.Pagination.PaginationView.prototype */{
     init: function(options, $element) {
         /**
-         * 페이지네이션의 루트 엘리먼트
-         *
+         * Pagination root element
          * @type {jQueryObject}
          * @private
          */
         this._element = $element;
+
         /**
-         * 페이지네이션 지정 옵션
-         *
+         * Pagination options
          * @type {Object}
          * @private
          */
         this._options = options;
+
         /**
-         * 컴포넌트에 저장되는 셀렉터
-         *
+         * Selectors
          * @type {Object}
          * @private
          */
         this._elementSelector = {};
+
         /**
-         * 선택된 엘리먼트들을 캐싱해두는 객체
-         *
-         * @type {Object}
-         * @private
-         */
-        this._cachedElement = {};
-        /**
-         * 페이지 아이템 리스트
-         *
+         * Page item list
          * @type {Array}
          * @private
          */
@@ -59,10 +52,10 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         });
         this._element.addClass(this._wrapPrefix('loaded'));
     },
+
     /**
-     * 뷰를 업데이트 한다
-     *
-     * @param {Object} viewSet 뷰갱신에 대한 값들
+     * Update view
+     * @param {Object} viewSet Values of each pagination view components
      */
     update: function(viewSet) {
         this._addTextNode();
@@ -87,11 +80,11 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         this._setNext(viewSet);
         this._setLast(viewSet);
     },
+
     /**
-     * 포함관계를 본다
-     *
-     * @param {JQueryObject} $find 포함되어있는 체크할 대상
-     * @param {JQueryObject} $parent 포함하고 있는지 체크할 대상
+     * Check include
+     * @param {JQueryObject} $find Target element
+     * @param {JQueryObject} $parent Wrapper element
      * @returns {boolean}
      */
     isIn: function($find, $parent) {
@@ -100,16 +93,17 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         }
         return ($find[0] === $parent[0]) ? true : $.contains($parent, $find);
     },
+
     /**
-     * 기준 엘리먼트를 구한다
-     *
+     * Get base(root) element
      * @returns {JQueryObject}
      */
     getBaseElement: function() {
-        return this._element;
+        return this.getElement();
     },
+
     /**
-     * 기준엘리먼트를 초기화 시킨다
+     * Reset base element
      */
     empty: function(){
 
@@ -136,11 +130,11 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
 
         this._element.empty();
     },
+
     /**
-     * 페이지 숫자를 담은 엘리먼트 중 원하는 엘리먼트를 찾는다.
-     *
-     * @param {jQueryObject|HTMLElement} el 목록 중에서 찾을 target 엘리먼트
-     * @return {jQueryObject} 있을 경우 해당 엘리먼트 jQuery 객체를 반환하며, 없으면 null을 반환한다.
+     * Find target element from page elements
+     * @param {jQueryObject|HTMLElement} el Target element
+     * @return {jQueryObject}
      */
     getPageElement: function(el) {
 
@@ -156,11 +150,11 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         }
         return null;
     },
+
     /**
-     * targetElement 엘리먼트에 eventType 이벤트의 콜백함수로 callback 함수를 등록한다.
-     *
-     * @param {String} eventType 등록할 이벤트 명
-     * @param {Function} callback 해당 이벤트가 발생 시에 호출할 콜백함수
+     * Attach Events
+     * @param {String} eventType Event name to attach
+     * @param {Function} callback Callback function
      */
     attachEvent: function(eventType, callback) {
 
@@ -175,21 +169,18 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
             $(targetElement).bind(eventType, null, callback);
         }
     },
+
     /**
-     * 루트 엘리먼트객체를 돌려준다.
-     *
+     * Get root element
      * @returns {jQueryObject}
      */
     getElement: function() {
-
         return this._element;
-
     },
+
     /**
-     * 클래스명에 Prefix 를 붙힘
-     * Prefix는 options.classPrefix를 참조, 붙혀질 때 기존 클래스명의 언더바(_) 문자는 하이픈(-)으로 변환됨
-     *
-     * @param {String} className
+     * Return className added prefix
+     * @param {String} className Class name to be wrapping
      * @returns {*}
      * @private
      */
@@ -197,18 +188,18 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         var classPrefix = this._options['classPrefix'];
         return classPrefix ? classPrefix + className.replace(/_/g, '-') : className;
     },
+
     /**
-     * 페이지표시 마크업 사이사이에 options.insertTextNode를 끼어넣어준다.
+     * Put insertTextNode between page items
      * @private
      */
     _addTextNode: function() {
-
         var textNode = this._options['insertTextNode'];
         this._element.append(document.createTextNode(textNode));
-
     },
+
     /**
-     * 엘리먼트 복제, html은 동일하나 jQuery객체상태를 초기화 하여 반환된다.
+     * Clone element
      * @returns {*}
      * @private
      */
@@ -220,9 +211,10 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         return $link;
 
     },
+
     /**
-     * 페이지 결과값에 따른, 결과클래스를 입힌다.
-     * @param {Number} lastNum
+     * Wrapping class by page result
+     * @param {Number} lastNum Last page number
      * @private
      */
     _setPageResult: function(lastNum) {
@@ -236,14 +228,13 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         }
 
     },
+
     /**
-     * 현재페이지의 양 끝페이지를 구한다
-     *
-     * @param viewSet
+     * Get each edge page
+     * @param {object} viewSet Pagination view elements set
      * @returns {{left: *, right: *}}
      * @private
      */
-
     _getEdge: function(viewSet) {
 
         var options = this._options,
@@ -277,10 +268,10 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
             right: rightPageNumber
         };
     },
+
     /**
-     * 첫번째 페이지인지 여부에 따라 첫번째페이지로 가는 링크를 노출할지 결정한다.
-     *
-     * @param {Object} viewSet
+     * Decide to show first page link by whether first page or not
+     * @param {object} viewSet Pagination view elements set
      * @private
      */
     _setFirst: function(viewSet) {
@@ -298,12 +289,11 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         }
 
     },
+
     /**
-     * 이전페이지가 있는지 여부에 따른 오브젝트 활성화
-     *
-     * @param {Object} viewSet
+     * Decide to show previous page link by whether first page or not
+     * @param {object} viewSet Pagination view elements set
      * @private
-     *
      */
     _setPrev: function(viewSet) {
         var options = this._options;
@@ -321,9 +311,8 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         }
     },
     /**
-     * 다음페이지가 있는지 여부에 따른 오브젝트 활성화
-     *
-     * @param {Obejct} viewSet
+     * Decide to show next page link by whether first page or not
+     * @param {object} viewSet Pagination view elements set
      * @private
      */
     _setNext: function(viewSet) {
@@ -343,9 +332,8 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
 
     },
     /**
-     * 마지막페이지가 있는지 여부에 따른 오브젝트 활성화
-     *
-     * @param {Object} viewSet
+     * Decide to show last page link by whether first page or not
+     * @param {object} viewSet Pagination view elements set
      * @private
      */
     _setLast: function(viewSet) {
@@ -366,9 +354,8 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
 
     },
     /**
-     * 페이지 넘버링을 한다
-     *
-     * @param {Object} viewSet
+     * Set page number that will be drawn
+     * @param {object} viewSet Pagination view elements set
      * @private
      */
     _setPageNumbers: function(viewSet) {
