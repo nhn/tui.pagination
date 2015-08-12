@@ -33,7 +33,9 @@
 <script>
     // 생성
     var pagination = new ne.component.Pagination({
-        "itemCount": 500
+        "itemCount": 10,
+        "itemPerPage": 10,
+        pagePerPageList: 100
     }, $('.paginate1'));
 
     // 이벤트 등록

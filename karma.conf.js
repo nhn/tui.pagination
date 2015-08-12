@@ -17,10 +17,9 @@ module.exports = function(config) {
         ],
 
         files: [
-            'lib/json2/json2.js',
             'lib/jquery/jquery.js',
             'lib/ne-code-snippet/code-snippet.js',
-            'src/**/uploader.js',
+            'src/**/pagination.js',
             'src/**/*.js',
             'test/**/*.spec.js'
         ],

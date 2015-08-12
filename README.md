@@ -38,6 +38,7 @@ Make page list and provide indicator of pages.
 ## History
 | Version | Description | Date | Developer |
 | ---- | ---- | ---- | ---- |
+| 1.0.2 | item count 0 case, broweriy+gulp | 2015.05 | NHN Entertainment. FE dev team<dl_javascript@nhnent.com> |
 | 1.0.1a | defineNamespace apply | 2015.05 | NHN Entertainment. FE dev team Jein Yi <jein.yi@nhnent.com> |
 | 1.0.1 | Bug fix(Align center bug) | 2015.04 | NHN Entertainment. FE dev team Jein Yi <jein.yi@nhnent.com> |
 | <a href="https://github.nhnent.com/pages/fe/component-pagination/1.0.0">1.0.0</a> | Release | 2015.03 | NHN Entertainment. FE dev team Jein Yi <jein.yi@nhnent.com> |

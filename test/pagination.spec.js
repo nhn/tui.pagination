@@ -1,23 +1,24 @@
-describe('페이징 객체의 동작을 테스트', function() {
-    // 객체 생성
+var Pagination = require('../src/js/pagination.js');
+
+describe('Test pagination behavior', function() {
 
     jasmine.getFixtures().fixturesPath = "base/";
 
 
     beforeEach(function() {
-        loadFixtures("test/fixture/pageview.html");
+        loadFixtures("test/fixtures/pageview.html");
     });
 
-    describe('객체 생성 후 테스트',  function() {
+    describe('create object',  function() {
         var pagination,
             paginationOption;
         beforeEach(function() {
-            pagination = new ne.component.Pagination({
+            pagination = new Pagination({
                 itemCount: 500,
                 itemPerPage: 10
             }, $('.paginate3'));
 
-            paginationOption = new ne.component.Pagination({
+            paginationOption = new Pagination({
                 itemCount: 500,
                 itemPerPage: 10,
                 pagePerPageList: 20,
@@ -33,11 +34,11 @@ describe('페이징 객체의 동작을 테스트', function() {
         });
 
 
-        it('생성', function() {
+        it('Are paginations defined?', function() {
             expect(pagination).toBeDefined();
             expect(paginationOption).toBeDefined();
         });
-        it('생성된 객체들이 옵션에 맞게 생성되었는지 확인', function() {
+        it('Are pationations defined, with options?', function() {
 
             var itemCount = pagination.getOption('itemCount'),
                 itemPerPage = pagination.getOption('itemPerPage'),
@@ -90,7 +91,7 @@ describe('페이징 객체의 동작을 테스트', function() {
 
         });
 
-        it('뷰가 제대로 생성 되었는지 확인한다', function() {
+        it('Check correctly creating view via pagination.', function() {
             var view = pagination._view;
             var viewOfPaginationOption = paginationOption._view;
             expect(view).toBeDefined();
@@ -98,7 +99,7 @@ describe('페이징 객체의 동작을 테스트', function() {
         });
 
 
-        it('옵션 변경을 테스트한다. setOption & getOption itemCount', function() {
+        it('Change options via setOption() & getOption() with itemCount attribute', function() {
             pagination.setOption('itemCount', 100);
             expect(pagination.getOption('itemCount')).toBe(100);
             pagination.setOption('itemCount', 500);
@@ -107,17 +108,17 @@ describe('페이징 객체의 동작을 테스트', function() {
             expect(pagination.getOption('isCenterAlign')).toBe(true);
         });
 
-        it('현재 페이지를 확인한다', function() {
+        it('Check current page via getCurrentPage()', function() {
             var page = pagination.getCurrentPage();
             expect(page).toBe(1);
         });
 
-        it('getIndexOf first Item', function() {
+        it('Get First Item via getIndexOfFirstItem()', function() {
             var page = pagination.getIndexOfFirstItem(2);
             expect(page).toBe(11);
         });
 
-        it('getRelativePage, 연관 페이지', function() {
+        it('Get relative page via getRelativePage()', function() {
             var result,
                 po = paginationOption;
             result = po._getRelativePage('pre');
@@ -126,7 +127,7 @@ describe('페이징 객체의 동작을 테스트', function() {
             expect(result).toBe(16);
         });
 
-        it('페이지 이동하고 현재페이지 체크', function() {
+        it('Check page after move via movePage(page number)', function() {
             pagination.movePageTo(1);
             var page1 = pagination.getCurrentPage();
             pagination.movePageTo(2);
@@ -144,7 +145,7 @@ describe('페이징 객체의 동작을 테스트', function() {
             expect(page4).toBe(lastPage);
         });
 
-        it('페이지 이전, 다음, 마지막, 처음', function() {
+        it('Check first, prev, next, last pages.', function() {
             var event,
                 currentPage1,
                 currentPage2,
@@ -176,19 +177,19 @@ describe('페이징 객체의 동작을 테스트', function() {
             expect(currentPage4).toBe(50);
         });
 
-        it('페이징을 다시그린다.', function() {
+        it('Redraw pagination via reset()', function() {
             pagination.reset();
             var page = pagination.getCurrentPage();
             expect(page).toBe(1);
         });
 
-        it('페이징을 다시 그린다. 아이템 카운트 재설정을 함께 한다.', function() {
+        it('Redraw pagination via reset() with new itemCount', function() {
             pagination.reset(100);
             var itemCount = pagination.getOption('itemCount');
             expect(itemCount).toBe(100);
         });
 
-        it('커스텀 이벤트를 등록하고 이벤트가 동작하는 지 확인한다.', function() {
+        it('Check custom event behavior after connect custom event handler.', function() {
 
             var isBeforeMoveFire1 = false,
                 page;
