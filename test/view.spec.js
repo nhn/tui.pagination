@@ -1,16 +1,17 @@
-describe('페이징 객체의 동작을 테스트', function() {
-    // 객체 생성
+var View = require('../src/js/view.js');
+
+describe('Test Pagination view', function() {
 
     jasmine.getFixtures().fixturesPath = "base/";
 
     beforeEach(function() {
-        loadFixtures("test/fixture/pageview.html");
+        loadFixtures("test/fixtures/pageview.html");
     });
 
-    var pv = new ne.component.Pagination.PaginationView({
+    var pv = new View({
     }, $('.paginate1'));
 
-    var pv2 = new ne.component.Pagination.PaginationView({
+    var pv2 = new View({
         itemCount: 500,
         itemPerPage: 10,
         pagePerPageList: 10,
@@ -25,18 +26,18 @@ describe('페이징 객체의 동작을 테스트', function() {
         currentPageTemplate: '<strong>{=page}Sel</strong>'
     }, $('.paginate2'));
 
-    it('생성 확인', function() {
+    it('Are the views created?', function() {
         expect(pv).toBeDefined();
         expect(pv2).toBeDefined();
     });
 
 
-    it('_wrapPrefix확인', function() {
+    it('Check the prefix applied via _wrapPrefix()', function() {
         var pfx = pv2._wrapPrefix('text');
         expect(pfx).toBe('fe_text');
     });
 
-    it('_setPageNumbers 페이지 세팅', function() {
+    it('Set page number via _setPageNumbers(move page number)', function() {
         var viewSet = {
             leftPageNumber: 11,
             rightPageNumber: 20,
@@ -48,7 +49,7 @@ describe('페이징 객체의 동작을 테스트', function() {
         expect(pageList.length).toBe(9);
     });
 
-    it('_getEdge 양끝점을 구한다.', function() {
+    it('Get each edge via _getEdge()', function() {
         var viewSet = {
             lastPage: 50,
             page: 5

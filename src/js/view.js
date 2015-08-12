@@ -10,7 +10,7 @@
  * @param {Object} $element Container element
  *
  */
-ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.component.Pagination.PaginationView.prototype */{
+var View = ne.util.defineClass(/** @lends ne.component.Pagination.PaginationView.prototype */{
     init: function(options, $element) {
         /**
          * Pagination root element
@@ -384,3 +384,5 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         }
     }
 });
+
+module.exports = View;

@@ -1,22 +1,18 @@
 /**
  * @fileoverview Core of pagination component, create pagination view and attach events.
  * (from pug.Pagination)
- * @author NHN entertainment FE dev team Jein Yi(jein.yi@nhnent.com)
- * @dependency jquery-1.11.1.min.js, common.js
+ * @author NHN entertainment FE dev team(dl_javascript@nhnent.com)
+ * @dependency jquery-1.8.3.min.js, code-snippet.js
  */
 
-
-/* istanbul ignore next */
-if (!ne.component) {
-    ne.component = {};
-}
+var View = require('./view.js');
 
 /**
- *
+ * Pagination core class
  * @constructor ne.component.Pagination
  *
  */
-ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.prototype */{
+var Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.prototype */{
     /**
      * Initialize
      * @param {DataObject} options Option object
@@ -61,12 +57,18 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
             pageTemplate: '<a href="#">{=page}</a>',
             currentPageTemplate: '<strong>{=page}</strong>'
         };
+
+        if (!options.itemCount) {
+            alert('itemCount have to more than 1');
+        }
+
         /**
          * Option object
          * @type {Object}
          * @private
          */
         this._options = ne.util.extend(defaultOption, options);
+
         /**
          * Event handler savor
          * @type {Object}
@@ -79,7 +81,7 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
          * @type {PaginationView}
          * @private
          */
-        this._view = new ne.component.Pagination.PaginationView(this._options, $element);
+        this._view = new View(this._options, $element);
         this._view.attachEvent('click', ne.util.bind(this._onClickPageList, this));
 
         this.movePageTo(this.getOption('page'), false);
@@ -320,4 +322,6 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
     }
 });
 // CustomEvent  Mixin
-ne.util.CustomEvents.mixin(ne.component.Pagination);
+ne.util.CustomEvents.mixin(Pagination);
+
+module.exports = Pagination;
