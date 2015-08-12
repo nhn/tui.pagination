@@ -55,7 +55,7 @@ gulp.task('compress', ['bundle'], function() {
 gulp.task('concat', ['compress'], function() {
     gulp.src(filename + '.js')
         .pipe(concat(filename + '.js'))
-        .pipe(gulp.dest('./sample/js/'));
+        .pipe(gulp.dest('./samples/js/'));
 });
 
 gulp.task('default', ['bundle', 'compress', 'concat']);
