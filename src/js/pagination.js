@@ -58,16 +58,17 @@ var Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.prototype
             currentPageTemplate: '<strong>{=page}</strong>'
         };
 
-        if (!options.itemCount) {
-            alert('itemCount have to more than 1');
-        }
 
-        /**
-         * Option object
-         * @type {Object}
-         * @private
-         */
-        this._options = ne.util.extend(defaultOption, options);
+        if (options.itemCount === 0) {
+            /**
+             * Option object
+             * @type {Object}
+             * @private
+             */
+            this._options = defaultOption;
+        } else {
+            this._options = ne.util.extend(defaultOption, options);
+        }
 
         /**
          * Event handler savor
