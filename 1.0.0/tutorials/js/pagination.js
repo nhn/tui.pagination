@@ -1,52 +1,52 @@
-/*!Component-Pagination v1.0.0 | NHN Entertainment*/
-(function() {
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+ne.util.defineNamespace('ne.component.Pagination', require('./src/js/pagination.js'));
+
+},{"./src/js/pagination.js":2}],2:[function(require,module,exports){
 /**
- * @fileoverview 페이지네이션의 뷰를 생성하고, 이벤트를 건다.
- * (pug.Pagination 에서 분리)
- * @author 이제인(jein.yi@nhnent.com)
- * @dependency jquery-1.11.1.min.js, common.js
+ * @fileoverview Core of pagination component, create pagination view and attach events.
+ * (from pug.Pagination)
+ * @author NHN entertainment FE dev team(dl_javascript@nhnent.com)
+ * @dependency jquery-1.8.3.min.js, code-snippet.js
  */
 
-
-/* istanbul ignore next */
-if (!ne.component) {
-    ne.component = {};
-}
+var View = require('./view.js');
 
 /**
- *
+ * Pagination core class
  * @constructor ne.component.Pagination
- * @param {DataObject} options 옵션 객체
- * 		@param {Number} [options.itemCount=10] 리스트의 전체 아이템 개수
- * 		@param {Number} [options.itemPerPage=10] 한 페이지에 표시 될 아이템의 개수를 정의한다.
- * 		@param {Number} [options.pagePerPageList=10] 페이지 목록에 표시 될 페이지의 개수를 정의한다.
- * 		@param {Number} [options.page=1] Pagination 컴포넌트가 로딩되었을 때 보여 주는 페이지이다. 기본값으로는 1이 설정된다. 아래의 이미지에서는 12페이지를 선택한 경우이다.
- * 		@param {String} [options.moveUnit="pagelist"] 이전/다음 버튼을 누르는 경우 한 페이지씩(page) 또는 페이지 목록(pagelist) 단위로 이동하게 해주는 설정 값이다.
- * 			<ul>
- * 				<li>pagelist : nPagePerPageList로 설정한 값 기준으로 이동한다.(기본값 기준으로 10페이지)</li>
- * 				<li>page : 한 페이지 씩 이동한다.</li>
- * 			</ul>
- * 		@param {Boolean}[options.isCenterAlign=false] 현재 페이지가 항상 가운데에 오도록 정렬해주는 값이다. 이전 또는 다음 버튼을 눌러서 페이지를 이동하는 경우 이동 된 페이지가 중앙에 오게 된다.<br/>※ 이 값을 true로 할 경우엔 moveUnit이 항상 "page"로 설정되어야 한다.
- * 		@param {String} [options.insertTextNode=""] 페이지 목록에서 페이지의 마크업들을 연결해주는 문자열이다. 설정 값에 따라서 각각의 페이지를 보여주는 노드 (예 <a href="#">11</a><a href="#">12</a>에서 a태그)를 "\n" 또는 " "등으로 설정해서 변경할 수 있다. (위의 예에서는 a태그 사이의 간격이 한 줄 또는 하나의 공백문자로 변경되게 된다.)<br/>※ 주의할 점은 이 옵션에 따라 렌더링이 달라질 수 있다는 점이다.
- * 		@param {String} [options.classPrefix=""] 클래스명 접두어
- * 		@param {String} [options.firstItemClassName="first-child"] 페이지 목록에서 첫 번째 페이지 항목에 추가되는 클래스명
- * 		@param {String} [options.lastItemClassName="last-child"] 페이지 목록에서 마지막 페이지 항목에 추가되는 클래스명
- * 		@param {String} [options.pageTemplate="<a href='#'>{=page}</a>"] 1, 2, 3, .. 과 같은 페이지를 보여주는 엘리먼트를 어떤 마크업으로 보여줄 지를 설정한다. {=page}가 페이지 번호로 교체된다.
- * 		@param {String} [options.currentPageTemplate="<strong>{=page}</strong>"] 페이지 목록에서 보여주고 있는 현재 페이지를 어떻게 보여줄 지 설정하는 마크업 템플릿이다. {=page}가 현재 페이지 번호로 교체된다.
- * 		@param {jQueryObject} [options.$pre_endOn] 페이지 목록에서 페이지의 맨 처음으로 이동하는 버튼으로 사용되는 엘리먼트이다. 처음으로 이동할 수 있는 경우만 노출되며 값을 지정하지 않거나 pre_end 클래스 명을 가진 a 엘리먼트가 존재하지 않으면 버튼이 생성되지 않는다.<br/>기본 값 : 페이지 목록 엘리먼트 아래의 pre_end 클래스 명을 가지고 있는 a 엘리먼트
- * 		@param {jQueryObject} [options.$preOn] 페이지 목록에서 이전 페이지 또는 이전 페이지목록으로 이동하는 버튼으로 사용되는 엘리먼트이다. 이전으로 이동할 수 있는 경우만 노출되며 값을 지정하지 않거나 pre 클래스 명을 가진 a 엘리먼트가 존재하지 않으면 버튼이 생성되지 않는다.<br/>기본 값 : 페이지 목록 엘리먼트 아래의 pre 클래스 명을 가지고 있는 a 엘리먼트
- * 		@param {jQueryObject} [options.$nextOn] 페이지 목록에서 다음 페이지 또는 다음 페이지목록으로 이동하는 버튼으로 사용되는 엘리먼트이다. 다음으로 이동할 수 있는 경우만 노출되며 값을 지정하지 않거나 next 클래스 명을 가진 a 엘리먼트가 존재하지 않으면 버튼이 생성되지 않는다.<br/>기본 값 : 페이지 목록 엘리먼트 아래의 next 클래스 명을 가지고 있는 a 엘리먼트
- * 		@param {jQueryObject} [options.$lastOn] 페이지 목록에서 페이지의 맨 마지막으로 이동하는 버튼으로 사용되는 엘리먼트이다. 마지막으로 이동할 수 있는 경우만 노출되며 값을 지정하지 않거나 next_end 클래스 명을 가진 a 엘리먼트가 존재하지 않으면 버튼이 생성되지 않는다.<br/>기본 값 : 페이지 목록 엘리먼트 아래의 next_end 클래스 명을 가지고 있는 a 엘리먼트
- * 		@param {jQueryObject} [options.$pre_endOff] elFirstPageLinkOn과는 반대로 처음으로 이동할 수 없는 경우에 사용자에게 비활성화된 상태를 보여주기 위한 엘리먼트이다. 값을 지정하지 않거나 pre_end 클래스 명을 가진 span 엘리먼트가 존재하지 않으면 버튼이 생성되지 않는다.<br/>기본 값 : 페이지 목록 엘리먼트 아래의 pre_end 클래스 명을 가지고 있는 span 엘리먼트
- * 		@param {jQueryObject} [options.$preOff] elPrevPageLinkOn과는 반대로 이전으로 이동할 수 없는 경우에 사용자에게 비활성화된 상태를 보여주기 위한 엘리먼트이다. 값을 지정하지 않거나 pre 클래스 명을 가진 span 엘리먼트가 존재하지 않으면 버튼이 생성되지 않는다.<br/>기본 값 : 페이지 목록 엘리먼트 아래의 pre 클래스 명을 가지고 있는 span 엘리먼트
- * 		@param {jQueryObject} [options.$nextOff] elNextPageLinkOn과는 반대로 다음으로 이동할 수 없는 경우에 사용자에게 비활성화된 상태를 보여주기 위한 엘리먼트이다. 값을 지정하지 않거나 next 클래스 명을 가진 span 엘리먼트가 존재하지 않으면 버튼이 생성되지 않는다.<br/>기본 값 : 페이지 목록 엘리먼트 아래의 next 클래스 명을 가지고 있는 span 엘리먼트
- * 		@param {jQueryObject} [options.$lastOff] zelLastPageLinkOn과는 반대로 마지막으로 이동할 수 없는 경우에 사용자에게 비활성화된 상태를 보여주기 위한 엘리먼트이다. 값을 지정하지 않거나 next_end 클래스 명을 가진 span 엘리먼트가 존재하지 않으면 버튼이 생성되지 않는다.<br/>기본 값 : 페이지 목록 엘리먼트 아래의 next_end 클래스 명을 가지고 있는 span 엘리먼트
- * @param {jQueryObject} $element 페이지목록을 생성할 jQuery객체가 랩핑된 엘리먼트
  *
  */
-ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.prototype */{
+var Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.prototype */{
+    /**
+     * Initialize
+     * @param {DataObject} options Option object
+     * 		@param {Number} [options.itemCount=10] Total item count
+     * 		@param {Number} [options.itemPerPage=10] Item count per page
+     * 		@param {Number} [options.pagePerPageList=10] Display page link count
+     * 		@param {Number} [options.page=1] page Display page after pagination draw.
+     * 		@param {String} [options.moveUnit="pagelist"] Page move unit.
+     * 			<ul>
+     * 				<li>pagelist : Move page for unit</li>
+     * 				<li>page : Move one page</li>
+     * 			</ul>
+     * 		@param {Boolean}[options.isCenterAlign=false] Whether current page keep center or not
+     * 		@param {String} [options.insertTextNode=""] The coupler between page links
+     * 		@param {String} [options.classPrefix=""] A prefix of class name
+     * 		@param {String} [options.firstItemClassName="first-child"] The class name is granted first page link item
+     * 		@param {String} [options.lastItemClassName="last-child"] The class name is granted first page link item
+     * 		@param {String} [options.pageTemplate="<a href='#'>{=page}</a>"] The markup template to show page item such as 1, 2, 3, .. {=page} will be changed each page number.
+     * 		@param {String} [options.currentPageTemplate="<strong>{=page}</strong>"] The markup template for current page {=page} will be changed current page number.
+     * 		@param {jQueryObject} [options.$pre_endOn] The button element to move first page. If this option is not exist and the element that has class 'pre_end', component do not create this button.
+     * 		@param {jQueryObject} [options.$preOn] The button element to move previouse page. If this option is not exist and the element that has class 'pre', component do not create this button.
+     * 		@param {jQueryObject} [options.$nextOn] The button element to move next page. If this option is not exist and the element that has class 'next', component do not create this button.
+     * 		@param {jQueryObject} [options.$lastOn] The button element to move last page. If this option is not exist and the element that has class 'last', component do not create this button.
+     * 		@param {jQueryObject} [options.$pre_endOff] The element to show that pre_endOn button is not enable. If this option is not exist and the element that has class 'pre_endOff', component do not create this button.
+     * 		@param {jQueryObject} [options.$preOff] The element to show that preOn button is not enable. If this option is not exist and the element that has class 'preOff', component do not create this button.
+     * 		@param {jQueryObject} [options.$nextOff] The element to show that nextOn button is not enable. If this option is not exist and the element that has class 'nextOff', component do not create this button.
+     * 		@param {jQueryObject} [options.$lastOff] The element to show that lastOn button is not enable. If this option is not exist and the element that has class 'lastOff', component do not create this button.
+     * @param {jQueryObject} $element Pagination container
+     */
     init: function(options, $element) {
-        // 기본옵션
         var defaultOption = {
             itemCount: 10,
             itemPerPage: 10,
@@ -61,35 +61,40 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
             pageTemplate: '<a href="#">{=page}</a>',
             currentPageTemplate: '<strong>{=page}</strong>'
         };
+
+
+        if (options.itemCount === 0) {
+            /**
+             * Option object
+             * @type {Object}
+             * @private
+             */
+            this._options = defaultOption;
+        } else {
+            this._options = ne.util.extend(defaultOption, options);
+        }
+
         /**
-         * 옵션객체
-         * @type {Object}
-         * @private
-         */
-        this._options = ne.util.extend(defaultOption, options);
-        /**
-         * 이벤트 핸들러 저장객체
-         *
+         * Event handler savor
          * @type {Object}
          * @private
          */
         this._events = {};
 
-        // 뷰 생성
         /**
-         * 뷰객체
+         * view instance
          * @type {PaginationView}
          * @private
          */
-        this._view = new ne.component.Pagination.PaginationView(this._options, $element);
+        this._view = new View(this._options, $element);
         this._view.attachEvent('click', ne.util.bind(this._onClickPageList, this));
-        // 페이지 초기화(이동)
+
         this.movePageTo(this.getOption('page'), false);
     },
+
     /**
-     * 페이징을 다시 그린다
-     *
-     * @param {*} itemCount 다시 그릴 페이지의 아이템 갯수
+     * Reset pagination
+     * @param {*} itemCount Redraw page item count
      */
     reset: function(itemCount) {
 
@@ -102,25 +107,23 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
         this.setOption('itemCount', itemCount);
         this.movePageTo(1, false);
     },
+
     /**
-     * 옵션값을 가져온다
-     *
-     * @param {String} optionKey 가져올 옵션 키 값
+     * Get options
+     * @param {String} optionKey Option key
      * @private
      * @returns {*}
      *
      */
     getOption: function(optionKey) {
-
         return this._options[optionKey];
-
     },
+
     /**
-     * 지정한 페이지로 이동하고, 페이지 목록을 다시 그린다
-     * 이동하기 전엔 beforeMove라는 커스텀 이벤트를 발생시키고, 이동후에는 afterMove라는 커스텀 이벤터를 발생시킨다.
-     *
-     * @param {Number} targetPage 이동할 페이지
-     * @param {Boolean} isNotRunCustomEvent [isNotRunCustomEvent=true] 커스텀 이벤트의 발생 여부
+     * Move to specific page, redraw list.
+     * Befor move fire beforeMove event, After move fire afterMove event.
+     * @param {Number} targetPage Target page
+     * @param {Boolean} isNotRunCustomEvent [isNotRunCustomEvent=true] Whether custom event fire or not
      */
     movePageTo: function(targetPage, isNotRunCustomEvent) {
 
@@ -129,15 +132,13 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
 
         if (!isNotRunCustomEvent) {
             /**
-             * 페이지 이동이 수행되기 직전에 발생
-             *
+             * Fire 'beforeMove' event(CustomEvent)
              * @param {componentEvent} eventData
-             * @param {String} eventData.eventType 커스텀 이벤트명
-             * @param {Number} eventData.page 이동하게 될 페이지
-             * @param {Function} eventData.stop 페이지 이동을 정지한다
+             * @param {String} eventData.eventType Custom event name
+             * @param {Number} eventData.page Target page
+             * @param {Function} eventData.stop Stop move specific page
              * @example
              * paganation.on("beforeMove", function(eventData) {
-                // 사용자  클릭의 결과로 이동한 페이지
                 var currentPage = eventData.page;
              });
              */
@@ -151,71 +152,63 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
 
         if (isNotRunCustomEvent) {
             /**
-             * 페이지 이동이 완료된 시점에서 발생
-             *
+             * Fire 'afterMove'
              * @param {componentEvent} eventData
-             * @param {String} eventData.eventType 커스텀 이벤트명
-             * @param {Number} eventData.page 사용자 클릭의 결과로 이동한 페이지
+             * @param {String} eventData.eventType Custom event name
+             * @param {Number} eventData.page Moved page
              * @example
              * paganation.on("beforeMove", function(eventData) {
-            // 사용자  클릭의 결과로 이동한 페이지
             var currentPage = eventData.page;
          });
              */
             this.fire('afterMove', { page: targetPage });
         }
     },
+
     /**
-     * 옵션값을 변경한다
-     *
-     * @param {String} optionKey 변경할 옵션 키 값
-     * @param {*} optionValue 변경할 옵션 값
+     * Change option value
+     * @param {String} optionKey The target option key
+     * @param {*} optionValue The target option value
      * @private
      */
     setOption: function(optionKey, optionValue) {
-
         this._options[optionKey] = optionValue;
-
     },
+
     /**
-     * 현재 페이지를 가져온다
-     *
-     * @returns {Number} 현재 페이지
+     * Get current page
+     * @returns {Number} Current page
      */
     getCurrentPage: function() {
         return this._currentPage || this._options['page'];
-
     },
+
     /**
-     * 해당 페이지의 첫번째 아이템이 전체중 몇번째 인지 구한다
-     *
-     * @param {Number} pageNumber 해당 페이지 번호
+     * Get item  index from list
+     * @param {Number} pageNumber Page number
      * @returns {number}
      */
     getIndexOfFirstItem: function(pageNumber) {
-
         return this.getOption('itemPerPage') * (pageNumber - 1) + 1;
-
     },
+
     /**
-     * 마지막 페이지 숫자를 구함
-     *
-     * @returns {number} 마지막 페이지 숫자
+     * Get Last page number
+     * @returns {number}
      * @private
      */
     _getLastPage: function() {
         return Math.ceil(this.getOption('itemCount') / this.getOption('itemPerPage'));
-
     },
+
     /**
-     * 몇번째 페이지 리스트인지 구함
-     *
-     * @param {Number} pageNumber
-     * @return {Number} 페이지 리스트 순번
+     * Index of list in total lists
+     * @param {Number} pageNumber Page number
+     * @return {Number}
      * @private
      */
     _getPageIndex: function(pageNumber) {
-        //현재 페이지 리스트가 중앙에 와야할때
+        // IsCenterAlign == true case
         if (this.getOption('isCenterAlign')) {
             var left = Math.floor(this.getOption('pagePerPageList') / 2),
                 pageIndex = pageNumber - left;
@@ -225,14 +218,13 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
         }
         return Math.ceil(pageNumber / this.getOption("pagePerPageList"));
     },
+
     /**
-     * 이전, 다음 버튼을 클릭할 때 제공받을 페이지 숫자를 구한다
-     *
-     * @param {String} relativeName 어떤 영역으로 옮겨갈지 정한다(pre_end, next_end, pre, next)
-     * @return {Number} 해당되는 페이지 숫자
+     * Get page number of prev, next pages
+     * @param {String} relativeName Directions(pre_end, next_end, pre, next)
+     * @return {Number}
      * @private
-     *
-     */
+     *     */
     _getRelativePage: function(relativeName) {
         var page = null,
             isMovePage = this.getOption('moveUnit') === 'page',
@@ -252,12 +244,12 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
         }
         return page;
     },
+
     /**
-     * 페이지 숫자를 받으면 현재 페이지 범위내로 변경하여 반환한다.
-     * 예를들어 총 페이지수가 23인데 30이라는 수를 넣으면 23을 반환받는다. 숫자가 1보다 작으면 1을 반환받는다.
-     *
-     * @param {Number} page
-     * @returns {number} 페이지 범위내로 확인된 숫자
+     * Get avail page number from over number
+     * If total page is 23, but input number is 30 => return 23
+     * @param {Number} page Page number
+     * @returns {number}
      * @private
      */
     _convertToAvailPage: function(page) {
@@ -266,9 +258,9 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
         page = Math.min(page, lastPageNumber);
         return page;
     },
+
     /**
-     * 페이지를 그리는데 필요한 뷰셋을 만들고, 뷰에 업데이트를 요청한다
-     *
+     * Create require view set, notify view to update.
      * @param {Number} page
      * @private
      */
@@ -286,9 +278,9 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
 
         this._view.update(viewSet, page);
     },
+
     /**
-     * 페이지네이션 이벤트 핸들
-     *
+     * Pagelist click event hadnler
      * @param {JQueryEvent} event
      * @private
      */
@@ -319,13 +311,11 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
         }
 
         /**
-         페이지 이동을 위한 숫자나 버튼을 클릭했을때 발생
-
+         Fire 'click' custom event when page button clicked
          @param {componentEvent} eventData
-         @param {String} eventData.eventType 커스텀 이벤트명
-         @param {Number} eventData.page 클릭해서 이동할 페이지
-         @param {Function} eventData.stop 페이지 이동을 정지한다
-
+         @param {String} eventData.eventType Custom event name
+         @param {Number} eventData.page Page to move
+         @param {Function} eventData.stop Stop page move
          **/
 
         var isFired = this.invoke("click", {"page" : page});
@@ -336,52 +326,48 @@ ne.component.Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.
         this.movePageTo(page);
     }
 });
-// 커스텀 이벤트 믹스인
-ne.util.CustomEvents.mixin(ne.component.Pagination);
+// CustomEvent  Mixin
+ne.util.CustomEvents.mixin(Pagination);
+
+module.exports = Pagination;
+},{"./view.js":3}],3:[function(require,module,exports){
 /**
- * @fileoverview 페이지네이션, 화면에 그려지는 요소들을 관리한다
- * (pug.Pagination 에서 분리)
- * @author 이제인(jein.yi@nhnent.com)
+ * @fileoverview Pagination view manage all of draw elements
+ * (from pug.Pagination)
+ * @author NHN entertainment FE dev team Jein Yi(jein.yi@nhnent.com)
+ * @dependency pagination.js
  */
 /**
  * @constructor ne.component.Pagination.PaginationView
- * @param {Object} options 옵션 객체
- * @param {Object} $element 루트 엘리먼트
+ * @param {Object} options Option object
+ * @param {Object} $element Container element
  *
  */
-ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.component.Pagination.PaginationView.prototype */{
+var View = ne.util.defineClass(/** @lends ne.component.Pagination.PaginationView.prototype */{
     init: function(options, $element) {
         /**
-         * 페이지네이션의 루트 엘리먼트
-         *
+         * Pagination root element
          * @type {jQueryObject}
          * @private
          */
         this._element = $element;
+
         /**
-         * 페이지네이션 지정 옵션
-         *
+         * Pagination options
          * @type {Object}
          * @private
          */
         this._options = options;
+
         /**
-         * 컴포넌트에 저장되는 셀렉터
-         *
+         * Selectors
          * @type {Object}
          * @private
          */
         this._elementSelector = {};
+
         /**
-         * 선택된 엘리먼트들을 캐싱해두는 객체
-         *
-         * @type {Object}
-         * @private
-         */
-        this._cachedElement = {};
-        /**
-         * 페이지 아이템 리스트
-         *
+         * Page item list
          * @type {Array}
          * @private
          */
@@ -399,10 +385,10 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         });
         this._element.addClass(this._wrapPrefix('loaded'));
     },
+
     /**
-     * 뷰를 업데이트 한다
-     *
-     * @param {Object} viewSet 뷰갱신에 대한 값들
+     * Update view
+     * @param {Object} viewSet Values of each pagination view components
      */
     update: function(viewSet) {
         this._addTextNode();
@@ -427,11 +413,11 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         this._setNext(viewSet);
         this._setLast(viewSet);
     },
+
     /**
-     * 포함관계를 본다
-     *
-     * @param {JQueryObject} $find 포함되어있는 체크할 대상
-     * @param {JQueryObject} $parent 포함하고 있는지 체크할 대상
+     * Check include
+     * @param {JQueryObject} $find Target element
+     * @param {JQueryObject} $parent Wrapper element
      * @returns {boolean}
      */
     isIn: function($find, $parent) {
@@ -440,16 +426,17 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         }
         return ($find[0] === $parent[0]) ? true : $.contains($parent, $find);
     },
+
     /**
-     * 기준 엘리먼트를 구한다
-     *
+     * Get base(root) element
      * @returns {JQueryObject}
      */
     getBaseElement: function() {
-        return this._element;
+        return this.getElement();
     },
+
     /**
-     * 기준엘리먼트를 초기화 시킨다
+     * Reset base element
      */
     empty: function(){
 
@@ -476,11 +463,11 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
 
         this._element.empty();
     },
+
     /**
-     * 페이지 숫자를 담은 엘리먼트 중 원하는 엘리먼트를 찾는다.
-     *
-     * @param {jQueryObject|HTMLElement} el 목록 중에서 찾을 target 엘리먼트
-     * @return {jQueryObject} 있을 경우 해당 엘리먼트 jQuery 객체를 반환하며, 없으면 null을 반환한다.
+     * Find target element from page elements
+     * @param {jQueryObject|HTMLElement} el Target element
+     * @return {jQueryObject}
      */
     getPageElement: function(el) {
 
@@ -496,11 +483,11 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         }
         return null;
     },
+
     /**
-     * targetElement 엘리먼트에 eventType 이벤트의 콜백함수로 callback 함수를 등록한다.
-     *
-     * @param {String} eventType 등록할 이벤트 명
-     * @param {Function} callback 해당 이벤트가 발생 시에 호출할 콜백함수
+     * Attach Events
+     * @param {String} eventType Event name to attach
+     * @param {Function} callback Callback function
      */
     attachEvent: function(eventType, callback) {
 
@@ -515,21 +502,18 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
             $(targetElement).bind(eventType, null, callback);
         }
     },
+
     /**
-     * 루트 엘리먼트객체를 돌려준다.
-     *
+     * Get root element
      * @returns {jQueryObject}
      */
     getElement: function() {
-
         return this._element;
-
     },
+
     /**
-     * 클래스명에 Prefix 를 붙힘
-     * Prefix는 options.classPrefix를 참조, 붙혀질 때 기존 클래스명의 언더바(_) 문자는 하이픈(-)으로 변환됨
-     *
-     * @param {String} className
+     * Return className added prefix
+     * @param {String} className Class name to be wrapping
      * @returns {*}
      * @private
      */
@@ -537,18 +521,18 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         var classPrefix = this._options['classPrefix'];
         return classPrefix ? classPrefix + className.replace(/_/g, '-') : className;
     },
+
     /**
-     * 페이지표시 마크업 사이사이에 options.insertTextNode를 끼어넣어준다.
+     * Put insertTextNode between page items
      * @private
      */
     _addTextNode: function() {
-
         var textNode = this._options['insertTextNode'];
         this._element.append(document.createTextNode(textNode));
-
     },
+
     /**
-     * 엘리먼트 복제, html은 동일하나 jQuery객체상태를 초기화 하여 반환된다.
+     * Clone element
      * @returns {*}
      * @private
      */
@@ -560,9 +544,10 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         return $link;
 
     },
+
     /**
-     * 페이지 결과값에 따른, 결과클래스를 입힌다.
-     * @param {Number} lastNum
+     * Wrapping class by page result
+     * @param {Number} lastNum Last page number
      * @private
      */
     _setPageResult: function(lastNum) {
@@ -576,14 +561,13 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         }
 
     },
+
     /**
-     * 현재페이지의 양 끝페이지를 구한다
-     *
-     * @param viewSet
+     * Get each edge page
+     * @param {object} viewSet Pagination view elements set
      * @returns {{left: *, right: *}}
      * @private
      */
-
     _getEdge: function(viewSet) {
 
         var options = this._options,
@@ -617,10 +601,10 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
             right: rightPageNumber
         };
     },
+
     /**
-     * 첫번째 페이지인지 여부에 따라 첫번째페이지로 가는 링크를 노출할지 결정한다.
-     *
-     * @param {Object} viewSet
+     * Decide to show first page link by whether first page or not
+     * @param {object} viewSet Pagination view elements set
      * @private
      */
     _setFirst: function(viewSet) {
@@ -638,12 +622,11 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         }
 
     },
+
     /**
-     * 이전페이지가 있는지 여부에 따른 오브젝트 활성화
-     *
-     * @param {Object} viewSet
+     * Decide to show previous page link by whether first page or not
+     * @param {object} viewSet Pagination view elements set
      * @private
-     *
      */
     _setPrev: function(viewSet) {
         var options = this._options;
@@ -661,9 +644,8 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
         }
     },
     /**
-     * 다음페이지가 있는지 여부에 따른 오브젝트 활성화
-     *
-     * @param {Obejct} viewSet
+     * Decide to show next page link by whether first page or not
+     * @param {object} viewSet Pagination view elements set
      * @private
      */
     _setNext: function(viewSet) {
@@ -683,9 +665,8 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
 
     },
     /**
-     * 마지막페이지가 있는지 여부에 따른 오브젝트 활성화
-     *
-     * @param {Object} viewSet
+     * Decide to show last page link by whether first page or not
+     * @param {object} viewSet Pagination view elements set
      * @private
      */
     _setLast: function(viewSet) {
@@ -706,9 +687,8 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
 
     },
     /**
-     * 페이지 넘버링을 한다
-     *
-     * @param {Object} viewSet
+     * Set page number that will be drawn
+     * @param {object} viewSet Pagination view elements set
      * @private
      */
     _setPageNumbers: function(viewSet) {
@@ -738,4 +718,6 @@ ne.component.Pagination.PaginationView = ne.util.defineClass(/** @lends ne.compo
     }
 });
 
-})();
+module.exports = View;
+},{}]},{},[1])
+//# sourceMappingURL=data:application/json;charset:utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm5vZGVfbW9kdWxlcy9icm93c2VyaWZ5L25vZGVfbW9kdWxlcy9icm93c2VyLXBhY2svX3ByZWx1ZGUuanMiLCJpbmRleC5qcyIsInNyYy9qcy9wYWdpbmF0aW9uLmpzIiwic3JjL2pzL3ZpZXcuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7QUNBQTtBQUNBOztBQ0RBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQ3ZVQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSIsImZpbGUiOiJnZW5lcmF0ZWQuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlc0NvbnRlbnQiOlsiKGZ1bmN0aW9uIGUodCxuLHIpe2Z1bmN0aW9uIHMobyx1KXtpZighbltvXSl7aWYoIXRbb10pe3ZhciBhPXR5cGVvZiByZXF1aXJlPT1cImZ1bmN0aW9uXCImJnJlcXVpcmU7aWYoIXUmJmEpcmV0dXJuIGEobywhMCk7aWYoaSlyZXR1cm4gaShvLCEwKTt2YXIgZj1uZXcgRXJyb3IoXCJDYW5ub3QgZmluZCBtb2R1bGUgJ1wiK28rXCInXCIpO3Rocm93IGYuY29kZT1cIk1PRFVMRV9OT1RfRk9VTkRcIixmfXZhciBsPW5bb109e2V4cG9ydHM6e319O3Rbb11bMF0uY2FsbChsLmV4cG9ydHMsZnVuY3Rpb24oZSl7dmFyIG49dFtvXVsxXVtlXTtyZXR1cm4gcyhuP246ZSl9LGwsbC5leHBvcnRzLGUsdCxuLHIpfXJldHVybiBuW29dLmV4cG9ydHN9dmFyIGk9dHlwZW9mIHJlcXVpcmU9PVwiZnVuY3Rpb25cIiYmcmVxdWlyZTtmb3IodmFyIG89MDtvPHIubGVuZ3RoO28rKylzKHJbb10pO3JldHVybiBzfSkiLCJuZS51dGlsLmRlZmluZU5hbWVzcGFjZSgnbmUuY29tcG9uZW50LlBhZ2luYXRpb24nLCByZXF1aXJlKCcuL3NyYy9qcy9wYWdpbmF0aW9uLmpzJykpO1xuIiwiLyoqXG4gKiBAZmlsZW92ZXJ2aWV3IENvcmUgb2YgcGFnaW5hdGlvbiBjb21wb25lbnQsIGNyZWF0ZSBwYWdpbmF0aW9uIHZpZXcgYW5kIGF0dGFjaCBldmVudHMuXG4gKiAoZnJvbSBwdWcuUGFnaW5hdGlvbilcbiAqIEBhdXRob3IgTkhOIGVudGVydGFpbm1lbnQgRkUgZGV2IHRlYW0oZGxfamF2YXNjcmlwdEBuaG5lbnQuY29tKVxuICogQGRlcGVuZGVuY3kganF1ZXJ5LTEuOC4zLm1pbi5qcywgY29kZS1zbmlwcGV0LmpzXG4gKi9cblxudmFyIFZpZXcgPSByZXF1aXJlKCcuL3ZpZXcuanMnKTtcblxuLyoqXG4gKiBQYWdpbmF0aW9uIGNvcmUgY2xhc3NcbiAqIEBjb25zdHJ1Y3RvciBuZS5jb21wb25lbnQuUGFnaW5hdGlvblxuICpcbiAqL1xudmFyIFBhZ2luYXRpb24gPSBuZS51dGlsLmRlZmluZUNsYXNzKC8qKkBsZW5kcyBuZS5jb21wb25lbnQuUGFnaW5hdGlvbi5wcm90b3R5cGUgKi97XG4gICAgLyoqXG4gICAgICogSW5pdGlhbGl6ZVxuICAgICAqIEBwYXJhbSB7RGF0YU9iamVjdH0gb3B0aW9ucyBPcHRpb24gb2JqZWN0XG4gICAgICogXHRcdEBwYXJhbSB7TnVtYmVyfSBbb3B0aW9ucy5pdGVtQ291bnQ9MTBdIFRvdGFsIGl0ZW0gY291bnRcbiAgICAgKiBcdFx0QHBhcmFtIHtOdW1iZXJ9IFtvcHRpb25zLml0ZW1QZXJQYWdlPTEwXSBJdGVtIGNvdW50IHBlciBwYWdlXG4gICAgICogXHRcdEBwYXJhbSB7TnVtYmVyfSBbb3B0aW9ucy5wYWdlUGVyUGFnZUxpc3Q9MTBdIERpc3BsYXkgcGFnZSBsaW5rIGNvdW50XG4gICAgICogXHRcdEBwYXJhbSB7TnVtYmVyfSBbb3B0aW9ucy5wYWdlPTFdIHBhZ2UgRGlzcGxheSBwYWdlIGFmdGVyIHBhZ2luYXRpb24gZHJhdy5cbiAgICAgKiBcdFx0QHBhcmFtIHtTdHJpbmd9IFtvcHRpb25zLm1vdmVVbml0PVwicGFnZWxpc3RcIl0gUGFnZSBtb3ZlIHVuaXQuXG4gICAgICogXHRcdFx0PHVsPlxuICAgICAqIFx0XHRcdFx0PGxpPnBhZ2VsaXN0IDogTW92ZSBwYWdlIGZvciB1bml0PC9saT5cbiAgICAgKiBcdFx0XHRcdDxsaT5wYWdlIDogTW92ZSBvbmUgcGFnZTwvbGk+XG4gICAgICogXHRcdFx0PC91bD5cbiAgICAgKiBcdFx0QHBhcmFtIHtCb29sZWFufVtvcHRpb25zLmlzQ2VudGVyQWxpZ249ZmFsc2VdIFdoZXRoZXIgY3VycmVudCBwYWdlIGtlZXAgY2VudGVyIG9yIG5vdFxuICAgICAqIFx0XHRAcGFyYW0ge1N0cmluZ30gW29wdGlvbnMuaW5zZXJ0VGV4dE5vZGU9XCJcIl0gVGhlIGNvdXBsZXIgYmV0d2VlbiBwYWdlIGxpbmtzXG4gICAgICogXHRcdEBwYXJhbSB7U3RyaW5nfSBbb3B0aW9ucy5jbGFzc1ByZWZpeD1cIlwiXSBBIHByZWZpeCBvZiBjbGFzcyBuYW1lXG4gICAgICogXHRcdEBwYXJhbSB7U3RyaW5nfSBbb3B0aW9ucy5maXJzdEl0ZW1DbGFzc05hbWU9XCJmaXJzdC1jaGlsZFwiXSBUaGUgY2xhc3MgbmFtZSBpcyBncmFudGVkIGZpcnN0IHBhZ2UgbGluayBpdGVtXG4gICAgICogXHRcdEBwYXJhbSB7U3RyaW5nfSBbb3B0aW9ucy5sYXN0SXRlbUNsYXNzTmFtZT1cImxhc3QtY2hpbGRcIl0gVGhlIGNsYXNzIG5hbWUgaXMgZ3JhbnRlZCBmaXJzdCBwYWdlIGxpbmsgaXRlbVxuICAgICAqIFx0XHRAcGFyYW0ge1N0cmluZ30gW29wdGlvbnMucGFnZVRlbXBsYXRlPVwiPGEgaHJlZj0nIyc+ez1wYWdlfTwvYT5cIl0gVGhlIG1hcmt1cCB0ZW1wbGF0ZSB0byBzaG93IHBhZ2UgaXRlbSBzdWNoIGFzIDEsIDIsIDMsIC4uIHs9cGFnZX0gd2lsbCBiZSBjaGFuZ2VkIGVhY2ggcGFnZSBudW1iZXIuXG4gICAgICogXHRcdEBwYXJhbSB7U3RyaW5nfSBbb3B0aW9ucy5jdXJyZW50UGFnZVRlbXBsYXRlPVwiPHN0cm9uZz57PXBhZ2V9PC9zdHJvbmc+XCJdIFRoZSBtYXJrdXAgdGVtcGxhdGUgZm9yIGN1cnJlbnQgcGFnZSB7PXBhZ2V9IHdpbGwgYmUgY2hhbmdlZCBjdXJyZW50IHBhZ2UgbnVtYmVyLlxuICAgICAqIFx0XHRAcGFyYW0ge2pRdWVyeU9iamVjdH0gW29wdGlvbnMuJHByZV9lbmRPbl0gVGhlIGJ1dHRvbiBlbGVtZW50IHRvIG1vdmUgZmlyc3QgcGFnZS4gSWYgdGhpcyBvcHRpb24gaXMgbm90IGV4aXN0IGFuZCB0aGUgZWxlbWVudCB0aGF0IGhhcyBjbGFzcyAncHJlX2VuZCcsIGNvbXBvbmVudCBkbyBub3QgY3JlYXRlIHRoaXMgYnV0dG9uLlxuICAgICAqIFx0XHRAcGFyYW0ge2pRdWVyeU9iamVjdH0gW29wdGlvbnMuJHByZU9uXSBUaGUgYnV0dG9uIGVsZW1lbnQgdG8gbW92ZSBwcmV2aW91c2UgcGFnZS4gSWYgdGhpcyBvcHRpb24gaXMgbm90IGV4aXN0IGFuZCB0aGUgZWxlbWVudCB0aGF0IGhhcyBjbGFzcyAncHJlJywgY29tcG9uZW50IGRvIG5vdCBjcmVhdGUgdGhpcyBidXR0b24uXG4gICAgICogXHRcdEBwYXJhbSB7alF1ZXJ5T2JqZWN0fSBbb3B0aW9ucy4kbmV4dE9uXSBUaGUgYnV0dG9uIGVsZW1lbnQgdG8gbW92ZSBuZXh0IHBhZ2UuIElmIHRoaXMgb3B0aW9uIGlzIG5vdCBleGlzdCBhbmQgdGhlIGVsZW1lbnQgdGhhdCBoYXMgY2xhc3MgJ25leHQnLCBjb21wb25lbnQgZG8gbm90IGNyZWF0ZSB0aGlzIGJ1dHRvbi5cbiAgICAgKiBcdFx0QHBhcmFtIHtqUXVlcnlPYmplY3R9IFtvcHRpb25zLiRsYXN0T25dIFRoZSBidXR0b24gZWxlbWVudCB0byBtb3ZlIGxhc3QgcGFnZS4gSWYgdGhpcyBvcHRpb24gaXMgbm90IGV4aXN0IGFuZCB0aGUgZWxlbWVudCB0aGF0IGhhcyBjbGFzcyAnbGFzdCcsIGNvbXBvbmVudCBkbyBub3QgY3JlYXRlIHRoaXMgYnV0dG9uLlxuICAgICAqIFx0XHRAcGFyYW0ge2pRdWVyeU9iamVjdH0gW29wdGlvbnMuJHByZV9lbmRPZmZdIFRoZSBlbGVtZW50IHRvIHNob3cgdGhhdCBwcmVfZW5kT24gYnV0dG9uIGlzIG5vdCBlbmFibGUuIElmIHRoaXMgb3B0aW9uIGlzIG5vdCBleGlzdCBhbmQgdGhlIGVsZW1lbnQgdGhhdCBoYXMgY2xhc3MgJ3ByZV9lbmRPZmYnLCBjb21wb25lbnQgZG8gbm90IGNyZWF0ZSB0aGlzIGJ1dHRvbi5cbiAgICAgKiBcdFx0QHBhcmFtIHtqUXVlcnlPYmplY3R9IFtvcHRpb25zLiRwcmVPZmZdIFRoZSBlbGVtZW50IHRvIHNob3cgdGhhdCBwcmVPbiBidXR0b24gaXMgbm90IGVuYWJsZS4gSWYgdGhpcyBvcHRpb24gaXMgbm90IGV4aXN0IGFuZCB0aGUgZWxlbWVudCB0aGF0IGhhcyBjbGFzcyAncHJlT2ZmJywgY29tcG9uZW50IGRvIG5vdCBjcmVhdGUgdGhpcyBidXR0b24uXG4gICAgICogXHRcdEBwYXJhbSB7alF1ZXJ5T2JqZWN0fSBbb3B0aW9ucy4kbmV4dE9mZl0gVGhlIGVsZW1lbnQgdG8gc2hvdyB0aGF0IG5leHRPbiBidXR0b24gaXMgbm90IGVuYWJsZS4gSWYgdGhpcyBvcHRpb24gaXMgbm90IGV4aXN0IGFuZCB0aGUgZWxlbWVudCB0aGF0IGhhcyBjbGFzcyAnbmV4dE9mZicsIGNvbXBvbmVudCBkbyBub3QgY3JlYXRlIHRoaXMgYnV0dG9uLlxuICAgICAqIFx0XHRAcGFyYW0ge2pRdWVyeU9iamVjdH0gW29wdGlvbnMuJGxhc3RPZmZdIFRoZSBlbGVtZW50IHRvIHNob3cgdGhhdCBsYXN0T24gYnV0dG9uIGlzIG5vdCBlbmFibGUuIElmIHRoaXMgb3B0aW9uIGlzIG5vdCBleGlzdCBhbmQgdGhlIGVsZW1lbnQgdGhhdCBoYXMgY2xhc3MgJ2xhc3RPZmYnLCBjb21wb25lbnQgZG8gbm90IGNyZWF0ZSB0aGlzIGJ1dHRvbi5cbiAgICAgKiBAcGFyYW0ge2pRdWVyeU9iamVjdH0gJGVsZW1lbnQgUGFnaW5hdGlvbiBjb250YWluZXJcbiAgICAgKi9cbiAgICBpbml0OiBmdW5jdGlvbihvcHRpb25zLCAkZWxlbWVudCkge1xuICAgICAgICB2YXIgZGVmYXVsdE9wdGlvbiA9IHtcbiAgICAgICAgICAgIGl0ZW1Db3VudDogMTAsXG4gICAgICAgICAgICBpdGVtUGVyUGFnZTogMTAsXG4gICAgICAgICAgICBwYWdlUGVyUGFnZUxpc3Q6IDEwLFxuICAgICAgICAgICAgcGFnZTogMSxcbiAgICAgICAgICAgIG1vdmVVbml0OiAncGFnZWxpc3QnLFxuICAgICAgICAgICAgaXNDZW50ZXJBbGlnbjogZmFsc2UsXG4gICAgICAgICAgICBpbnNlcnRUZXh0Tm9kZTogJycsXG4gICAgICAgICAgICBjbGFzc1ByZWZpeDogJycsXG4gICAgICAgICAgICBmaXJzdEl0ZW1DbGFzc05hbWU6ICdmaXJzdC1jaGlsZCcsXG4gICAgICAgICAgICBsYXN0SXRlbUNsYXNzTmFtZTogJ2xhc3QtY2hpbGQnLFxuICAgICAgICAgICAgcGFnZVRlbXBsYXRlOiAnPGEgaHJlZj1cIiNcIj57PXBhZ2V9PC9hPicsXG4gICAgICAgICAgICBjdXJyZW50UGFnZVRlbXBsYXRlOiAnPHN0cm9uZz57PXBhZ2V9PC9zdHJvbmc+J1xuICAgICAgICB9O1xuXG5cbiAgICAgICAgaWYgKG9wdGlvbnMuaXRlbUNvdW50ID09PSAwKSB7XG4gICAgICAgICAgICAvKipcbiAgICAgICAgICAgICAqIE9wdGlvbiBvYmplY3RcbiAgICAgICAgICAgICAqIEB0eXBlIHtPYmplY3R9XG4gICAgICAgICAgICAgKiBAcHJpdmF0ZVxuICAgICAgICAgICAgICovXG4gICAgICAgICAgICB0aGlzLl9vcHRpb25zID0gZGVmYXVsdE9wdGlvbjtcbiAgICAgICAgfSBlbHNlIHtcbiAgICAgICAgICAgIHRoaXMuX29wdGlvbnMgPSBuZS51dGlsLmV4dGVuZChkZWZhdWx0T3B0aW9uLCBvcHRpb25zKTtcbiAgICAgICAgfVxuXG4gICAgICAgIC8qKlxuICAgICAgICAgKiBFdmVudCBoYW5kbGVyIHNhdm9yXG4gICAgICAgICAqIEB0eXBlIHtPYmplY3R9XG4gICAgICAgICAqIEBwcml2YXRlXG4gICAgICAgICAqL1xuICAgICAgICB0aGlzLl9ldmVudHMgPSB7fTtcblxuICAgICAgICAvKipcbiAgICAgICAgICogdmlldyBpbnN0YW5jZVxuICAgICAgICAgKiBAdHlwZSB7UGFnaW5hdGlvblZpZXd9XG4gICAgICAgICAqIEBwcml2YXRlXG4gICAgICAgICAqL1xuICAgICAgICB0aGlzLl92aWV3ID0gbmV3IFZpZXcodGhpcy5fb3B0aW9ucywgJGVsZW1lbnQpO1xuICAgICAgICB0aGlzLl92aWV3LmF0dGFjaEV2ZW50KCdjbGljaycsIG5lLnV0aWwuYmluZCh0aGlzLl9vbkNsaWNrUGFnZUxpc3QsIHRoaXMpKTtcblxuICAgICAgICB0aGlzLm1vdmVQYWdlVG8odGhpcy5nZXRPcHRpb24oJ3BhZ2UnKSwgZmFsc2UpO1xuICAgIH0sXG5cbiAgICAvKipcbiAgICAgKiBSZXNldCBwYWdpbmF0aW9uXG4gICAgICogQHBhcmFtIHsqfSBpdGVtQ291bnQgUmVkcmF3IHBhZ2UgaXRlbSBjb3VudFxuICAgICAqL1xuICAgIHJlc2V0OiBmdW5jdGlvbihpdGVtQ291bnQpIHtcblxuICAgICAgICB2YXIgaXNFeGlzdCA9IG5lLnV0aWwuaXNFeGlzdHkoKGl0ZW1Db3VudCAhPT0gbnVsbCkgJiYgKGl0ZW1Db3VudCAhPT0gdW5kZWZpbmVkKSk7XG5cbiAgICAgICAgaWYgKCFpc0V4aXN0KSB7XG4gICAgICAgICAgICBpdGVtQ291bnQgPSB0aGlzLmdldE9wdGlvbignaXRlbUNvdW50Jyk7XG4gICAgICAgIH1cblxuICAgICAgICB0aGlzLnNldE9wdGlvbignaXRlbUNvdW50JywgaXRlbUNvdW50KTtcbiAgICAgICAgdGhpcy5tb3ZlUGFnZVRvKDEsIGZhbHNlKTtcbiAgICB9LFxuXG4gICAgLyoqXG4gICAgICogR2V0IG9wdGlvbnNcbiAgICAgKiBAcGFyYW0ge1N0cmluZ30gb3B0aW9uS2V5IE9wdGlvbiBrZXlcbiAgICAgKiBAcHJpdmF0ZVxuICAgICAqIEByZXR1cm5zIHsqfVxuICAgICAqXG4gICAgICovXG4gICAgZ2V0T3B0aW9uOiBmdW5jdGlvbihvcHRpb25LZXkpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMuX29wdGlvbnNbb3B0aW9uS2V5XTtcbiAgICB9LFxuXG4gICAgLyoqXG4gICAgICogTW92ZSB0byBzcGVjaWZpYyBwYWdlLCByZWRyYXcgbGlzdC5cbiAgICAgKiBCZWZvciBtb3ZlIGZpcmUgYmVmb3JlTW92ZSBldmVudCwgQWZ0ZXIgbW92ZSBmaXJlIGFmdGVyTW92ZSBldmVudC5cbiAgICAgKiBAcGFyYW0ge051bWJlcn0gdGFyZ2V0UGFnZSBUYXJnZXQgcGFnZVxuICAgICAqIEBwYXJhbSB7Qm9vbGVhbn0gaXNOb3RSdW5DdXN0b21FdmVudCBbaXNOb3RSdW5DdXN0b21FdmVudD10cnVlXSBXaGV0aGVyIGN1c3RvbSBldmVudCBmaXJlIG9yIG5vdFxuICAgICAqL1xuICAgIG1vdmVQYWdlVG86IGZ1bmN0aW9uKHRhcmdldFBhZ2UsIGlzTm90UnVuQ3VzdG9tRXZlbnQpIHtcblxuICAgICAgICB0YXJnZXRQYWdlID0gdGhpcy5fY29udmVydFRvQXZhaWxQYWdlKHRhcmdldFBhZ2UpO1xuICAgICAgICB0aGlzLl9jdXJyZW50UGFnZSA9IHRhcmdldFBhZ2U7XG5cbiAgICAgICAgaWYgKCFpc05vdFJ1bkN1c3RvbUV2ZW50KSB7XG4gICAgICAgICAgICAvKipcbiAgICAgICAgICAgICAqIEZpcmUgJ2JlZm9yZU1vdmUnIGV2ZW50KEN1c3RvbUV2ZW50KVxuICAgICAgICAgICAgICogQHBhcmFtIHtjb21wb25lbnRFdmVudH0gZXZlbnREYXRhXG4gICAgICAgICAgICAgKiBAcGFyYW0ge1N0cmluZ30gZXZlbnREYXRhLmV2ZW50VHlwZSBDdXN0b20gZXZlbnQgbmFtZVxuICAgICAgICAgICAgICogQHBhcmFtIHtOdW1iZXJ9IGV2ZW50RGF0YS5wYWdlIFRhcmdldCBwYWdlXG4gICAgICAgICAgICAgKiBAcGFyYW0ge0Z1bmN0aW9ufSBldmVudERhdGEuc3RvcCBTdG9wIG1vdmUgc3BlY2lmaWMgcGFnZVxuICAgICAgICAgICAgICogQGV4YW1wbGVcbiAgICAgICAgICAgICAqIHBhZ2FuYXRpb24ub24oXCJiZWZvcmVNb3ZlXCIsIGZ1bmN0aW9uKGV2ZW50RGF0YSkge1xuICAgICAgICAgICAgICAgIHZhciBjdXJyZW50UGFnZSA9IGV2ZW50RGF0YS5wYWdlO1xuICAgICAgICAgICAgIH0pO1xuICAgICAgICAgICAgICovXG5cbiAgICAgICAgICAgIGlmICghdGhpcy5pbnZva2UoJ2JlZm9yZU1vdmUnLCB7IHBhZ2U6IHRhcmdldFBhZ2UgfSkpIHtcbiAgICAgICAgICAgICAgICByZXR1cm47XG4gICAgICAgICAgICB9XG4gICAgICAgIH1cblxuICAgICAgICB0aGlzLl9wYWdpbmF0ZSh0YXJnZXRQYWdlKTtcblxuICAgICAgICBpZiAoaXNOb3RSdW5DdXN0b21FdmVudCkge1xuICAgICAgICAgICAgLyoqXG4gICAgICAgICAgICAgKiBGaXJlICdhZnRlck1vdmUnXG4gICAgICAgICAgICAgKiBAcGFyYW0ge2NvbXBvbmVudEV2ZW50fSBldmVudERhdGFcbiAgICAgICAgICAgICAqIEBwYXJhbSB7U3RyaW5nfSBldmVudERhdGEuZXZlbnRUeXBlIEN1c3RvbSBldmVudCBuYW1lXG4gICAgICAgICAgICAgKiBAcGFyYW0ge051bWJlcn0gZXZlbnREYXRhLnBhZ2UgTW92ZWQgcGFnZVxuICAgICAgICAgICAgICogQGV4YW1wbGVcbiAgICAgICAgICAgICAqIHBhZ2FuYXRpb24ub24oXCJiZWZvcmVNb3ZlXCIsIGZ1bmN0aW9uKGV2ZW50RGF0YSkge1xuICAgICAgICAgICAgdmFyIGN1cnJlbnRQYWdlID0gZXZlbnREYXRhLnBhZ2U7XG4gICAgICAgICB9KTtcbiAgICAgICAgICAgICAqL1xuICAgICAgICAgICAgdGhpcy5maXJlKCdhZnRlck1vdmUnLCB7IHBhZ2U6IHRhcmdldFBhZ2UgfSk7XG4gICAgICAgIH1cbiAgICB9LFxuXG4gICAgLyoqXG4gICAgICogQ2hhbmdlIG9wdGlvbiB2YWx1ZVxuICAgICAqIEBwYXJhbSB7U3RyaW5nfSBvcHRpb25LZXkgVGhlIHRhcmdldCBvcHRpb24ga2V5XG4gICAgICogQHBhcmFtIHsqfSBvcHRpb25WYWx1ZSBUaGUgdGFyZ2V0IG9wdGlvbiB2YWx1ZVxuICAgICAqIEBwcml2YXRlXG4gICAgICovXG4gICAgc2V0T3B0aW9uOiBmdW5jdGlvbihvcHRpb25LZXksIG9wdGlvblZhbHVlKSB7XG4gICAgICAgIHRoaXMuX29wdGlvbnNbb3B0aW9uS2V5XSA9IG9wdGlvblZhbHVlO1xuICAgIH0sXG5cbiAgICAvKipcbiAgICAgKiBHZXQgY3VycmVudCBwYWdlXG4gICAgICogQHJldHVybnMge051bWJlcn0gQ3VycmVudCBwYWdlXG4gICAgICovXG4gICAgZ2V0Q3VycmVudFBhZ2U6IGZ1bmN0aW9uKCkge1xuICAgICAgICByZXR1cm4gdGhpcy5fY3VycmVudFBhZ2UgfHwgdGhpcy5fb3B0aW9uc1sncGFnZSddO1xuICAgIH0sXG5cbiAgICAvKipcbiAgICAgKiBHZXQgaXRlbSAgaW5kZXggZnJvbSBsaXN0XG4gICAgICogQHBhcmFtIHtOdW1iZXJ9IHBhZ2VOdW1iZXIgUGFnZSBudW1iZXJcbiAgICAgKiBAcmV0dXJucyB7bnVtYmVyfVxuICAgICAqL1xuICAgIGdldEluZGV4T2ZGaXJzdEl0ZW06IGZ1bmN0aW9uKHBhZ2VOdW1iZXIpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMuZ2V0T3B0aW9uKCdpdGVtUGVyUGFnZScpICogKHBhZ2VOdW1iZXIgLSAxKSArIDE7XG4gICAgfSxcblxuICAgIC8qKlxuICAgICAqIEdldCBMYXN0IHBhZ2UgbnVtYmVyXG4gICAgICogQHJldHVybnMge251bWJlcn1cbiAgICAgKiBAcHJpdmF0ZVxuICAgICAqL1xuICAgIF9nZXRMYXN0UGFnZTogZnVuY3Rpb24oKSB7XG4gICAgICAgIHJldHVybiBNYXRoLmNlaWwodGhpcy5nZXRPcHRpb24oJ2l0ZW1Db3VudCcpIC8gdGhpcy5nZXRPcHRpb24oJ2l0ZW1QZXJQYWdlJykpO1xuICAgIH0sXG5cbiAgICAvKipcbiAgICAgKiBJbmRleCBvZiBsaXN0IGluIHRvdGFsIGxpc3RzXG4gICAgICogQHBhcmFtIHtOdW1iZXJ9IHBhZ2VOdW1iZXIgUGFnZSBudW1iZXJcbiAgICAgKiBAcmV0dXJuIHtOdW1iZXJ9XG4gICAgICogQHByaXZhdGVcbiAgICAgKi9cbiAgICBfZ2V0UGFnZUluZGV4OiBmdW5jdGlvbihwYWdlTnVtYmVyKSB7XG4gICAgICAgIC8vIElzQ2VudGVyQWxpZ24gPT0gdHJ1ZSBjYXNlXG4gICAgICAgIGlmICh0aGlzLmdldE9wdGlvbignaXNDZW50ZXJBbGlnbicpKSB7XG4gICAgICAgICAgICB2YXIgbGVmdCA9IE1hdGguZmxvb3IodGhpcy5nZXRPcHRpb24oJ3BhZ2VQZXJQYWdlTGlzdCcpIC8gMiksXG4gICAgICAgICAgICAgICAgcGFnZUluZGV4ID0gcGFnZU51bWJlciAtIGxlZnQ7XG4gICAgICAgICAgICBwYWdlSW5kZXggPSBNYXRoLm1heChwYWdlSW5kZXgsIDEpO1xuICAgICAgICAgICAgcGFnZUluZGV4ID0gTWF0aC5taW4ocGFnZUluZGV4LCB0aGlzLl9nZXRMYXN0UGFnZSgpIC0gdGhpcy5nZXRPcHRpb24oJ3BhZ2VQZXJQYWdlTGlzdCcpICsgMSk7XG4gICAgICAgICAgICByZXR1cm4gcGFnZUluZGV4O1xuICAgICAgICB9XG4gICAgICAgIHJldHVybiBNYXRoLmNlaWwocGFnZU51bWJlciAvIHRoaXMuZ2V0T3B0aW9uKFwicGFnZVBlclBhZ2VMaXN0XCIpKTtcbiAgICB9LFxuXG4gICAgLyoqXG4gICAgICogR2V0IHBhZ2UgbnVtYmVyIG9mIHByZXYsIG5leHQgcGFnZXNcbiAgICAgKiBAcGFyYW0ge1N0cmluZ30gcmVsYXRpdmVOYW1lIERpcmVjdGlvbnMocHJlX2VuZCwgbmV4dF9lbmQsIHByZSwgbmV4dClcbiAgICAgKiBAcmV0dXJuIHtOdW1iZXJ9XG4gICAgICogQHByaXZhdGVcbiAgICAgKiAgICAgKi9cbiAgICBfZ2V0UmVsYXRpdmVQYWdlOiBmdW5jdGlvbihyZWxhdGl2ZU5hbWUpIHtcbiAgICAgICAgdmFyIHBhZ2UgPSBudWxsLFxuICAgICAgICAgICAgaXNNb3ZlUGFnZSA9IHRoaXMuZ2V0T3B0aW9uKCdtb3ZlVW5pdCcpID09PSAncGFnZScsXG4gICAgICAgICAgICBjdXJyZW50UGFnZUluZGV4ID0gdGhpcy5fZ2V0UGFnZUluZGV4KHRoaXMuZ2V0Q3VycmVudFBhZ2UoKSk7XG4gICAgICAgIGlmKHRoaXMuZ2V0T3B0aW9uKCdpc0NlbnRlckFsaWduJykpIHtcbiAgICAgICAgICAgIGlmIChyZWxhdGl2ZU5hbWUgPT09ICdwcmUnKSB7XG4gICAgICAgICAgICAgICAgcGFnZSA9IGlzTW92ZVBhZ2UgPyB0aGlzLmdldEN1cnJlbnRQYWdlKCkgLSAxIDogY3VycmVudFBhZ2VJbmRleCAtIDE7XG4gICAgICAgICAgICB9IGVsc2Uge1xuICAgICAgICAgICAgICAgIHBhZ2UgPSBpc01vdmVQYWdlID8gdGhpcy5nZXRDdXJyZW50UGFnZSgpICsgMSA6IGN1cnJlbnRQYWdlSW5kZXggKyB0aGlzLmdldE9wdGlvbigncGFnZVBlclBhZ2VMaXN0Jyk7XG4gICAgICAgICAgICB9XG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgICBpZiAocmVsYXRpdmVOYW1lID09PSAncHJlJykge1xuICAgICAgICAgICAgICAgIHBhZ2UgPSBpc01vdmVQYWdlID8gdGhpcy5nZXRDdXJyZW50UGFnZSgpIC0gMSA6IChjdXJyZW50UGFnZUluZGV4IC0gMSkgKiB0aGlzLmdldE9wdGlvbigncGFnZVBlclBhZ2VMaXN0Jyk7XG4gICAgICAgICAgICB9IGVsc2Uge1xuICAgICAgICAgICAgICAgIHBhZ2UgPSBpc01vdmVQYWdlID8gdGhpcy5nZXRDdXJyZW50UGFnZSgpICsgMSA6IGN1cnJlbnRQYWdlSW5kZXggKiB0aGlzLmdldE9wdGlvbigncGFnZVBlclBhZ2VMaXN0JykgKyAxO1xuICAgICAgICAgICAgfVxuICAgICAgICB9XG4gICAgICAgIHJldHVybiBwYWdlO1xuICAgIH0sXG5cbiAgICAvKipcbiAgICAgKiBHZXQgYXZhaWwgcGFnZSBudW1iZXIgZnJvbSBvdmVyIG51bWJlclxuICAgICAqIElmIHRvdGFsIHBhZ2UgaXMgMjMsIGJ1dCBpbnB1dCBudW1iZXIgaXMgMzAgPT4gcmV0dXJuIDIzXG4gICAgICogQHBhcmFtIHtOdW1iZXJ9IHBhZ2UgUGFnZSBudW1iZXJcbiAgICAgKiBAcmV0dXJucyB7bnVtYmVyfVxuICAgICAqIEBwcml2YXRlXG4gICAgICovXG4gICAgX2NvbnZlcnRUb0F2YWlsUGFnZTogZnVuY3Rpb24ocGFnZSkge1xuICAgICAgICB2YXIgbGFzdFBhZ2VOdW1iZXIgPSB0aGlzLl9nZXRMYXN0UGFnZSgpO1xuICAgICAgICBwYWdlID0gTWF0aC5tYXgocGFnZSwgMSk7XG4gICAgICAgIHBhZ2UgPSBNYXRoLm1pbihwYWdlLCBsYXN0UGFnZU51bWJlcik7XG4gICAgICAgIHJldHVybiBwYWdlO1xuICAgIH0sXG5cbiAgICAvKipcbiAgICAgKiBDcmVhdGUgcmVxdWlyZSB2aWV3IHNldCwgbm90aWZ5IHZpZXcgdG8gdXBkYXRlLlxuICAgICAqIEBwYXJhbSB7TnVtYmVyfSBwYWdlXG4gICAgICogQHByaXZhdGVcbiAgICAgKi9cbiAgICBfcGFnaW5hdGU6IGZ1bmN0aW9uKHBhZ2Upe1xuXG4gICAgICAgIC8vIOu3sOydmCDrsoTtirwg67CPIO2OmOydtOyngOulvCDrqqjrkZAg7KCc6rGwIOuwjyDrs7XsgqxcbiAgICAgICAgdGhpcy5fdmlldy5lbXB0eSgpO1xuXG4gICAgICAgIHZhciB2aWV3U2V0ID0ge307XG5cbiAgICAgICAgdmlld1NldC5sYXN0UGFnZSA9IHRoaXMuX2dldExhc3RQYWdlKCk7XG4gICAgICAgIHZpZXdTZXQuY3VycmVudFBhZ2VJbmRleCA9IHRoaXMuX2dldFBhZ2VJbmRleChwYWdlKTtcbiAgICAgICAgdmlld1NldC5sYXN0UGFnZUxpc3RJbmRleCA9IHRoaXMuX2dldFBhZ2VJbmRleCh2aWV3U2V0Lmxhc3RQYWdlKTtcbiAgICAgICAgdmlld1NldC5wYWdlID0gcGFnZTtcblxuICAgICAgICB0aGlzLl92aWV3LnVwZGF0ZSh2aWV3U2V0LCBwYWdlKTtcbiAgICB9LFxuXG4gICAgLyoqXG4gICAgICogUGFnZWxpc3QgY2xpY2sgZXZlbnQgaGFkbmxlclxuICAgICAqIEBwYXJhbSB7SlF1ZXJ5RXZlbnR9IGV2ZW50XG4gICAgICogQHByaXZhdGVcbiAgICAgKi9cbiAgICBfb25DbGlja1BhZ2VMaXN0OiBmdW5jdGlvbihldmVudCkge1xuXG4gICAgICAgIGV2ZW50LnByZXZlbnREZWZhdWx0KCk7XG4gICAgICAgIHZhciBwYWdlID0gbnVsbCxcbiAgICAgICAgICAgIHRhcmdldEVsZW1lbnQgPSAkKGV2ZW50LnRhcmdldCksXG4gICAgICAgICAgICB0YXJnZXRQYWdlO1xuXG4gICAgICAgIGlmICh0aGlzLl92aWV3LmlzSW4odGFyZ2V0RWxlbWVudCwgdGhpcy5nZXRPcHRpb24oJyRwcmVfZW5kT24nKSkpIHtcbiAgICAgICAgICAgIHBhZ2UgPSAxO1xuICAgICAgICB9IGVsc2UgaWYgKHRoaXMuX3ZpZXcuaXNJbih0YXJnZXRFbGVtZW50LCB0aGlzLmdldE9wdGlvbignJGxhc3RPbicpKSkge1xuICAgICAgICAgICAgcGFnZSA9IHRoaXMuX2dldExhc3RQYWdlKCk7XG4gICAgICAgIH0gZWxzZSBpZiAodGhpcy5fdmlldy5pc0luKHRhcmdldEVsZW1lbnQsIHRoaXMuZ2V0T3B0aW9uKCckcHJlT24nKSkpIHtcbiAgICAgICAgICAgIHBhZ2UgPSB0aGlzLl9nZXRSZWxhdGl2ZVBhZ2UoJ3ByZScpO1xuICAgICAgICB9IGVsc2UgaWYgKHRoaXMuX3ZpZXcuaXNJbih0YXJnZXRFbGVtZW50LCB0aGlzLmdldE9wdGlvbignJG5leHRPbicpKSkge1xuICAgICAgICAgICAgcGFnZSA9IHRoaXMuX2dldFJlbGF0aXZlUGFnZSgnbmV4dCcpO1xuICAgICAgICB9IGVsc2Uge1xuXG4gICAgICAgICAgICB0YXJnZXRQYWdlID0gdGhpcy5fdmlldy5nZXRQYWdlRWxlbWVudCh0YXJnZXRFbGVtZW50KTtcblxuICAgICAgICAgICAgaWYgKHRhcmdldFBhZ2UgJiYgdGFyZ2V0UGFnZS5sZW5ndGgpIHtcbiAgICAgICAgICAgICAgICBwYWdlID0gcGFyc2VJbnQodGFyZ2V0UGFnZS50ZXh0KCksIDEwKTtcbiAgICAgICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgICAgICAgcmV0dXJuO1xuICAgICAgICAgICAgfVxuICAgICAgICB9XG5cbiAgICAgICAgLyoqXG4gICAgICAgICBGaXJlICdjbGljaycgY3VzdG9tIGV2ZW50IHdoZW4gcGFnZSBidXR0b24gY2xpY2tlZFxuICAgICAgICAgQHBhcmFtIHtjb21wb25lbnRFdmVudH0gZXZlbnREYXRhXG4gICAgICAgICBAcGFyYW0ge1N0cmluZ30gZXZlbnREYXRhLmV2ZW50VHlwZSBDdXN0b20gZXZlbnQgbmFtZVxuICAgICAgICAgQHBhcmFtIHtOdW1iZXJ9IGV2ZW50RGF0YS5wYWdlIFBhZ2UgdG8gbW92ZVxuICAgICAgICAgQHBhcmFtIHtGdW5jdGlvbn0gZXZlbnREYXRhLnN0b3AgU3RvcCBwYWdlIG1vdmVcbiAgICAgICAgICoqL1xuXG4gICAgICAgIHZhciBpc0ZpcmVkID0gdGhpcy5pbnZva2UoXCJjbGlja1wiLCB7XCJwYWdlXCIgOiBwYWdlfSk7XG4gICAgICAgIGlmICghaXNGaXJlZCkge1xuICAgICAgICAgICAgcmV0dXJuO1xuICAgICAgICB9XG5cbiAgICAgICAgdGhpcy5tb3ZlUGFnZVRvKHBhZ2UpO1xuICAgIH1cbn0pO1xuLy8gQ3VzdG9tRXZlbnQgIE1peGluXG5uZS51dGlsLkN1c3RvbUV2ZW50cy5taXhpbihQYWdpbmF0aW9uKTtcblxubW9kdWxlLmV4cG9ydHMgPSBQYWdpbmF0aW9uOyIsIi8qKlxuICogQGZpbGVvdmVydmlldyBQYWdpbmF0aW9uIHZpZXcgbWFuYWdlIGFsbCBvZiBkcmF3IGVsZW1lbnRzXG4gKiAoZnJvbSBwdWcuUGFnaW5hdGlvbilcbiAqIEBhdXRob3IgTkhOIGVudGVydGFpbm1lbnQgRkUgZGV2IHRlYW0gSmVpbiBZaShqZWluLnlpQG5obmVudC5jb20pXG4gKiBAZGVwZW5kZW5jeSBwYWdpbmF0aW9uLmpzXG4gKi9cbi8qKlxuICogQGNvbnN0cnVjdG9yIG5lLmNvbXBvbmVudC5QYWdpbmF0aW9uLlBhZ2luYXRpb25WaWV3XG4gKiBAcGFyYW0ge09iamVjdH0gb3B0aW9ucyBPcHRpb24gb2JqZWN0XG4gKiBAcGFyYW0ge09iamVjdH0gJGVsZW1lbnQgQ29udGFpbmVyIGVsZW1lbnRcbiAqXG4gKi9cbnZhciBWaWV3ID0gbmUudXRpbC5kZWZpbmVDbGFzcygvKiogQGxlbmRzIG5lLmNvbXBvbmVudC5QYWdpbmF0aW9uLlBhZ2luYXRpb25WaWV3LnByb3RvdHlwZSAqL3tcbiAgICBpbml0OiBmdW5jdGlvbihvcHRpb25zLCAkZWxlbWVudCkge1xuICAgICAgICAvKipcbiAgICAgICAgICogUGFnaW5hdGlvbiByb290IGVsZW1lbnRcbiAgICAgICAgICogQHR5cGUge2pRdWVyeU9iamVjdH1cbiAgICAgICAgICogQHByaXZhdGVcbiAgICAgICAgICovXG4gICAgICAgIHRoaXMuX2VsZW1lbnQgPSAkZWxlbWVudDtcblxuICAgICAgICAvKipcbiAgICAgICAgICogUGFnaW5hdGlvbiBvcHRpb25zXG4gICAgICAgICAqIEB0eXBlIHtPYmplY3R9XG4gICAgICAgICAqIEBwcml2YXRlXG4gICAgICAgICAqL1xuICAgICAgICB0aGlzLl9vcHRpb25zID0gb3B0aW9ucztcblxuICAgICAgICAvKipcbiAgICAgICAgICogU2VsZWN0b3JzXG4gICAgICAgICAqIEB0eXBlIHtPYmplY3R9XG4gICAgICAgICAqIEBwcml2YXRlXG4gICAgICAgICAqL1xuICAgICAgICB0aGlzLl9lbGVtZW50U2VsZWN0b3IgPSB7fTtcblxuICAgICAgICAvKipcbiAgICAgICAgICogUGFnZSBpdGVtIGxpc3RcbiAgICAgICAgICogQHR5cGUge0FycmF5fVxuICAgICAgICAgKiBAcHJpdmF0ZVxuICAgICAgICAgKi9cbiAgICAgICAgdGhpcy5fcGFnZUl0ZW1MaXN0ID0gW107XG5cbiAgICAgICAgbmUudXRpbC5leHRlbmQob3B0aW9ucywge1xuICAgICAgICAgICAgJHByZV9lbmRPbjogb3B0aW9uc1snJHByZV9lbmRPbiddIHx8ICQoJ2EuJyArIHRoaXMuX3dyYXBQcmVmaXgoJ3ByZV9lbmQnKSwgdGhpcy5fZWxlbWVudCksXG4gICAgICAgICAgICAkcHJlT246IG9wdGlvbnNbJyRwcmVPbiddIHx8ICQoJ2EuJyArIHRoaXMuX3dyYXBQcmVmaXgoJ3ByZScpLCB0aGlzLl9lbGVtZW50KSxcbiAgICAgICAgICAgICRuZXh0T246IG9wdGlvbnNbJyRuZXh0T24nXSB8fCAkKCdhLicgKyB0aGlzLl93cmFwUHJlZml4KCduZXh0JyksIHRoaXMuX2VsZW1lbnQpLFxuICAgICAgICAgICAgJGxhc3RPbjogb3B0aW9uc1snJGxhc3RPbiddIHx8ICQoJ2EuJyArIHRoaXMuX3dyYXBQcmVmaXgoJ25leHRfZW5kJyksIHRoaXMuX2VsZW1lbnQpLFxuICAgICAgICAgICAgJHByZV9lbmRPZmY6IG9wdGlvbnNbJyRwcmVfZW5kT2ZmJ10gfHwgJCgnc3Bhbi4nICsgdGhpcy5fd3JhcFByZWZpeCgncHJlX2VuZCcpLCB0aGlzLl9lbGVtZW50KSxcbiAgICAgICAgICAgICRwcmVPZmY6IG9wdGlvbnNbJyRwcmVPZmYnXSB8fCAkKCdzcGFuLicgKyB0aGlzLl93cmFwUHJlZml4KCdwcmUnKSwgdGhpcy5fZWxlbWVudCksXG4gICAgICAgICAgICAkbmV4dE9mZjogb3B0aW9uc1snJG5leHRPZmYnXSB8fCAkKCdzcGFuLicgKyB0aGlzLl93cmFwUHJlZml4KCduZXh0JyksIHRoaXMuX2VsZW1lbnQpLFxuICAgICAgICAgICAgJGxhc3RPZmY6IG9wdGlvbnNbJyRsYXN0T2ZmJ10gfHwgJCgnc3Bhbi4nICsgdGhpcy5fd3JhcFByZWZpeCgnbmV4dF9lbmQnKSwgdGhpcy5fZWxlbWVudClcbiAgICAgICAgfSk7XG4gICAgICAgIHRoaXMuX2VsZW1lbnQuYWRkQ2xhc3ModGhpcy5fd3JhcFByZWZpeCgnbG9hZGVkJykpO1xuICAgIH0sXG5cbiAgICAvKipcbiAgICAgKiBVcGRhdGUgdmlld1xuICAgICAqIEBwYXJhbSB7T2JqZWN0fSB2aWV3U2V0IFZhbHVlcyBvZiBlYWNoIHBhZ2luYXRpb24gdmlldyBjb21wb25lbnRzXG4gICAgICovXG4gICAgdXBkYXRlOiBmdW5jdGlvbih2aWV3U2V0KSB7XG4gICAgICAgIHRoaXMuX2FkZFRleHROb2RlKCk7XG4gICAgICAgIHRoaXMuX3NldFBhZ2VSZXN1bHQodmlld1NldC5sYXN0UGFnZSk7XG5cbiAgICAgICAgdmFyIG9wdGlvbnMgPSB0aGlzLl9vcHRpb25zLFxuICAgICAgICAgICAgZWRnZXMgPSB0aGlzLl9nZXRFZGdlKHZpZXdTZXQpLFxuICAgICAgICAgICAgbGVmdFBhZ2VOdW1iZXIgPSBlZGdlcy5sZWZ0LFxuICAgICAgICAgICAgcmlnaHRQYWdlTnVtYmVyID0gZWRnZXMucmlnaHQ7XG5cbiAgICAgICAgdmlld1NldC5sZWZ0UGFnZU51bWJlciA9IGxlZnRQYWdlTnVtYmVyO1xuICAgICAgICB2aWV3U2V0LnJpZ2h0UGFnZU51bWJlciA9IHJpZ2h0UGFnZU51bWJlcjtcblxuICAgICAgICBpZiAob3B0aW9ucy5tb3ZlVW5pdCA9PT0gJ3BhZ2UnKSB7XG4gICAgICAgICAgICB2aWV3U2V0LmN1cnJlbnRQYWdlSW5kZXggPSB2aWV3U2V0LnBhZ2U7XG4gICAgICAgICAgICB2aWV3U2V0Lmxhc3RQYWdlTGlzdEluZGV4ID0gdmlld1NldC5sYXN0UGFnZTtcbiAgICAgICAgfVxuXG4gICAgICAgIHRoaXMuX3NldEZpcnN0KHZpZXdTZXQpO1xuICAgICAgICB0aGlzLl9zZXRQcmV2KHZpZXdTZXQpO1xuICAgICAgICB0aGlzLl9zZXRQYWdlTnVtYmVycyh2aWV3U2V0KTtcbiAgICAgICAgdGhpcy5fc2V0TmV4dCh2aWV3U2V0KTtcbiAgICAgICAgdGhpcy5fc2V0TGFzdCh2aWV3U2V0KTtcbiAgICB9LFxuXG4gICAgLyoqXG4gICAgICogQ2hlY2sgaW5jbHVkZVxuICAgICAqIEBwYXJhbSB7SlF1ZXJ5T2JqZWN0fSAkZmluZCBUYXJnZXQgZWxlbWVudFxuICAgICAqIEBwYXJhbSB7SlF1ZXJ5T2JqZWN0fSAkcGFyZW50IFdyYXBwZXIgZWxlbWVudFxuICAgICAqIEByZXR1cm5zIHtib29sZWFufVxuICAgICAqL1xuICAgIGlzSW46IGZ1bmN0aW9uKCRmaW5kLCAkcGFyZW50KSB7XG4gICAgICAgIGlmICghJHBhcmVudCkge1xuICAgICAgICAgICAgcmV0dXJuIGZhbHNlO1xuICAgICAgICB9XG4gICAgICAgIHJldHVybiAoJGZpbmRbMF0gPT09ICRwYXJlbnRbMF0pID8gdHJ1ZSA6ICQuY29udGFpbnMoJHBhcmVudCwgJGZpbmQpO1xuICAgIH0sXG5cbiAgICAvKipcbiAgICAgKiBHZXQgYmFzZShyb290KSBlbGVtZW50XG4gICAgICogQHJldHVybnMge0pRdWVyeU9iamVjdH1cbiAgICAgKi9cbiAgICBnZXRCYXNlRWxlbWVudDogZnVuY3Rpb24oKSB7XG4gICAgICAgIHJldHVybiB0aGlzLmdldEVsZW1lbnQoKTtcbiAgICB9LFxuXG4gICAgLyoqXG4gICAgICogUmVzZXQgYmFzZSBlbGVtZW50XG4gICAgICovXG4gICAgZW1wdHk6IGZ1bmN0aW9uKCl7XG5cbiAgICAgICAgdmFyIG9wdGlvbnMgPSB0aGlzLl9vcHRpb25zLFxuICAgICAgICAgICAgJHByZV9lbmRPbiA9IG9wdGlvbnMuJHByZV9lbmRPbixcbiAgICAgICAgICAgICRwcmVPbiA9IG9wdGlvbnMuJHByZU9uLFxuICAgICAgICAgICAgJG5leHRPbiA9IG9wdGlvbnMuJG5leHRPbixcbiAgICAgICAgICAgICRsYXN0T24gPSBvcHRpb25zLiRsYXN0T24sXG4gICAgICAgICAgICAkcHJlX2VuZE9mZiA9IG9wdGlvbnMuJHByZV9lbmRPZmYsXG4gICAgICAgICAgICAkcHJlT2ZmID0gb3B0aW9ucy4kcHJlT2ZmLFxuICAgICAgICAgICAgJG5leHRPZmYgPSBvcHRpb25zLiRuZXh0T2ZmLFxuICAgICAgICAgICAgJGxhc3RPZmYgPSBvcHRpb25zLiRsYXN0T2ZmO1xuXG4gICAgICAgIG9wdGlvbnMuJHByZV9lbmRPbiA9IHRoaXMuX2Nsb25lKCRwcmVfZW5kT24pO1xuICAgICAgICBvcHRpb25zLiRwcmVPbiA9IHRoaXMuX2Nsb25lKCRwcmVPbik7XG4gICAgICAgIG9wdGlvbnMuJGxhc3RPbiA9IHRoaXMuX2Nsb25lKCRsYXN0T24pO1xuICAgICAgICBvcHRpb25zLiRuZXh0T24gPSB0aGlzLl9jbG9uZSgkbmV4dE9uKTtcbiAgICAgICAgb3B0aW9ucy4kcHJlX2VuZE9mZiA9IHRoaXMuX2Nsb25lKCRwcmVfZW5kT2ZmKTtcbiAgICAgICAgb3B0aW9ucy4kcHJlT2ZmID0gdGhpcy5fY2xvbmUoJHByZU9mZik7XG4gICAgICAgIG9wdGlvbnMuJGxhc3RPZmYgPSB0aGlzLl9jbG9uZSgkbGFzdE9mZik7XG4gICAgICAgIG9wdGlvbnMuJG5leHRPZmYgPSB0aGlzLl9jbG9uZSgkbmV4dE9mZik7XG5cbiAgICAgICAgdGhpcy5fcGFnZUl0ZW1MaXN0ID0gW107XG5cbiAgICAgICAgdGhpcy5fZWxlbWVudC5lbXB0eSgpO1xuICAgIH0sXG5cbiAgICAvKipcbiAgICAgKiBGaW5kIHRhcmdldCBlbGVtZW50IGZyb20gcGFnZSBlbGVtZW50c1xuICAgICAqIEBwYXJhbSB7alF1ZXJ5T2JqZWN0fEhUTUxFbGVtZW50fSBlbCBUYXJnZXQgZWxlbWVudFxuICAgICAqIEByZXR1cm4ge2pRdWVyeU9iamVjdH1cbiAgICAgKi9cbiAgICBnZXRQYWdlRWxlbWVudDogZnVuY3Rpb24oZWwpIHtcblxuICAgICAgICB2YXIgaSxcbiAgICAgICAgICAgIGxlbmd0aCxcbiAgICAgICAgICAgIHBpY2tlZEl0ZW07XG5cbiAgICAgICAgZm9yIChpID0gMCwgbGVuZ3RoID0gdGhpcy5fcGFnZUl0ZW1MaXN0Lmxlbmd0aDsgaSA8IGxlbmd0aDsgaSsrKSB7XG4gICAgICAgICAgICBwaWNrZWRJdGVtID0gdGhpcy5fcGFnZUl0ZW1MaXN0W2ldO1xuICAgICAgICAgICAgaWYgKHRoaXMuaXNJbihlbCwgcGlja2VkSXRlbSkpIHtcbiAgICAgICAgICAgICAgICByZXR1cm4gcGlja2VkSXRlbTtcbiAgICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgICByZXR1cm4gbnVsbDtcbiAgICB9LFxuXG4gICAgLyoqXG4gICAgICogQXR0YWNoIEV2ZW50c1xuICAgICAqIEBwYXJhbSB7U3RyaW5nfSBldmVudFR5cGUgRXZlbnQgbmFtZSB0byBhdHRhY2hcbiAgICAgKiBAcGFyYW0ge0Z1bmN0aW9ufSBjYWxsYmFjayBDYWxsYmFjayBmdW5jdGlvblxuICAgICAqL1xuICAgIGF0dGFjaEV2ZW50OiBmdW5jdGlvbihldmVudFR5cGUsIGNhbGxiYWNrKSB7XG5cbiAgICAgICAgdmFyIHRhcmdldEVsZW1lbnQgPSB0aGlzLl9lbGVtZW50LFxuICAgICAgICAgICAgaXNTYXZlZEVsZW1lbnQgPSBuZS51dGlsLmlzU3RyaW5nKHRhcmdldEVsZW1lbnQpICYmIHRoaXMuX2VsZW1lbnRTZWxlY3Rvclt0YXJnZXRFbGVtZW50XTtcblxuICAgICAgICBpZiAoaXNTYXZlZEVsZW1lbnQpIHtcbiAgICAgICAgICAgIHRhcmdldEVsZW1lbnQgPSB0aGlzLl9nZXRFbGVtZW50KHRhcmdldEVsZW1lbnQsIHRydWUpO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKHRhcmdldEVsZW1lbnQgJiYgZXZlbnRUeXBlICYmIGNhbGxiYWNrKSB7XG4gICAgICAgICAgICAkKHRhcmdldEVsZW1lbnQpLmJpbmQoZXZlbnRUeXBlLCBudWxsLCBjYWxsYmFjayk7XG4gICAgICAgIH1cbiAgICB9LFxuXG4gICAgLyoqXG4gICAgICogR2V0IHJvb3QgZWxlbWVudFxuICAgICAqIEByZXR1cm5zIHtqUXVlcnlPYmplY3R9XG4gICAgICovXG4gICAgZ2V0RWxlbWVudDogZnVuY3Rpb24oKSB7XG4gICAgICAgIHJldHVybiB0aGlzLl9lbGVtZW50O1xuICAgIH0sXG5cbiAgICAvKipcbiAgICAgKiBSZXR1cm4gY2xhc3NOYW1lIGFkZGVkIHByZWZpeFxuICAgICAqIEBwYXJhbSB7U3RyaW5nfSBjbGFzc05hbWUgQ2xhc3MgbmFtZSB0byBiZSB3cmFwcGluZ1xuICAgICAqIEByZXR1cm5zIHsqfVxuICAgICAqIEBwcml2YXRlXG4gICAgICovXG4gICAgX3dyYXBQcmVmaXg6IGZ1bmN0aW9uKGNsYXNzTmFtZSkge1xuICAgICAgICB2YXIgY2xhc3NQcmVmaXggPSB0aGlzLl9vcHRpb25zWydjbGFzc1ByZWZpeCddO1xuICAgICAgICByZXR1cm4gY2xhc3NQcmVmaXggPyBjbGFzc1ByZWZpeCArIGNsYXNzTmFtZS5yZXBsYWNlKC9fL2csICctJykgOiBjbGFzc05hbWU7XG4gICAgfSxcblxuICAgIC8qKlxuICAgICAqIFB1dCBpbnNlcnRUZXh0Tm9kZSBiZXR3ZWVuIHBhZ2UgaXRlbXNcbiAgICAgKiBAcHJpdmF0ZVxuICAgICAqL1xuICAgIF9hZGRUZXh0Tm9kZTogZnVuY3Rpb24oKSB7XG4gICAgICAgIHZhciB0ZXh0Tm9kZSA9IHRoaXMuX29wdGlvbnNbJ2luc2VydFRleHROb2RlJ107XG4gICAgICAgIHRoaXMuX2VsZW1lbnQuYXBwZW5kKGRvY3VtZW50LmNyZWF0ZVRleHROb2RlKHRleHROb2RlKSk7XG4gICAgfSxcblxuICAgIC8qKlxuICAgICAqIENsb25lIGVsZW1lbnRcbiAgICAgKiBAcmV0dXJucyB7Kn1cbiAgICAgKiBAcHJpdmF0ZVxuICAgICAqL1xuICAgIF9jbG9uZTogZnVuY3Rpb24oJGxpbmspIHtcblxuICAgICAgICBpZiAoJGxpbmsgJiYgJGxpbmsubGVuZ3RoICYmICRsaW5rLmdldCgwKS5jbG9uZU5vZGUpIHtcbiAgICAgICAgICAgIHJldHVybiAkKCRsaW5rLmdldCgwKS5jbG9uZU5vZGUodHJ1ZSkpO1xuICAgICAgICB9XG4gICAgICAgIHJldHVybiAkbGluaztcblxuICAgIH0sXG5cbiAgICAvKipcbiAgICAgKiBXcmFwcGluZyBjbGFzcyBieSBwYWdlIHJlc3VsdFxuICAgICAqIEBwYXJhbSB7TnVtYmVyfSBsYXN0TnVtIExhc3QgcGFnZSBudW1iZXJcbiAgICAgKiBAcHJpdmF0ZVxuICAgICAqL1xuICAgIF9zZXRQYWdlUmVzdWx0OiBmdW5jdGlvbihsYXN0TnVtKSB7XG5cbiAgICAgICAgaWYgKGxhc3ROdW0gPT09IDApIHtcbiAgICAgICAgICAgIHRoaXMuX2VsZW1lbnQuYWRkQ2xhc3ModGhpcy5fd3JhcFByZWZpeCgnbm8tcmVzdWx0JykpO1xuICAgICAgICB9IGVsc2UgaWYgKGxhc3ROdW0gPT09IDEpIHtcbiAgICAgICAgICAgIHRoaXMuX2VsZW1lbnQuYWRkQ2xhc3ModGhpcy5fd3JhcFByZWZpeCgnb25seS1vbmUnKSkucmVtb3ZlQ2xhc3ModGhpcy5fd3JhcFByZWZpeCgnbm8tcmVzdWx0JykpO1xuICAgICAgICB9IGVsc2Uge1xuICAgICAgICAgICAgdGhpcy5fZWxlbWVudC5yZW1vdmVDbGFzcyh0aGlzLl93cmFwUHJlZml4KCdvbmx5LW9uZScpKS5yZW1vdmVDbGFzcyh0aGlzLl93cmFwUHJlZml4KCduby1yZXN1bHQnKSk7XG4gICAgICAgIH1cblxuICAgIH0sXG5cbiAgICAvKipcbiAgICAgKiBHZXQgZWFjaCBlZGdlIHBhZ2VcbiAgICAgKiBAcGFyYW0ge29iamVjdH0gdmlld1NldCBQYWdpbmF0aW9uIHZpZXcgZWxlbWVudHMgc2V0XG4gICAgICogQHJldHVybnMge3tsZWZ0OiAqLCByaWdodDogKn19XG4gICAgICogQHByaXZhdGVcbiAgICAgKi9cbiAgICBfZ2V0RWRnZTogZnVuY3Rpb24odmlld1NldCkge1xuXG4gICAgICAgIHZhciBvcHRpb25zID0gdGhpcy5fb3B0aW9ucyxcbiAgICAgICAgICAgIGxlZnRQYWdlTnVtYmVyLFxuICAgICAgICAgICAgcmlnaHRQYWdlTnVtYmVyLFxuICAgICAgICAgICAgbGVmdDtcblxuICAgICAgICBpZiAob3B0aW9ucy5pc0NlbnRlckFsaWduKSB7XG5cbiAgICAgICAgICAgIGxlZnQgPSBNYXRoLmZsb29yKG9wdGlvbnMucGFnZVBlclBhZ2VMaXN0IC8gMik7XG4gICAgICAgICAgICBsZWZ0UGFnZU51bWJlciA9IHZpZXdTZXQucGFnZSAtIGxlZnQ7XG4gICAgICAgICAgICBsZWZ0UGFnZU51bWJlciA9IE1hdGgubWF4KGxlZnRQYWdlTnVtYmVyLCAxKTtcbiAgICAgICAgICAgIHJpZ2h0UGFnZU51bWJlciA9IGxlZnRQYWdlTnVtYmVyICsgb3B0aW9ucy5wYWdlUGVyUGFnZUxpc3QgLSAxO1xuXG4gICAgICAgICAgICBpZiAocmlnaHRQYWdlTnVtYmVyID4gdmlld1NldC5sYXN0UGFnZSkge1xuICAgICAgICAgICAgICAgIGxlZnRQYWdlTnVtYmVyID0gdmlld1NldC5sYXN0UGFnZSAtIG9wdGlvbnMucGFnZVBlclBhZ2VMaXN0ICsgMTtcbiAgICAgICAgICAgICAgICBsZWZ0UGFnZU51bWJlciA9IE1hdGgubWF4KGxlZnRQYWdlTnVtYmVyLCAxKTtcbiAgICAgICAgICAgICAgICByaWdodFBhZ2VOdW1iZXIgPSB2aWV3U2V0Lmxhc3RQYWdlO1xuICAgICAgICAgICAgfVxuXG4gICAgICAgIH0gZWxzZSB7XG5cbiAgICAgICAgICAgIGxlZnRQYWdlTnVtYmVyID0gKHZpZXdTZXQuY3VycmVudFBhZ2VJbmRleCAtIDEpICogb3B0aW9ucy5wYWdlUGVyUGFnZUxpc3QgKyAxO1xuICAgICAgICAgICAgcmlnaHRQYWdlTnVtYmVyID0gKHZpZXdTZXQuY3VycmVudFBhZ2VJbmRleCkgKiBvcHRpb25zLnBhZ2VQZXJQYWdlTGlzdDtcbiAgICAgICAgICAgIHJpZ2h0UGFnZU51bWJlciA9IE1hdGgubWluKHJpZ2h0UGFnZU51bWJlciwgdmlld1NldC5sYXN0UGFnZSk7XG5cbiAgICAgICAgfVxuXG4gICAgICAgIHJldHVybiB7XG4gICAgICAgICAgICBsZWZ0OiBsZWZ0UGFnZU51bWJlcixcbiAgICAgICAgICAgIHJpZ2h0OiByaWdodFBhZ2VOdW1iZXJcbiAgICAgICAgfTtcbiAgICB9LFxuXG4gICAgLyoqXG4gICAgICogRGVjaWRlIHRvIHNob3cgZmlyc3QgcGFnZSBsaW5rIGJ5IHdoZXRoZXIgZmlyc3QgcGFnZSBvciBub3RcbiAgICAgKiBAcGFyYW0ge29iamVjdH0gdmlld1NldCBQYWdpbmF0aW9uIHZpZXcgZWxlbWVudHMgc2V0XG4gICAgICogQHByaXZhdGVcbiAgICAgKi9cbiAgICBfc2V0Rmlyc3Q6IGZ1bmN0aW9uKHZpZXdTZXQpIHtcbiAgICAgICAgdmFyIG9wdGlvbnMgPSB0aGlzLl9vcHRpb25zO1xuICAgICAgICBpZiAodmlld1NldC5wYWdlID4gMSkge1xuICAgICAgICAgICAgaWYgKG9wdGlvbnMuJHByZV9lbmRPbikge1xuICAgICAgICAgICAgICAgIHRoaXMuX2VsZW1lbnQuYXBwZW5kKG9wdGlvbnMuJHByZV9lbmRPbik7XG4gICAgICAgICAgICAgICAgdGhpcy5fYWRkVGV4dE5vZGUoKTtcbiAgICAgICAgICAgIH1cbiAgICAgICAgfSBlbHNlIHtcbiAgICAgICAgICAgIGlmIChvcHRpb25zLiRwcmVfZW5kT2ZmKSB7XG4gICAgICAgICAgICAgICAgdGhpcy5fZWxlbWVudC5hcHBlbmQob3B0aW9ucy4kcHJlX2VuZE9mZik7XG4gICAgICAgICAgICAgICAgdGhpcy5fYWRkVGV4dE5vZGUoKTtcbiAgICAgICAgICAgIH1cbiAgICAgICAgfVxuXG4gICAgfSxcblxuICAgIC8qKlxuICAgICAqIERlY2lkZSB0byBzaG93IHByZXZpb3VzIHBhZ2UgbGluayBieSB3aGV0aGVyIGZpcnN0IHBhZ2Ugb3Igbm90XG4gICAgICogQHBhcmFtIHtvYmplY3R9IHZpZXdTZXQgUGFnaW5hdGlvbiB2aWV3IGVsZW1lbnRzIHNldFxuICAgICAqIEBwcml2YXRlXG4gICAgICovXG4gICAgX3NldFByZXY6IGZ1bmN0aW9uKHZpZXdTZXQpIHtcbiAgICAgICAgdmFyIG9wdGlvbnMgPSB0aGlzLl9vcHRpb25zO1xuXG4gICAgICAgIGlmICh2aWV3U2V0LmN1cnJlbnRQYWdlSW5kZXggPiAxKSB7XG4gICAgICAgICAgICBpZiAob3B0aW9ucy4kcHJlT24pIHtcbiAgICAgICAgICAgICAgICB0aGlzLl9lbGVtZW50LmFwcGVuZChvcHRpb25zLiRwcmVPbik7XG4gICAgICAgICAgICAgICAgdGhpcy5fYWRkVGV4dE5vZGUoKTtcbiAgICAgICAgICAgIH1cbiAgICAgICAgfSBlbHNlIHtcbiAgICAgICAgICAgIGlmIChvcHRpb25zLiRwcmVPZmYpIHtcbiAgICAgICAgICAgICAgICB0aGlzLl9lbGVtZW50LmFwcGVuZChvcHRpb25zLiRwcmVPZmYpO1xuICAgICAgICAgICAgICAgIHRoaXMuX2FkZFRleHROb2RlKCk7XG4gICAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICB9LFxuICAgIC8qKlxuICAgICAqIERlY2lkZSB0byBzaG93IG5leHQgcGFnZSBsaW5rIGJ5IHdoZXRoZXIgZmlyc3QgcGFnZSBvciBub3RcbiAgICAgKiBAcGFyYW0ge29iamVjdH0gdmlld1NldCBQYWdpbmF0aW9uIHZpZXcgZWxlbWVudHMgc2V0XG4gICAgICogQHByaXZhdGVcbiAgICAgKi9cbiAgICBfc2V0TmV4dDogZnVuY3Rpb24odmlld1NldCkge1xuICAgICAgICB2YXIgb3B0aW9ucyA9IHRoaXMuX29wdGlvbnM7XG5cbiAgICAgICAgaWYgKHZpZXdTZXQuY3VycmVudFBhZ2VJbmRleCA8IHZpZXdTZXQubGFzdFBhZ2VMaXN0SW5kZXgpIHtcbiAgICAgICAgICAgIGlmIChvcHRpb25zLiRuZXh0T24pIHtcbiAgICAgICAgICAgICAgICB0aGlzLl9lbGVtZW50LmFwcGVuZChvcHRpb25zLiRuZXh0T24pO1xuICAgICAgICAgICAgICAgIHRoaXMuX2FkZFRleHROb2RlKCk7XG4gICAgICAgICAgICB9XG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgICBpZiAob3B0aW9ucy4kbmV4dE9mZikge1xuICAgICAgICAgICAgICAgIHRoaXMuX2VsZW1lbnQuYXBwZW5kKG9wdGlvbnMuJG5leHRPZmYpO1xuICAgICAgICAgICAgICAgIHRoaXMuX2FkZFRleHROb2RlKCk7XG4gICAgICAgICAgICB9XG4gICAgICAgIH1cblxuICAgIH0sXG4gICAgLyoqXG4gICAgICogRGVjaWRlIHRvIHNob3cgbGFzdCBwYWdlIGxpbmsgYnkgd2hldGhlciBmaXJzdCBwYWdlIG9yIG5vdFxuICAgICAqIEBwYXJhbSB7b2JqZWN0fSB2aWV3U2V0IFBhZ2luYXRpb24gdmlldyBlbGVtZW50cyBzZXRcbiAgICAgKiBAcHJpdmF0ZVxuICAgICAqL1xuICAgIF9zZXRMYXN0OiBmdW5jdGlvbih2aWV3U2V0KSB7XG5cbiAgICAgICAgdmFyIG9wdGlvbnMgPSB0aGlzLl9vcHRpb25zO1xuXG4gICAgICAgIGlmICh2aWV3U2V0LnBhZ2UgPCB2aWV3U2V0Lmxhc3RQYWdlKSB7XG4gICAgICAgICAgICBpZiAob3B0aW9ucy4kbGFzdE9uKSB7XG4gICAgICAgICAgICAgICAgdGhpcy5fZWxlbWVudC5hcHBlbmQob3B0aW9ucy4kbGFzdE9uKTtcbiAgICAgICAgICAgICAgICB0aGlzLl9hZGRUZXh0Tm9kZSgpO1xuICAgICAgICAgICAgfVxuICAgICAgICB9IGVsc2Uge1xuICAgICAgICAgICAgaWYgKG9wdGlvbnMuJGxhc3RPZmYpIHtcbiAgICAgICAgICAgICAgICB0aGlzLl9lbGVtZW50LmFwcGVuZChvcHRpb25zLiRsYXN0T2ZmKTtcbiAgICAgICAgICAgICAgICB0aGlzLl9hZGRUZXh0Tm9kZSgpO1xuICAgICAgICAgICAgfVxuICAgICAgICB9XG5cbiAgICB9LFxuICAgIC8qKlxuICAgICAqIFNldCBwYWdlIG51bWJlciB0aGF0IHdpbGwgYmUgZHJhd25cbiAgICAgKiBAcGFyYW0ge29iamVjdH0gdmlld1NldCBQYWdpbmF0aW9uIHZpZXcgZWxlbWVudHMgc2V0XG4gICAgICogQHByaXZhdGVcbiAgICAgKi9cbiAgICBfc2V0UGFnZU51bWJlcnM6IGZ1bmN0aW9uKHZpZXdTZXQpIHtcbiAgICAgICAgdmFyICRwYWdlSXRlbSxcbiAgICAgICAgICAgIGZpcnN0UGFnZSA9IHZpZXdTZXQubGVmdFBhZ2VOdW1iZXIsXG4gICAgICAgICAgICBsYXN0UGFnZSA9IHZpZXdTZXQucmlnaHRQYWdlTnVtYmVyLFxuICAgICAgICAgICAgb3B0aW9ucyA9IHRoaXMuX29wdGlvbnMsXG4gICAgICAgICAgICBpO1xuXG4gICAgICAgIGZvciAoaSA9IGZpcnN0UGFnZTsgaSA8PSBsYXN0UGFnZTsgaSsrKSB7XG4gICAgICAgICAgICBpZiAoaSA9PT0gdmlld1NldC5wYWdlKSB7XG4gICAgICAgICAgICAgICAgJHBhZ2VJdGVtID0gJChvcHRpb25zLmN1cnJlbnRQYWdlVGVtcGxhdGUucmVwbGFjZSgnez1wYWdlfScsIGkudG9TdHJpbmcoKSkpO1xuICAgICAgICAgICAgfSBlbHNlIHtcbiAgICAgICAgICAgICAgICAkcGFnZUl0ZW0gPSAkKG9wdGlvbnMucGFnZVRlbXBsYXRlLnJlcGxhY2UoJ3s9cGFnZX0nLCBpLnRvU3RyaW5nKCkpKTtcbiAgICAgICAgICAgICAgICB0aGlzLl9wYWdlSXRlbUxpc3QucHVzaCgkcGFnZUl0ZW0pO1xuICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICBpZiAoaSA9PT0gZmlyc3RQYWdlKSB7XG4gICAgICAgICAgICAgICAgJHBhZ2VJdGVtLmFkZENsYXNzKHRoaXMuX3dyYXBQcmVmaXgob3B0aW9uc1snZmlyc3RJdGVtQ2xhc3NOYW1lJ10pKTtcbiAgICAgICAgICAgIH1cbiAgICAgICAgICAgIGlmIChpID09PSBsYXN0UGFnZSkge1xuICAgICAgICAgICAgICAgICRwYWdlSXRlbS5hZGRDbGFzcyh0aGlzLl93cmFwUHJlZml4KG9wdGlvbnNbJ2xhc3RJdGVtQ2xhc3NOYW1lJ10pKTtcbiAgICAgICAgICAgIH1cbiAgICAgICAgICAgIHRoaXMuX2VsZW1lbnQuYXBwZW5kKCRwYWdlSXRlbSk7XG4gICAgICAgICAgICB0aGlzLl9hZGRUZXh0Tm9kZSgpO1xuICAgICAgICB9XG4gICAgfVxufSk7XG5cbm1vZHVsZS5leHBvcnRzID0gVmlldzsiXX0=
