@@ -5,12 +5,12 @@
  * @dependency pagination.js
  */
 /**
- * @constructor ne.component.Pagination.PaginationView
+ * @constructor View
  * @param {Object} options Option object
  * @param {Object} $element Container element
  *
  */
-var View = ne.util.defineClass(/** @lends ne.component.Pagination.PaginationView.prototype */{
+var View = ne.util.defineClass(/** @lends View.prototype */{
     init: function(options, $element) {
         /**
          * Pagination root element

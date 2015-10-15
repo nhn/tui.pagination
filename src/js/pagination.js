@@ -9,10 +9,10 @@ var View = require('./view.js');
 
 /**
  * Pagination core class
- * @constructor ne.component.Pagination
+ * @constructor Pagination
  *
  */
-var Pagination = ne.util.defineClass(/**@lends ne.component.Pagination.prototype */{
+var Pagination = ne.util.defineClass(/**@lends Pagination.prototype */{
     /**
      * Initialize
      * @param {DataObject} options Option object
