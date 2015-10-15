@@ -81,6 +81,9 @@ ul, ol, li {list-style:none; padding-left:0; margin-left:0;}
 }
 #left ul.tutorials li {padding:4px 0;}
 #left ul.tutorials li a {font-weight: normal !important;}
+
+#left ul li .directory { opacity: 0.8; }
+
 .home {
     text-align:center;
     padding:15px 0;
@@ -182,6 +185,11 @@ ul, ol, li {list-style:none; padding-left:0; margin-left:0;}
 #contentBody .method code {
     text-decoration: underline;
     cursor:pointer;
+}
+
+#contentBody .members code {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 #contentBody pre.prettyprint {
