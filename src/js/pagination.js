@@ -12,7 +12,7 @@ var View = require('./view.js');
  * @constructor Pagination
  *
  */
-var Pagination = ne.util.defineClass(/**@lends Pagination.prototype */{
+var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
     /**
      * Initialize
      * @param {DataObject} options Option object
@@ -67,7 +67,7 @@ var Pagination = ne.util.defineClass(/**@lends Pagination.prototype */{
              */
             this._options = defaultOption;
         } else {
-            this._options = ne.util.extend(defaultOption, options);
+            this._options = tui.util.extend(defaultOption, options);
         }
 
         /**
@@ -83,7 +83,7 @@ var Pagination = ne.util.defineClass(/**@lends Pagination.prototype */{
          * @private
          */
         this._view = new View(this._options, $element);
-        this._view.attachEvent('click', ne.util.bind(this._onClickPageList, this));
+        this._view.attachEvent('click', tui.util.bind(this._onClickPageList, this));
 
         this.movePageTo(this.getOption('page'), false);
     },
@@ -94,7 +94,7 @@ var Pagination = ne.util.defineClass(/**@lends Pagination.prototype */{
      */
     reset: function(itemCount) {
 
-        var isExist = ne.util.isExisty((itemCount !== null) && (itemCount !== undefined));
+        var isExist = tui.util.isExisty((itemCount !== null) && (itemCount !== undefined));
 
         if (!isExist) {
             itemCount = this.getOption('itemCount');
@@ -323,6 +323,6 @@ var Pagination = ne.util.defineClass(/**@lends Pagination.prototype */{
     }
 });
 // CustomEvent  Mixin
-ne.util.CustomEvents.mixin(Pagination);
+tui.util.CustomEvents.mixin(Pagination);
 
 module.exports = Pagination;

@@ -10,7 +10,7 @@
  * @param {Object} $element Container element
  *
  */
-var View = ne.util.defineClass(/** @lends View.prototype */{
+var View = tui.util.defineClass(/** @lends View.prototype */{
     init: function(options, $element) {
         /**
          * Pagination root element
@@ -40,7 +40,7 @@ var View = ne.util.defineClass(/** @lends View.prototype */{
          */
         this._pageItemList = [];
 
-        ne.util.extend(options, {
+        tui.util.extend(options, {
             $pre_endOn: options['$pre_endOn'] || $('a.' + this._wrapPrefix('pre_end'), this._element),
             $preOn: options['$preOn'] || $('a.' + this._wrapPrefix('pre'), this._element),
             $nextOn: options['$nextOn'] || $('a.' + this._wrapPrefix('next'), this._element),
@@ -159,7 +159,7 @@ var View = ne.util.defineClass(/** @lends View.prototype */{
     attachEvent: function(eventType, callback) {
 
         var targetElement = this._element,
-            isSavedElement = ne.util.isString(targetElement) && this._elementSelector[targetElement];
+            isSavedElement = tui.util.isString(targetElement) && this._elementSelector[targetElement];
 
         if (isSavedElement) {
             targetElement = this._getElement(targetElement, true);
