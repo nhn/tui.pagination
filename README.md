@@ -31,8 +31,8 @@ Make page list and provide indicator of pages.
 
 ## Download/Install
 * Bower:
-   * latest : `bower install ne-component-pagination#master`
-   * each version : `bower install ne-component-pagination[#tag]`
+   * latest : `bower install tui-component-pagination#master`
+   * each version : `bower install tui-component-pagination[#tag]`
 * Download: https://github.com/nhnent/tui.component.pagination
 
 ## History
@@ -42,7 +42,7 @@ Make page list and provide indicator of pages.
 | 1.0.2 | item count 0 case, broweriy+gulp | 2015.05 | NHN Ent. FE dev team<dl_javascript@nhnent.com> |
 | 1.0.1a | defineNamespace apply | 2015.05 | NHN Ent. FE dev team Jein Yi <jein.yi@nhnent.com> |
 | 1.0.1 | Bug fix(Align center bug) | 2015.04 | NHN Ent. FE dev team Jein Yi <jein.yi@nhnent.com> |
-| <a href="https://github.nhnent.com/pages/tui.component.pagination/1.0.0">1.0.0</a> | Release | 2015.03 | NHN Ent. FE dev team Jein Yi <jein.yi@nhnent.com> |
+| <a href="https://nhnent.github.io:tui.component.pagination/1.0.0">1.0.0</a> | Release | 2015.03 | NHN Ent. FE dev team Jein Yi <jein.yi@nhnent.com> |
 | 0.1.0 | Develop | 2014.11 | NHN Ent. FE dev team Jein Yi <jein.yi@nhnent.com> |
 
 
