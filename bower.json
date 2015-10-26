@@ -2,10 +2,9 @@
   "name": "component-pagination",
   "version": "1.0.2",
   "authors": [
-    "이제인 <jein.yi@nhnent.com>"
+    "NHN Ent. FE Dev team.<dl_javascript@nhnent.com>"
   ],
   "license": "MIT",
-	"private" : true,
   "ignore": [
     "**/.*",
     "node_modules",
@@ -24,6 +23,6 @@
   ],
   "dependencies": {
     "jquery" : "~1.8.3",
-	"ne-code-snippet" : "~1.0.4"
+	"tui-code-snippet" : "~1.0.4"
   }
 }
