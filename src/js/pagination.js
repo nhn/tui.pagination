@@ -90,7 +90,10 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
 
     /**
      * Reset pagination
+     * @api
      * @param {*} itemCount Redraw page item count
+     * @example
+     *  pagination.reset();
      */
     reset: function(itemCount) {
 
@@ -109,7 +112,6 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
      * @param {String} optionKey Option key
      * @private
      * @returns {*}
-     *
      */
     getOption: function(optionKey) {
         return this._options[optionKey];
@@ -118,8 +120,11 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
     /**
      * Move to specific page, redraw list.
      * Befor move fire beforeMove event, After move fire afterMove event.
+     * @api
      * @param {Number} targetPage Target page
      * @param {Boolean} isNotRunCustomEvent [isNotRunCustomEvent=true] Whether custom event fire or not
+     * @example
+     *  pagination.reset();
      */
     movePageTo: function(targetPage, isNotRunCustomEvent) {
 
@@ -129,6 +134,8 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
         if (!isNotRunCustomEvent) {
             /**
              * Fire 'beforeMove' event(CustomEvent)
+             * @api
+             * @event Pagination#beforeMove
              * @param {componentEvent} eventData
              * @param {String} eventData.eventType Custom event name
              * @param {Number} eventData.page Target page
@@ -149,6 +156,8 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
         if (isNotRunCustomEvent) {
             /**
              * Fire 'afterMove'
+             * @api
+             * @event Pagination#afterMove
              * @param {componentEvent} eventData
              * @param {String} eventData.eventType Custom event name
              * @param {Number} eventData.page Moved page
