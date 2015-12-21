@@ -1,42 +1,52 @@
-<div id="main" class="main"><script type="text/javascript" src="js/jquery.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Default Example</title>
+<script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/code-snippet.js"></script>
-<script type="text/javascript" src="js/toast-doc.js"></script>
 <script type="text/javascript" src="js/list.js"></script>
 <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css" />
 <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
 <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
-<link type="text/css" rel="stylesheet" href="styles/jsdoc-fe2.css">
-   
+<link type="text/css" rel="stylesheet" href="styles/layout.css">
+<style>
+    html, body {height:100%;}
+</style>
+</head>
+<body class="sampleWrap tutorialDetail">
 <section>
 <header>
-    
-
-    <h2>Default Example</h2>
+    <h2 class="sampleHeader">Default Example</h2>
+    <a href="" target="_blank" class="newWindow">Open this sample in New Tab</a>
 </header>
-
-<article>
+<div class="buttons">
+<a href="tutorial.html" class="back">Return to list</a>
+</div>
+<article class="frame">
 	
-    <a href="tutorials/sample1.html" target="_blank">Open this sample in New Tab</a><br/>
-    <iframe id="exampleFrame" width="500" height="700" frameborder="0" src=tutorials/sample1.html onload="onIframeLoad()"></iframe>
+
+    <iframe id="exampleFrame" width="100%" height="100%" frameborder="0" scrolling="auto" src=tutorials/sample1.html onload="onIframeLoad()"></iframe>
     <br/>
     <div id='codeArea'></div>
 </article>
 <script>
+//  prettify
 /**
  * iframe load 이벤트 핸들러
  */
 function onIframeLoad() {
-    generateCode();
+//    generateCode();
     autoResize();
 }
+
 
 /**
  * iframe 의 너비/높이를 resize 한다.
  */
 function autoResize() {
     var ef = document.getElementById('exampleFrame');
-    ef.width = document.getElementById('main').clientWidth - 40;
-    ef.height = getIframeDocument().body.clientHeight + 40;
+    ef.width = document.body.clientWidth - 80;
+    ef.height = document.body.clientHeight - 250;
 }
 
 /**
@@ -76,4 +86,5 @@ function encodeHTMLEntity(html) {
 </script>
 
 </section>
-</div>
+</body>
+</html>
