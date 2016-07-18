@@ -1,1 +1,2 @@
-tui.util.defineNamespace('tui.component.Pagination', require('./src/js/pagination.js'));
+tui.util.defineNamespace('tui.component');
+tui.component.Pagination = require('./src/js/pagination.js');
