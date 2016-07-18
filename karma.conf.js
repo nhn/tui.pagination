@@ -1,5 +1,6 @@
+'use strict';
+
 var istanbul = require('browserify-istanbul');
-var hbsfy = require('hbsfy');
 
 module.exports = function(config) {
     var webdriverConfig = {
@@ -9,7 +10,11 @@ module.exports = function(config) {
     };
 
     config.set({
-        basePath: './',
+        basePath: '',
+
+        captureTimeout: 100000,
+        browserDisconnectTimeout: 60000,
+        browserNoActivityTimeout: 60000,
 
         frameworks: [
             'browserify',
@@ -17,45 +22,54 @@ module.exports = function(config) {
         ],
 
         files: [
-            'lib/jquery/jquery.js',
-            'lib/ne-code-snippet/code-snippet.js',
-            'src/**/pagination.js',
+            {pattern: 'lib/jquery/jquery.js', watched: false},
+            {pattern: 'lib/tui-code-snippet/code-snippet.js', watched: false},
+            {pattern: 'node_modules/jasmine-jquery/lib/jasmine-jquery.js', watched: false},
+
+            {pattern: 'test/fixtures/*.html', included: false},
+
             'src/**/*.js',
             'test/**/*.spec.js'
         ],
 
-        exclude: [
-        ],
+        exclude: [],
 
         preprocessors: {
-            'index.js': ['browserify'],
             'src/**/*.js': ['browserify'],
             'test/**/*.js': ['browserify']
         },
 
         reporters: [
-            'mocha',
+            'dots',
             'coverage',
             'junit'
         ],
 
         browserify: {
             debug: true,
-            bundleDelay: 1000,
-            transform:[hbsfy, istanbul({
-                ignore: [
-                    'index.js'
-                ]
+            transform:[istanbul({
+                ignore: ['test/**/*'],
+                defaultIgnore: true
             })]
         },
 
         coverageReporter: {
-            dir: 'report/',
-            reporters: [{
-                type: 'cobertura',
-                subdir: 'cobertura',
-                file: 'cobertura.xml'
-            }]
+            dir: 'report/coverage/',
+            reporters: [
+                {
+                    type: 'html',
+                    subdir: function(browser) {
+                        return 'report-html/' + browser;
+                    }
+                },
+                {
+                    type: 'cobertura',
+                    subdir: function(browser) {
+                        return 'report-cobertura/' + browser;
+                    },
+                    file: 'cobertura.txt'
+                }
+            ]
         },
 
         junitReporter: {
@@ -63,14 +77,13 @@ module.exports = function(config) {
             suite: ''
         },
 
-
         port: 9876,
 
         colors: true,
 
         logLevel: config.LOG_INFO,
 
-        autoWatch: false,
+        autoWatch: true,
 
         browsers: [
             'IE7',
@@ -84,44 +97,44 @@ module.exports = function(config) {
 
         customLaunchers: {
             'IE7': {
-                base: 'WebDriver', 
+                base: 'WebDriver',
                 config: webdriverConfig,
                 browserName: 'internet explorer',
                 version: 7
             },
             'IE8': {
-                base: 'WebDriver', 
+                base: 'WebDriver',
                 config: webdriverConfig,
                 browserName: 'internet explorer',
                 version: 8
             },
             'IE9': {
-                base: 'WebDriver', 
+                base: 'WebDriver',
                 config: webdriverConfig,
                 browserName: 'internet explorer',
                 version: 9
             },
             'IE10': {
-                base: 'WebDriver', 
+                base: 'WebDriver',
                 config: webdriverConfig,
                 browserName: 'internet explorer',
                 version: 10
             },
             'IE11': {
-                base: 'WebDriver', 
+                base: 'WebDriver',
                 config: webdriverConfig,
                 browserName: 'internet explorer',
                 version: 11
             },
             'Chrome-WebDriver': {
-                base: 'WebDriver', 
-                config: webdriverConfig, 
-                browserName: 'chrome' 
+                base: 'WebDriver',
+                config: webdriverConfig,
+                browserName: 'chrome'
             },
             'Firefox-WebDriver': {
-                base: 'WebDriver', 
-                config: webdriverConfig, 
-                browserName: 'firefox' 
+                base: 'WebDriver',
+                config: webdriverConfig,
+                browserName: 'firefox'
             }
         },
 
