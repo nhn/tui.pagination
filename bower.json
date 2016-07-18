@@ -1,6 +1,6 @@
 {
   "name": "component-pagination",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "authors": [
     "NHN Ent. FE Dev team.<dl_javascript@nhnent.com>"
   ],
@@ -23,6 +23,6 @@
   ],
   "dependencies": {
     "jquery" : "~1.8.3",
-	"tui-code-snippet" : "~1.0.4"
+	"tui-code-snippet" : "~1.2.0"
   }
 }
