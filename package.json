@@ -5,7 +5,8 @@
   "devDependencies": {
     "browserify": "latest",
     "browserify-istanbul": "^0.2.1",
-    "fedoc-template": "git+https://14bfd38a036366f7ca90355d202038126127bd01:x-oauth-basic@github.nhnent.com/fe/share-fedoc-template.git#develop",
+    "code-snippet": "git+http://4316b69ceef56267d69d733515f0f6ef3651ca7f:x-oauth-basic@github.nhnent.com/fe/code-snippet.git",
+    "fedoc-template": "git+https://github.nhnent.com/fe/share-fedoc-template.git#develop",
     "gulp": "latest",
     "gulp-concat": "^2.6.0",
     "gulp-connect": "latest",
@@ -31,7 +32,7 @@
     "vinyl-source-stream": "latest"
   },
   "scripts": {
-    "doc": "./node_modules/.bin/jsdoc -c jsdoc-conf.json"
+    "doc": "./node_modules/.bin/jsdoc -c jsdoc-conf.json -t ./node_modules/fedoc-template"
   },
   "author": "NHNEnt FE Development Team <e0242@nhnent.com>"
 }
