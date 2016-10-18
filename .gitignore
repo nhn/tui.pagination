@@ -52,7 +52,6 @@ etc
 temp
 doc
 report
-dist
 mock/*.json
 
 karma.conf.local.js
