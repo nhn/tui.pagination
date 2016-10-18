@@ -1,0 +1,47 @@
+h3 ,p { margin-left:30px; }
+h3 {margin-top:20px;}
+body {font-size: 12px;font-family: malgun gothic, verdana, consolas; min-width:900px;}
+/* grid 내부 */
+.pagination{height:26px;margin:14px 0 12px;line-height:normal;text-align:center}
+.pagination a,.pagination strong{
+    display:inline-block;
+    position:relative;
+    padding:3px 8px 4px;
+    color:#333;
+    font-size:12px;
+    font-weight:normal;
+    line-height:normal;
+    text-decoration:none;
+    vertical-align:middle;
+}
+.pagination strong{padding:3px 6px 4px;color:#ff1313;border:1px solid #d4d4d4;background:#e7e7e7}
+.pagination .pre_end,.pagination .pre,.pagination .next,.pagination .next_end{
+    overflow:hidden;
+    height:11px;
+    padding:0;
+    font-size:0;
+    line-height:999px;
+    white-space:nowrap;
+    font-weight:normal;
+}
+.pagination .pre_end, .pagination .pre, .pagination .next, .pagination .next_end {
+    background:url('ico_mail_150129_3.png') no-repeat left top;
+    width:25px; height:24px;
+    font-size:0px;
+    line-height: 1.0em
+}
+.pagination .pre_end{background-position:0 0}
+.pagination .pre{margin-right:10px;background-position:-25px 0}
+.pagination .next{margin-left:10px;background-position:-50px 0}
+.pagination .next_end{background-position:-76px 0}
+
+.code-layer {border-rㅡadius: 10px; border:1px solid #e3e3e3; padding:20px;color:#666; }
+
+.examwrap { height: 200px; }
+.examwrap.expend {height:500px; }
+.explain, .example {float:left; border:1px solid #eee; }
+.example { width:480px; height:200px; }
+.expend .example { width:480px; height:500px; }
+.expend .explain  { width:400px; height:500px; margin-left:15px; }
+.explain { width:400px; height:200px; margin-left:15px; }
+#state { width:380px; margin:0 auto; display:block; height:90px; }
