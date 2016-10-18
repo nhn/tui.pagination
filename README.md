@@ -24,7 +24,7 @@ Make page list and provide indicator of pages.
 
 ## Test environment
 * PC
-	* IE7~11
+	* IE8~11
 	* Chrome
 	* Firefox
 

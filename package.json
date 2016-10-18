@@ -2,20 +2,20 @@
   "name": "component-pagination",
   "version": "1.0.3",
   "description": "",
+  "repository": "https://github.com/nhnent/tui.component.pagination",
+  "license": "MIT",
   "devDependencies": {
     "browserify": "latest",
     "browserify-istanbul": "^0.2.1",
-    "code-snippet": "git+http://4316b69ceef56267d69d733515f0f6ef3651ca7f:x-oauth-basic@github.nhnent.com/fe/code-snippet.git",
     "fedoc-template": "git+https://github.nhnent.com/fe/share-fedoc-template.git#develop",
     "gulp": "latest",
     "gulp-concat": "^2.6.0",
     "gulp-connect": "latest",
-    "gulp-sourcemaps": "^1.5.2",
+    "gulp-header": "^1.8.8",
     "gulp-uglify": "^1.2.0",
-    "gulp-util": "^3.0.6",
     "jasmine-core": "latest",
     "jasmine-jquery": "^2.1.0",
-    "karma": "^1.1.1",
+    "karma": "^1.2.0",
     "karma-browserify": "latest",
     "karma-chrome-launcher": "^0.2.0",
     "karma-coverage": "latest",
@@ -27,12 +27,12 @@
     "karma-spec-reporter": "0.0.26",
     "karma-webdriver-launcher": "git+https://github.com/everedifice/karma-webdriver-launcher.git",
     "phantomjs": "^1.9.18",
-    "underscore": "^1.8.3",
     "vinyl-buffer": "latest",
-    "vinyl-source-stream": "latest"
+    "vinyl-source-stream": "latest",
+    "watchify": "^3.7.0"
   },
   "scripts": {
     "doc": "./node_modules/.bin/jsdoc -c jsdoc-conf.json -t ./node_modules/fedoc-template"
   },
-  "author": "NHNEnt FE Development Team <e0242@nhnent.com>"
+  "author": "NHNEnt FE Development Team <dl_javascript@nhnent.com>"
 }

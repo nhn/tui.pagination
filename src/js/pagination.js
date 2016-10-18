@@ -124,7 +124,8 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
      * @param {Number} targetPage Target page
      * @param {Boolean} isNotRunCustomEvent [isNotRunCustomEvent=true] Whether custom event fire or not
      * @example
-     *  pagination.reset();
+     *  pagination.movePageTo(10); // Move without custom-events - "beforeMove", "afterMove"
+     *  pagination.movePageTo(10, false) // Move with custom-events - "beforeMove", "afterMove"
      */
     movePageTo: function(targetPage, isNotRunCustomEvent) {
 

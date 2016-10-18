@@ -4,26 +4,36 @@ var gulp = require('gulp');
 var connect = require('gulp-connect');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
-var sourceMap = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
-var karma = require('karma').server;
+var Karma = require('karma').Server;
 var uglify = require('gulp-uglify');
-var gutil = require('gulp-util');
 var concat = require('gulp-concat');
-var filename = require('./package.json').name.replace('component-', '');
+var pkg = require('./package.json');
+var header = require('gulp-header');
+var filename = pkg.name.replace('component-', '');
+var banner = ['/**',
+    ' * <%= pkg.name %>',
+    ' * @author <%= pkg.author %>',
+    ' * @version v<%= pkg.version %>',
+    ' * @license <%= pkg.license %>',
+    ' */',
+    ''].join('\n');
 
-gulp.task('default', function() {
-    karma.start({
+var BUNDLE_PATH = './dist/';
+var SAMPLES_PATH = './samples/js/';
+
+gulp.task('test', function(done) {
+    new Karma({
         configFile: path.join(__dirname, 'karma.conf.js'),
         singleRun: true
-    });
+    }, done).start();
 });
 
 gulp.task('connect', function() {
     connect.server({
         livereload: true
     });
-    gulp.watch(['./src/**/*.js', './index.js', './demo/**/*.html'], ['bundle']);
+    gulp.watch(['./src/**/*.js', './index.js', './samples/**/*.html'], ['default']);
 });
 
 gulp.task('bundle', function() {
@@ -38,21 +48,23 @@ gulp.task('bundle', function() {
         })
         .pipe(source(filename + '.js'))
         .pipe(buffer())
-        .pipe(gulp.dest('./'));
+        .pipe(header(banner, { pkg : pkg } ))
+        .pipe(gulp.dest(BUNDLE_PATH));
 });
 
 gulp.task('compress', ['bundle'], function() {
-    gulp.src(filename + '.js')
+    gulp.src(BUNDLE_PATH + filename + '.js')
         .pipe(uglify())
         .pipe(concat(filename + '.min.js'))
-        .pipe(gulp.dest('./'));
+        .pipe(header(banner, { pkg : pkg } ))
+        .pipe(gulp.dest(BUNDLE_PATH));
 
 });
 
 gulp.task('concat', ['compress'], function() {
-    gulp.src(filename + '.js')
+    gulp.src(BUNDLE_PATH + filename + '.js')
         .pipe(concat(filename + '.js'))
-        .pipe(gulp.dest('./samples/js/'));
+        .pipe(gulp.dest(SAMPLES_PATH));
 });
 
 gulp.task('default', ['bundle', 'compress', 'concat']);

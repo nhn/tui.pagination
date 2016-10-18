@@ -22,8 +22,8 @@ module.exports = function(config) {
         ],
 
         files: [
-            {pattern: 'lib/jquery/jquery.js', watched: false},
-            {pattern: 'lib/tui-code-snippet/code-snippet.js', watched: false},
+            {pattern: 'bower_components/jquery/jquery.js', watched: false},
+            {pattern: 'bower_components/tui-code-snippet/code-snippet.js', watched: false},
             {pattern: 'node_modules/jasmine-jquery/lib/jasmine-jquery.js', watched: false},
 
             {pattern: 'test/fixtures/*.html', included: false},
@@ -86,7 +86,6 @@ module.exports = function(config) {
         autoWatch: true,
 
         browsers: [
-            'IE7',
             'IE8',
             'IE9',
             'IE10',
@@ -96,12 +95,6 @@ module.exports = function(config) {
         ],
 
         customLaunchers: {
-            'IE7': {
-                base: 'WebDriver',
-                config: webdriverConfig,
-                browserName: 'internet explorer',
-                version: 7
-            },
             'IE8': {
                 base: 'WebDriver',
                 config: webdriverConfig,
