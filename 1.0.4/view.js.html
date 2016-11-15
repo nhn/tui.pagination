@@ -1,0 +1,469 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Pagination</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+</head>
+<body>
+<nav class="lnb" id="lnb">
+    <div class="logo" style="width: 150px">
+        <img src="https://cloud.githubusercontent.com/assets/12269563/20029815/01133928-a39a-11e6-80f3-12500a91c755.png" width="100%" height="100%">
+    </div>
+    <div class="title">
+        <h1><a href="index.html" class="link">Pagination</a></h1>
+        
+    </div>
+    <div class="search-container" id="search-container">
+        <input type="text" placeholder="Search">
+        <ul></ul>
+    </div>
+    
+        <ol class="lnb-tab">
+            <li id="api-tab">
+                <a href="#"><h4>API</h4></a>
+            </li>
+            <li id="examples-tab">
+                <a href="#"><h4>Examples</h4></a>
+            </li>
+        </ol>
+    
+    <div class="lnb-examples hidden"><h3>Examples</h3><ul><li><a href="tutorial-sample1.html">Default Example</a><div class="hidden" id="sample1_sub"></div></li><li><a href="tutorial-sample2.html">CustomEvent Example</a><div class="hidden" id="sample2_sub"></div></li><li><a href="tutorial-sample3.html">Align Center Example</a><div class="hidden" id="sample3_sub"></div></li><li><a href="tutorial-sample4.html">Align Center unit move Example</a><div class="hidden" id="sample4_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="Pagination.html">Pagination</a><div class="hidden" id="Pagination_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Pagination.html#getCurrentPage">getCurrentPage</a></li><li><a href="Pagination.html#getIndexOfFirstItem">getIndexOfFirstItem</a></li><li><a href="Pagination.html#movePageTo">movePageTo</a></li><li><a href="Pagination.html#reset">reset</a></li></ul><div class="member-type">Events</div><ul class="inner"><li><a href="Pagination.html#event:afterMove">afterMove</a></li><li><a href="Pagination.html#event:beforeMove">beforeMove</a></li></ul></div></li><li><a href="View.html">View</a><div class="hidden" id="View_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="View.html#attachEvent">attachEvent</a></li><li><a href="View.html#empty">empty</a></li><li><a href="View.html#getBaseElement">getBaseElement</a></li><li><a href="View.html#getElement">getElement</a></li><li><a href="View.html#getPageElement">getPageElement</a></li><li><a href="View.html#isIn">isIn</a></li><li><a href="View.html#update">update</a></li></ul></div></li></ul></div>
+</nav>
+<div id="resizer"></div>
+
+<div class="main" id="main">
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Pagination view manage all of draw elements
+ * (from pug.Pagination)
+ * @author NHN entertainment FE dev team Jein Yi(jein.yi@nhnent.com)
+ * @dependency pagination.js
+ */
+'use strict';
+/**
+ * @constructor View
+ * @param {Object} options Option object
+ * @param {Object} $element Container element
+ *
+ */
+var View = tui.util.defineClass(/** @lends View.prototype */{
+    /* eslint-disable complexity */
+    init: function(options, $element) {
+        /**
+         * Pagination root element
+         * @type {jQueryObject}
+         * @private
+         */
+        this._element = $element;
+
+        /**
+         * Pagination options
+         * @type {Object}
+         * @private
+         */
+        this._options = options;
+
+        /**
+         * Selectors
+         * @type {Object}
+         * @private
+         */
+        this._elementSelector = {};
+
+        /**
+         * Page item list
+         * @type {Array}
+         * @private
+         */
+        this._pageItemList = [];
+
+        /* eslint-disable camelcase */
+        tui.util.extend(options, {
+            $pre_endOn: options.$pre_endOn || $('a.' + this._wrapPrefix('pre_end'), this._element),
+            $preOn: options.$preOn || $('a.' + this._wrapPrefix('pre'), this._element),
+            $nextOn: options.$nextOn || $('a.' + this._wrapPrefix('next'), this._element),
+            $lastOn: options.$lastOn || $('a.' + this._wrapPrefix('next_end'), this._element),
+            $pre_endOff: options.$pre_endOff || $('span.' + this._wrapPrefix('pre_end'), this._element),
+            $preOff: options.$preOff || $('span.' + this._wrapPrefix('pre'), this._element),
+            $nextOff: options.$nextOff || $('span.' + this._wrapPrefix('next'), this._element),
+            $lastOff: options.$lastOff || $('span.' + this._wrapPrefix('next_end'), this._element)
+        });
+        /* eslint-enable camelcase */
+        this._element.addClass(this._wrapPrefix('loaded'));
+    },
+    /* eslint-enable complexity */
+
+    /**
+     * Update view
+     * @param {Object} viewSet Values of each pagination view components
+     */
+    update: function(viewSet) {
+        var options, edges, leftPageNumber, rightPageNumber;
+
+        this._addTextNode();
+        this._setPageResult(viewSet.lastPage);
+
+        options = this._options;
+        edges = this._getEdge(viewSet);
+        leftPageNumber = edges.left;
+        rightPageNumber = edges.right;
+
+        viewSet.leftPageNumber = leftPageNumber;
+        viewSet.rightPageNumber = rightPageNumber;
+
+        if (options.moveUnit === 'page') {
+            viewSet.currentPageIndex = viewSet.page;
+            viewSet.lastPageListIndex = viewSet.lastPage;
+        }
+
+        this._setFirst(viewSet);
+        this._setPrev(viewSet);
+        this._setPageNumbers(viewSet);
+        this._setNext(viewSet);
+        this._setLast(viewSet);
+    },
+
+    /**
+     * Check include
+     * @param {JQueryObject} $find Target element
+     * @param {JQueryObject} $parent Wrapper element
+     * @returns {boolean}
+     */
+    isIn: function($find, $parent) {
+        if (!$parent) {
+            return false;
+        }
+
+        return ($find[0] === $parent[0]) ? true : $.contains($parent, $find);
+    },
+
+    /**
+     * Get base(root) element
+     * @returns {JQueryObject}
+     */
+    getBaseElement: function() {
+        return this.getElement();
+    },
+
+    /**
+     * Reset base element
+     */
+    /* eslint-disable camelcase */
+    empty: function() {
+        var options = this._options,
+            $pre_endOn = options.$pre_endOn,
+            $preOn = options.$preOn,
+            $nextOn = options.$nextOn,
+            $lastOn = options.$lastOn,
+            $pre_endOff = options.$pre_endOff,
+            $preOff = options.$preOff,
+            $nextOff = options.$nextOff,
+            $lastOff = options.$lastOff;
+
+        options.$pre_endOn = this._clone($pre_endOn);
+        options.$preOn = this._clone($preOn);
+        options.$lastOn = this._clone($lastOn);
+        options.$nextOn = this._clone($nextOn);
+        options.$pre_endOff = this._clone($pre_endOff);
+        options.$preOff = this._clone($preOff);
+        options.$lastOff = this._clone($lastOff);
+        options.$nextOff = this._clone($nextOff);
+
+        this._pageItemList = [];
+
+        this._element.empty();
+    },
+    /* eslint-enable camelcase */
+
+    /**
+     * Find target element from page elements
+     * @param {jQueryObject|HTMLElement} el Target element
+     * @returns {jQueryObject}
+     */
+    getPageElement: function(el) {
+        var i,
+            length,
+            pickedItem;
+
+        for (i = 0, length = this._pageItemList.length; i &lt; length; i += 1) {
+            pickedItem = this._pageItemList[i];
+            if (this.isIn(el, pickedItem)) {
+                return pickedItem;
+            }
+        }
+
+        return null;
+    },
+
+    /**
+     * Attach Events
+     * @param {String} eventType Event name to attach
+     * @param {Function} callback Callback function
+     */
+    attachEvent: function(eventType, callback) {
+        var targetElement = this._element,
+            isSavedElement = tui.util.isString(targetElement) &amp;&amp; this._elementSelector[targetElement];
+
+        if (isSavedElement) {
+            targetElement = this._getElement(targetElement, true);
+        }
+
+        if (targetElement &amp;&amp; eventType &amp;&amp; callback) {
+            $(targetElement).bind(eventType, null, callback);
+        }
+    },
+
+    /**
+     * Get root element
+     * @returns {jQueryObject}
+     */
+    getElement: function() {
+        return this._element;
+    },
+
+    /**
+     * Return className added prefix
+     * @param {String} className Class name to be wrapping
+     * @returns {*}
+     * @private
+     */
+    _wrapPrefix: function(className) {
+        var classPrefix = this._options.classPrefix;
+
+        return classPrefix ? classPrefix + className.replace(/_/g, '-') : className;
+    },
+
+    /**
+     * Put insertTextNode between page items
+     * @private
+     */
+    _addTextNode: function() {
+        var textNode = this._options.insertTextNode;
+        this._element.append(document.createTextNode(textNode));
+    },
+
+    /**
+     * Clone element
+     * @param {jQueryObject} $link - buttons
+     * @returns {*}
+     * @private
+     */
+    _clone: function($link) {
+        if ($link &amp;&amp; $link.length &amp;&amp; $link.get(0).cloneNode) {
+            return $($link.get(0).cloneNode(true));
+        }
+
+        return $link;
+    },
+
+    /**
+     * Wrapping class by page result
+     * @param {Number} lastNum Last page number
+     * @private
+     */
+    _setPageResult: function(lastNum) {
+        if (lastNum === 0) {
+            this._element.addClass(this._wrapPrefix('no-result'));
+        } else if (lastNum === 1) {
+            this._element.addClass(this._wrapPrefix('only-one')).removeClass(this._wrapPrefix('no-result'));
+        } else {
+            this._element.removeClass(this._wrapPrefix('only-one')).removeClass(this._wrapPrefix('no-result'));
+        }
+    },
+
+    /**
+     * Get each edge page
+     * @param {object} viewSet Pagination view elements set
+     * @returns {{left: *, right: *}}
+     * @private
+     */
+    _getEdge: function(viewSet) {
+        var options = this._options,
+            leftPageNumber,
+            rightPageNumber,
+            left;
+
+        if (options.isCenterAlign) {
+            left = Math.floor(options.pagePerPageList / 2);
+            leftPageNumber = viewSet.page - left;
+            leftPageNumber = Math.max(leftPageNumber, 1);
+            rightPageNumber = leftPageNumber + options.pagePerPageList - 1;
+
+            if (rightPageNumber > viewSet.lastPage) {
+                leftPageNumber = viewSet.lastPage - options.pagePerPageList + 1;
+                leftPageNumber = Math.max(leftPageNumber, 1);
+                rightPageNumber = viewSet.lastPage;
+            }
+        } else {
+            leftPageNumber = (viewSet.currentPageIndex - 1) * options.pagePerPageList + 1;
+            rightPageNumber = (viewSet.currentPageIndex) * options.pagePerPageList;
+            rightPageNumber = Math.min(rightPageNumber, viewSet.lastPage);
+        }
+
+        return {
+            left: leftPageNumber,
+            right: rightPageNumber
+        };
+    },
+
+    /**
+     * Decide to show first page link by whether first page or not
+     * @param {object} viewSet Pagination view elements set
+     * @private
+     */
+    /* eslint-disable no-lonely-if */
+    _setFirst: function(viewSet) {
+        var options = this._options;
+        if (viewSet.page > 1) {
+            if (options.$pre_endOn) {
+                this._element.append(options.$pre_endOn);
+                this._addTextNode();
+            }
+        } else {
+            if (options.$pre_endOff) {
+                this._element.append(options.$pre_endOff);
+                this._addTextNode();
+            }
+        }
+    },
+    /* eslint-enable no-lonely-if */
+
+    /**
+     * Decide to show previous page link by whether first page or not
+     * @param {object} viewSet Pagination view elements set
+     * @private
+     */
+    _setPrev: function(viewSet) {
+        var options = this._options;
+
+        if (viewSet.currentPageIndex > 1) {
+            if (options.$preOn) {
+                this._element.append(options.$preOn);
+                this._addTextNode();
+            }
+        } else {
+            if (options.$preOff) {
+                this._element.append(options.$preOff);
+                this._addTextNode();
+            }
+        }
+    },
+    /**
+     * Decide to show next page link by whether first page or not
+     * @param {object} viewSet Pagination view elements set
+     * @private
+     */
+    _setNext: function(viewSet) {
+        var options = this._options;
+
+        if (viewSet.currentPageIndex &lt; viewSet.lastPageListIndex) {
+            if (options.$nextOn) {
+                this._element.append(options.$nextOn);
+                this._addTextNode();
+            }
+        } else {
+            if (options.$nextOff) {
+                this._element.append(options.$nextOff);
+                this._addTextNode();
+            }
+        }
+    },
+    /**
+     * Decide to show last page link by whether first page or not
+     * @param {object} viewSet Pagination view elements set
+     * @private
+     */
+    _setLast: function(viewSet) {
+        var options = this._options;
+
+        if (viewSet.page &lt; viewSet.lastPage) {
+            if (options.$lastOn) {
+                this._element.append(options.$lastOn);
+                this._addTextNode();
+            }
+        } else {
+            if (options.$lastOff) {
+                this._element.append(options.$lastOff);
+                this._addTextNode();
+            }
+        }
+    },
+    /**
+     * Set page number that will be drawn
+     * @param {object} viewSet Pagination view elements set
+     * @private
+     */
+    _setPageNumbers: function(viewSet) {
+        var $pageItem,
+            firstPage = viewSet.leftPageNumber,
+            lastPage = viewSet.rightPageNumber,
+            options = this._options,
+            i;
+
+        for (i = firstPage; i &lt;= lastPage; i += 1) {
+            if (i === viewSet.page) {
+                $pageItem = $(options.currentPageTemplate.replace('{=page}', i.toString()));
+            } else {
+                $pageItem = $(options.pageTemplate.replace('{=page}', i.toString()));
+                this._pageItemList.push($pageItem);
+            }
+
+            if (i === firstPage) {
+                $pageItem.addClass(this._wrapPrefix(options.firstItemClassName));
+            }
+            if (i === lastPage) {
+                $pageItem.addClass(this._wrapPrefix(options.lastItemClassName));
+            }
+            this._element.append($pageItem);
+            this._addTextNode();
+        }
+    }
+});
+
+module.exports = View;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<footer>
+    <img class="logo" src="https://cloud.githubusercontent.com/assets/12269563/20029815/01133928-a39a-11e6-80f3-12500a91c755.png" style="width: 150px">
+    <div class="footer-text">NHN Entertainment. Frontend Development Lab</div>
+</footer>
+<script>prettyPrint();</script>
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/tui-doc.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+    <script>
+        var id = '_sub'.replace(/"/g, '_');
+        var element = document.getElementById(id); // do not use jquery selector
+
+        $(element).removeClass('hidden');
+        showLnbApi();
+    </script>
+
+</body>
+</html>
