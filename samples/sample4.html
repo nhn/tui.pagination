@@ -11,13 +11,13 @@
 </head>
 <body>
 <div>
-    <div class="examwrap expend">
+    <div class="code-html expend">
         <div class="example">
             <div class="paginate1 pagination">
                 <a href="#" class="pre_end">처음</a>
                 <a href="#" class="pre">이전</a>
                 <a href="#" class="next">다음</a>
-                <a href="#" class="next_end">마지</a>
+                <a href="#" class="next_end">마지막</a>
             </div>
         </div>
         <div class="explain">
@@ -36,11 +36,10 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="https://cdn.rawgit.com/jquery/jquery/1.8.3/jquery.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/jquery/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.rawgit.com/nhnent/tui.code-snippet/1.2.1/code-snippet.js"></script>
-<script src="js/pagination.js"></script>
-<script>
-    // 생성
+<script type="text/javascript" src="../dist/tui-component-pagination.js"></script>
+<script class="code-js">
     var pagination = new tui.component.Pagination({
         itemCount: 500,
         itemPerPage : 20,
@@ -54,7 +53,6 @@
         pageTemplate: '<a href="#">{=page}</a>',
         currentPageTemplate: '<strong>{=page}</strong>'
     }, $('.paginate1'));
-
 </script>
 </body>
 </html>

@@ -1,7 +1,3 @@
-'use strict';
-
-var istanbul = require('browserify-istanbul');
-
 module.exports = function(config) {
     var webdriverConfig = {
         hostname: 'fe.nhnent.com',
@@ -10,34 +6,9 @@ module.exports = function(config) {
     };
 
     config.set({
-        basePath: '',
+        basePath: './',
 
-        captureTimeout: 100000,
-        browserDisconnectTimeout: 60000,
-        browserNoActivityTimeout: 60000,
-
-        frameworks: [
-            'browserify',
-            'jasmine'
-        ],
-
-        files: [
-            {pattern: 'bower_components/jquery/jquery.js', watched: false},
-            {pattern: 'bower_components/tui-code-snippet/code-snippet.js', watched: false},
-            {pattern: 'node_modules/jasmine-jquery/lib/jasmine-jquery.js', watched: false},
-
-            {pattern: 'test/fixtures/*.html', included: false},
-
-            'src/**/*.js',
-            'test/**/*.spec.js'
-        ],
-
-        exclude: [],
-
-        preprocessors: {
-            'src/**/*.js': ['browserify'],
-            'test/**/*.js': ['browserify']
-        },
+        frameworks: ['browserify', 'jasmine'],
 
         reporters: [
             'dots',
@@ -45,12 +16,23 @@ module.exports = function(config) {
             'junit'
         ],
 
-        browserify: {
-            debug: true,
-            transform:[istanbul({
-                ignore: ['test/**/*'],
-                defaultIgnore: true
-            })]
+        files: [
+            'bower_components/jquery/jquery.min.js',
+            'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
+            'bower_components/tui-code-snippet/code-snippet.js',
+            'src/js/*.js',
+            'test/*.spec.js',
+            {
+                pattern: 'test/fixtures/*.html',
+                included: false
+            }
+        ],
+
+        exclude: [],
+
+        preprocessors: {
+            'src/**/*.js': ['browserify', 'coverage'],
+            'test/**/*.js': ['browserify']
         },
 
         coverageReporter: {
@@ -73,7 +55,7 @@ module.exports = function(config) {
         },
 
         junitReporter: {
-            outputDir: 'report/junit',
+            outputDir: 'report',
             suite: ''
         },
 
@@ -118,6 +100,11 @@ module.exports = function(config) {
                 config: webdriverConfig,
                 browserName: 'internet explorer',
                 version: 11
+            },
+            'Edge': {
+                base: 'WebDriver',
+                config: webdriverConfig,
+                browserName: 'MicrosoftEdge'
             },
             'Chrome-WebDriver': {
                 base: 'WebDriver',

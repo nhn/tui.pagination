@@ -205,8 +205,38 @@ describe('Test pagination behavior', function() {
             expect(isBeforeMoveFire1).toBeTruthy();
 
         });
+
+        describe('When movePageTo() is called', function() {
+            var beforeMoveMock, afterMoveMock;
+
+            beforeEach(function() {
+                beforeMoveMock = jasmine.createSpy();
+                afterMoveMock = jasmine.createSpy();
+
+                pagination.on('beforeMove', beforeMoveMock);
+                pagination.on('afterMove', afterMoveMock);
+            });
+
+            it('with no option, the custom events are fired.', function() {
+                pagination.movePageTo(10);
+
+                expect(beforeMoveMock).toHaveBeenCalled();
+                expect(afterMoveMock).toHaveBeenCalled();
+            });
+
+            it('with "false" option, the custom events are fired.', function() {
+                pagination.movePageTo(10, false);
+
+                expect(beforeMoveMock).toHaveBeenCalled();
+                expect(afterMoveMock).toHaveBeenCalled();
+            });
+
+            it('with "true" option, the custom events are not fired.', function() {
+                pagination.movePageTo(10, true);
+
+                expect(beforeMoveMock).not.toHaveBeenCalled();
+                expect(afterMoveMock).not.toHaveBeenCalled();
+            });
+        });
     });
-
-
-
 });

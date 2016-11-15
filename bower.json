@@ -14,11 +14,14 @@
     "server",
     "data.js",
     "Gruntfile.js",
+    "gulpfile.js",
+    "karma.*.js",
     "conf.json",
-    "karma.conf.js",
     "package.json",
     ".gitignore",
-    "samples"
+    "samples",
+    "index.js",
+    "jsdoc-conf.json"
   ],
   "dependencies": {
     "jquery" : "~1.8.3",

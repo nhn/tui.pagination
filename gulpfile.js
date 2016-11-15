@@ -1,16 +1,23 @@
+'use strict';
 /*eslint-disable*/
 var path = require('path');
-var gulp = require('gulp');
-var connect = require('gulp-connect');
+var browserSync = require('browser-sync').create();
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
-var Karma = require('karma').Server;
+var watchify = require('watchify');
+
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var gulpif = require('gulp-if');
+var connect = require('gulp-connect');
 var uglify = require('gulp-uglify');
-var concat = require('gulp-concat');
-var pkg = require('./package.json');
+var eslint = require('gulp-eslint');
 var header = require('gulp-header');
-var filename = pkg.name.replace('component-', '');
+var rename = require('gulp-rename');
+
+var pkg = require('./package.json');
+var NAME = pkg.name;
 var banner = ['/**',
     ' * <%= pkg.name %>',
     ' * @author <%= pkg.author %>',
@@ -19,52 +26,88 @@ var banner = ['/**',
     ' */',
     ''].join('\n');
 
-var BUNDLE_PATH = './dist/';
-var SAMPLES_PATH = './samples/js/';
+/**
+ * Paths
+ */
+var SOURCE_DIR = './src/**/*',
+    ENTRY = 'index.js',
+    DIST = './dist';
 
-gulp.task('test', function(done) {
-    new Karma({
-        configFile: path.join(__dirname, 'karma.conf.js'),
-        singleRun: true
-    }, done).start();
+/**
+ * Configuration
+ */
+var config = {};
+config.browserify = {
+    entries: ENTRY
+};
+config.browserSync = {
+    server: {
+        index: './sample1.html',
+        baseDir: './samples'
+    },
+    port: 3000,
+    ui: {
+        port: 3001
+    }
+};
+config.browserSyncStream = {
+    once: true
+};
+config.watchify = Object.assign({}, watchify.args, config.browserify);
+
+/**
+ * Bundle function
+ */
+function bundle(bundler) {
+    return bundler
+        .bundle()
+        .on('error', function(err) {
+            console.log(err.message);
+            browserSync.notify('Browserify Error');
+            this.emit('end');
+        })
+        .pipe(source(NAME + '.js'))
+        .pipe(buffer())
+        .pipe(header(banner, {pkg : pkg}))
+        .pipe(gulp.dest(DIST))
+        .pipe(gulpif(
+            browserSync.active,
+            browserSync.stream(config.browserSyncStream))
+        )
+        .pipe(uglify())
+        .pipe(rename(NAME + '.min.js'))
+        .pipe(header(banner, {pkg : pkg}))
+        .pipe(gulp.dest(DIST));
+}
+
+/**
+ * Tasks
+ */
+gulp.task('watch', function() {
+    var bundler = watchify(browserify(config.watchify)),
+        watcher = function() {
+            bundle(bundler);
+        };
+
+    browserSync.init(config.browserSync);
+    bundler.on('update', watcher);
+    bundler.on('log', gutil.log);
+
+    watcher();
 });
 
 gulp.task('connect', function() {
-    connect.server({
-        livereload: true
-    });
-    gulp.watch(['./src/**/*.js', './index.js', './samples/**/*.html'], ['default']);
+    connect.server();
+    gulp.watch(SOURCE_DIR, ['bundle']);
+});
+
+gulp.task('eslint', function() {
+    return gulp.src([SOURCE_DIR])
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
 });
 
 gulp.task('bundle', function() {
-    var b = browserify({
-        entries: 'index.js'
-    });
-
-    return b.bundle()
-        .on('error', function(err) {
-            console.log(err.message);
-            this.emit('end');
-        })
-        .pipe(source(filename + '.js'))
-        .pipe(buffer())
-        .pipe(header(banner, { pkg : pkg } ))
-        .pipe(gulp.dest(BUNDLE_PATH));
+    return bundle(browserify(config.browserify));
 });
-
-gulp.task('compress', ['bundle'], function() {
-    gulp.src(BUNDLE_PATH + filename + '.js')
-        .pipe(uglify())
-        .pipe(concat(filename + '.min.js'))
-        .pipe(header(banner, { pkg : pkg } ))
-        .pipe(gulp.dest(BUNDLE_PATH));
-
-});
-
-gulp.task('concat', ['compress'], function() {
-    gulp.src(BUNDLE_PATH + filename + '.js')
-        .pipe(concat(filename + '.js'))
-        .pipe(gulp.dest(SAMPLES_PATH));
-});
-
-gulp.task('default', ['bundle', 'compress', 'concat']);

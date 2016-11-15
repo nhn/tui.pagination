@@ -4,44 +4,60 @@
  * @author NHN entertainment FE dev team(dl_javascript@nhnent.com)
  * @dependency jquery-1.8.3.min.js, code-snippet.js
  */
+'use strict';
 
 var View = require('./view.js');
 
 /**
  * Pagination core class
  * @constructor Pagination
- *
+ * @param {DataObject} options Option object
+ * 		@param {Number} [options.itemCount=10] Total item count
+ * 		@param {Number} [options.itemPerPage=10] Item count per page
+ * 		@param {Number} [options.pagePerPageList=10] Display page link count
+ * 		@param {Number} [options.page=1] page Display page after pagination draw.
+ * 		@param {String} [options.moveUnit="pagelist"] Page move unit.
+ * 			<ul>
+ * 				<li>pagelist : Move page for unit</li>
+ * 				<li>page : Move one page</li>
+ * 			</ul>
+ * 		@param {Boolean}[options.isCenterAlign=false] Whether current page keep center or not
+ * 		@param {String} [options.insertTextNode=""] The coupler between page links
+ * 		@param {String} [options.classPrefix=""] A prefix of class name
+ * 		@param {String} [options.firstItemClassName="first-child"] The class name is granted first page link item
+ * 		@param {String} [options.lastItemClassName="last-child"] The class name is granted first page link item
+ * 		@param {String} [options.pageTemplate="<a href='#'>{=page}</a>"]
+ * 		                The markup template to show page item such as 1, 2, 3, ..
+ * 		                {=page} will be changed each page number.
+ * 		@param {String} [options.currentPageTemplate="<strong>{=page}</strong>"]
+ * 		                The markup template for current page {=page} will be changed current page number.
+ * 		@param {jQueryObject} [options.$pre_endOn] The button element to move first page.
+ * 		                      If this option is not exist and the element that has class 'pre_end',
+ * 		                      component do not create this button.
+ * 		@param {jQueryObject} [options.$preOn] The button element to move previouse page.
+ * 		                      If this option is not exist and the element that has class 'pre',
+ * 		                      component do not create this button.
+ * 		@param {jQueryObject} [options.$nextOn] The button element to move next page.
+ * 		                      If this option is not exist and the element that has class 'next',
+ * 		                      component do not create this button.
+ * 		@param {jQueryObject} [options.$lastOn] The button element to move last page.
+ * 		                      If this option is not exist and the element that has class 'last',
+ * 		                      component do not create this button.
+ * 		@param {jQueryObject} [options.$pre_endOff] The element to show that preEndOn button is not enable.
+ * 		                      If this option is not exist and the element that has class 'pre_endOff',
+ * 		                      component do not create this button.
+ * 		@param {jQueryObject} [options.$preOff] The element to show that preOn button is not enable.
+ * 		                      If this option is not exist and the element that has class 'preOff',
+ * 		                      component do not create this button.
+ * 		@param {jQueryObject} [options.$nextOff] The element to show that nextOn button is not enable.
+ * 		                      If this option is not exist and the element that has class 'nextOff',
+ * 		                      component do not create this button.
+ * 		@param {jQueryObject} [options.$lastOff] The element to show that lastOn button is not enable.
+ * 		                      If this option is not exist and the element that has class 'lastOff',
+ * 		                      component do not create this button.
+ * @param {jQueryObject} $element Pagination container
  */
 var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
-    /**
-     * Initialize
-     * @param {DataObject} options Option object
-     * 		@param {Number} [options.itemCount=10] Total item count
-     * 		@param {Number} [options.itemPerPage=10] Item count per page
-     * 		@param {Number} [options.pagePerPageList=10] Display page link count
-     * 		@param {Number} [options.page=1] page Display page after pagination draw.
-     * 		@param {String} [options.moveUnit="pagelist"] Page move unit.
-     * 			<ul>
-     * 				<li>pagelist : Move page for unit</li>
-     * 				<li>page : Move one page</li>
-     * 			</ul>
-     * 		@param {Boolean}[options.isCenterAlign=false] Whether current page keep center or not
-     * 		@param {String} [options.insertTextNode=""] The coupler between page links
-     * 		@param {String} [options.classPrefix=""] A prefix of class name
-     * 		@param {String} [options.firstItemClassName="first-child"] The class name is granted first page link item
-     * 		@param {String} [options.lastItemClassName="last-child"] The class name is granted first page link item
-     * 		@param {String} [options.pageTemplate="<a href='#'>{=page}</a>"] The markup template to show page item such as 1, 2, 3, .. {=page} will be changed each page number.
-     * 		@param {String} [options.currentPageTemplate="<strong>{=page}</strong>"] The markup template for current page {=page} will be changed current page number.
-     * 		@param {jQueryObject} [options.$pre_endOn] The button element to move first page. If this option is not exist and the element that has class 'pre_end', component do not create this button.
-     * 		@param {jQueryObject} [options.$preOn] The button element to move previouse page. If this option is not exist and the element that has class 'pre', component do not create this button.
-     * 		@param {jQueryObject} [options.$nextOn] The button element to move next page. If this option is not exist and the element that has class 'next', component do not create this button.
-     * 		@param {jQueryObject} [options.$lastOn] The button element to move last page. If this option is not exist and the element that has class 'last', component do not create this button.
-     * 		@param {jQueryObject} [options.$pre_endOff] The element to show that pre_endOn button is not enable. If this option is not exist and the element that has class 'pre_endOff', component do not create this button.
-     * 		@param {jQueryObject} [options.$preOff] The element to show that preOn button is not enable. If this option is not exist and the element that has class 'preOff', component do not create this button.
-     * 		@param {jQueryObject} [options.$nextOff] The element to show that nextOn button is not enable. If this option is not exist and the element that has class 'nextOff', component do not create this button.
-     * 		@param {jQueryObject} [options.$lastOff] The element to show that lastOn button is not enable. If this option is not exist and the element that has class 'lastOff', component do not create this button.
-     * @param {jQueryObject} $element Pagination container
-     */
     init: function(options, $element) {
         var defaultOption = {
             itemCount: 10,
@@ -96,8 +112,7 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
      *  pagination.reset();
      */
     reset: function(itemCount) {
-
-        var isExist = tui.util.isExisty((itemCount !== null) && (itemCount !== undefined));
+        var isExist = tui.util.isExisty((itemCount !== null) && (!tui.util.isUndefined(itemCount)));
 
         if (!isExist) {
             itemCount = this.getOption('itemCount');
@@ -128,7 +143,6 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
      *  pagination.movePageTo(10, false) // Move with custom-events - "beforeMove", "afterMove"
      */
     movePageTo: function(targetPage, isNotRunCustomEvent) {
-
         targetPage = this._convertToAvailPage(targetPage);
         this._currentPage = targetPage;
 
@@ -138,36 +152,35 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
              * @api
              * @event Pagination#beforeMove
              * @param {componentEvent} eventData
-             * @param {String} eventData.eventType Custom event name
              * @param {Number} eventData.page Target page
-             * @param {Function} eventData.stop Stop move specific page
              * @example
              * paganation.on("beforeMove", function(eventData) {
-                var currentPage = eventData.page;
-             });
+             *      var currentPage = eventData.page;
+             *      return false;
+             *      //return true;
+             * });
              */
-
-            if (!this.invoke('beforeMove', { page: targetPage })) {
+            if (!this.invoke('beforeMove', {page: targetPage})) {
                 return;
             }
         }
 
         this._paginate(targetPage);
 
-        if (isNotRunCustomEvent) {
+        if (!isNotRunCustomEvent) {
             /**
              * Fire 'afterMove'
              * @api
              * @event Pagination#afterMove
              * @param {componentEvent} eventData
-             * @param {String} eventData.eventType Custom event name
              * @param {Number} eventData.page Moved page
              * @example
-             * paganation.on("beforeMove", function(eventData) {
-            var currentPage = eventData.page;
-         });
+             * paganation.on("afterMove", function(eventData) {
+             *      var currentPage = eventData.page;
+             *      console.log(currentPage);
+             * });
              */
-            this.fire('afterMove', { page: targetPage });
+            this.fire('afterMove', {page: targetPage});
         }
     },
 
@@ -186,7 +199,7 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
      * @returns {Number} Current page
      */
     getCurrentPage: function() {
-        return this._currentPage || this._options['page'];
+        return this._currentPage || this._options.page;
     },
 
     /**
@@ -210,32 +223,36 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
     /**
      * Index of list in total lists
      * @param {Number} pageNumber Page number
-     * @return {Number}
+     * @returns {Number}
      * @private
      */
     _getPageIndex: function(pageNumber) {
+        var left, pageIndex;
         // IsCenterAlign == true case
         if (this.getOption('isCenterAlign')) {
-            var left = Math.floor(this.getOption('pagePerPageList') / 2),
-                pageIndex = pageNumber - left;
+            left = Math.floor(this.getOption('pagePerPageList') / 2);
+            pageIndex = pageNumber - left;
             pageIndex = Math.max(pageIndex, 1);
             pageIndex = Math.min(pageIndex, this._getLastPage() - this.getOption('pagePerPageList') + 1);
+
             return pageIndex;
         }
-        return Math.ceil(pageNumber / this.getOption("pagePerPageList"));
+
+        return Math.ceil(pageNumber / this.getOption('pagePerPageList'));
     },
 
     /**
      * Get page number of prev, next pages
      * @param {String} relativeName Directions(pre_end, next_end, pre, next)
-     * @return {Number}
+     * @returns {Number}
      * @private
-     *     */
+     */
+    /* eslint-disable complexity */
     _getRelativePage: function(relativeName) {
         var page = null,
             isMovePage = this.getOption('moveUnit') === 'page',
             currentPageIndex = this._getPageIndex(this.getCurrentPage());
-        if(this.getOption('isCenterAlign')) {
+        if (this.getOption('isCenterAlign')) {
             if (relativeName === 'pre') {
                 page = isMovePage ? this.getCurrentPage() - 1 : currentPageIndex - 1;
             } else {
@@ -243,13 +260,17 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
             }
         } else {
             if (relativeName === 'pre') {
-                page = isMovePage ? this.getCurrentPage() - 1 : (currentPageIndex - 1) * this.getOption('pagePerPageList');
+                page = isMovePage ? this.getCurrentPage() - 1 :
+                                    (currentPageIndex - 1) * this.getOption('pagePerPageList');
             } else {
-                page = isMovePage ? this.getCurrentPage() + 1 : currentPageIndex * this.getOption('pagePerPageList') + 1;
+                page = isMovePage ? this.getCurrentPage() + 1 :
+                                    currentPageIndex * this.getOption('pagePerPageList') + 1;
             }
         }
+
         return page;
     },
+    /* eslint-enable complexity */
 
     /**
      * Get avail page number from over number
@@ -262,20 +283,20 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
         var lastPageNumber = this._getLastPage();
         page = Math.max(page, 1);
         page = Math.min(page, lastPageNumber);
+
         return page;
     },
 
     /**
      * Create require view set, notify view to update.
-     * @param {Number} page
+     * @param {Number} page Page number
      * @private
      */
-    _paginate: function(page){
+    _paginate: function(page) {
+        var viewSet = {};
 
         // 뷰의 버튼 및 페이지를 모두 제거 및 복사
         this._view.empty();
-
-        var viewSet = {};
 
         viewSet.lastPage = this._getLastPage();
         viewSet.currentPageIndex = this._getPageIndex(page);
@@ -287,15 +308,17 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
 
     /**
      * Pagelist click event hadnler
-     * @param {JQueryEvent} event
+     * @param {JQueryEvent} event Event object
      * @private
      */
+    /* eslint-disable complexity */
     _onClickPageList: function(event) {
-
-        event.preventDefault();
         var page = null,
             targetElement = $(event.target),
-            targetPage;
+            targetPage,
+            isFired;
+
+        event.preventDefault();
 
         if (this._view.isIn(targetElement, this.getOption('$pre_endOn'))) {
             page = 1;
@@ -306,7 +329,6 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
         } else if (this._view.isIn(targetElement, this.getOption('$nextOn'))) {
             page = this._getRelativePage('next');
         } else {
-
             targetPage = this._view.getPageElement(targetElement);
 
             if (targetPage && targetPage.length) {
@@ -324,13 +346,14 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
          @param {Function} eventData.stop Stop page move
          **/
 
-        var isFired = this.invoke("click", {"page" : page});
+        isFired = this.invoke('click', {'page': page});
         if (!isFired) {
             return;
         }
 
         this.movePageTo(page);
     }
+    /* eslint-enable complexity */
 });
 // CustomEvent  Mixin
 tui.util.CustomEvents.mixin(Pagination);
