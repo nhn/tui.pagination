@@ -74,17 +74,7 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
             currentPageTemplate: '<strong>{=page}</strong>'
         };
 
-
-        if (options.itemCount === 0) {
-            /**
-             * Option object
-             * @type {Object}
-             * @private
-             */
-            this._options = defaultOption;
-        } else {
-            this._options = tui.util.extend(defaultOption, options);
-        }
+        this._options = tui.util.extend(defaultOption, options);
 
         /**
          * Event handler savor
@@ -217,7 +207,9 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
      * @private
      */
     _getLastPage: function() {
-        return Math.ceil(this.getOption('itemCount') / this.getOption('itemPerPage'));
+        var lastPage = Math.ceil(this.getOption('itemCount') / this.getOption('itemPerPage'));
+
+        return (!lastPage) ? 1 : lastPage;
     },
 
     /**
