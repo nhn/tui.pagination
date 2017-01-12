@@ -187,6 +187,7 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
     /**
      * Get current page
      * @returns {Number} Current page
+     * @private
      */
     getCurrentPage: function() {
         return this._currentPage || this._options.page;
@@ -196,6 +197,7 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
      * Get item  index from list
      * @param {Number} pageNumber Page number
      * @returns {number}
+     * @private
      */
     getIndexOfFirstItem: function(pageNumber) {
         return this.getOption('itemPerPage') * (pageNumber - 1) + 1;

@@ -198,6 +198,7 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
     /**
      * Get current page
      * @returns {Number} Current page
+     * @private
      */
     getCurrentPage: function() {
         return this._currentPage || this._options.page;
@@ -207,6 +208,7 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
      * Get item  index from list
      * @param {Number} pageNumber Page number
      * @returns {number}
+     * @private
      */
     getIndexOfFirstItem: function(pageNumber) {
         return this.getOption('itemPerPage') * (pageNumber - 1) + 1;
@@ -375,7 +377,7 @@ module.exports = Pagination;
  * @constructor View
  * @param {Object} options Option object
  * @param {Object} $element Container element
- *
+ * @ignore
  */
 var View = tui.util.defineClass(/** @lends View.prototype */{
     /* eslint-disable complexity */

@@ -9,7 +9,7 @@
  * @constructor View
  * @param {Object} options Option object
  * @param {Object} $element Container element
- *
+ * @ignore
  */
 var View = tui.util.defineClass(/** @lends View.prototype */{
     /* eslint-disable complexity */
