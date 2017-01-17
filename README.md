@@ -12,7 +12,7 @@ Make page list and provide indicator of pages
 ## Documentation
 * API: [https://nhnent.github.io/tui.component.pagination/latest](https://nhnent.github.io/tui.component.pagination/latest)
 * Tutorial: [https://github.com/nhnent/tui.component.pagination/wiki/Pagination-tutorial](https://github.com/nhnent/tui.component.pagination/wiki/Pagination-tutorial)
-* Examples: [https://nhnent.github.io/tui.component.pagination/latest/tutorial-sample1.html](https://nhnent.github.io/tui.component.pagination/latest/tutorial-sample1.html)
+* Examples: [https://nhnent.github.io/tui.component.pagination/latest/tutorial-basic.html](https://nhnent.github.io/tui.component.pagination/latest/tutorial-basic.html)
 
 ## Dependency
 * tui-code-snippet: ~1.2.0
