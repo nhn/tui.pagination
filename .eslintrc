@@ -136,7 +136,7 @@
     "array-bracket-spacing": [2, "never"],
     "block-spacing": [2, "never"],
     "brace-style": [2, "1tbs", {"allowSingleLine": false}],
-    "camelcase": 0,
+    "camelcase": 2,
     "comma-spacing": [2, {"before": false, "after": true}],
     "comma-style": [2, "last"],
     "computed-property-spacing": [2, "never"],
@@ -164,7 +164,7 @@
     "no-bitwise": 0,
     "no-continue": 0,
     "no-inline-comments": 0,
-    "no-lonely-if": 0,
+    "no-lonely-if": 2,
     "no-mixed-spaces-and-tabs": [2, "smart-tabs"],
     "no-multiple-empty-lines": [2, {"max": 2}],
     "no-nested-ternary": 2,
@@ -194,6 +194,6 @@
     "space-unary-ops": [2, {"words": true, "nonwords": false}],
     "spaced-comment": 0,
     "wrap-regex": 0,
-    "newline-before-return": 1,
+    "newline-before-return": 1
   }
 }

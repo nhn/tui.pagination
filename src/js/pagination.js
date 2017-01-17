@@ -1,279 +1,188 @@
-/**
- * @fileoverview Core of pagination component, create pagination view and attach events.
- * (from pug.Pagination)
- * @author NHN entertainment FE dev team(dl_javascript@nhnent.com)
- * @dependency jquery-1.8.3.min.js, code-snippet.js
- */
 'use strict';
 
 var View = require('./view.js');
 
+var defaultOption = {
+    totalItems: 10,
+    itemsPerPage: 10,
+    visiblePages: 10,
+    page: 1,
+    centerAlign: false,
+    firstItemClassName: 'tui-first-child',
+    lastItemClassName: 'tui-last-child'
+};
+var snippet = tui.util;
+
 /**
- * Pagination core class
- * @constructor Pagination
- * @param {DataObject} options Option object
- * 		@param {Number} [options.itemCount=10] Total item count
- * 		@param {Number} [options.itemPerPage=10] Item count per page
- * 		@param {Number} [options.pagePerPageList=10] Display page link count
- * 		@param {Number} [options.page=1] page Display page after pagination draw.
- * 		@param {String} [options.moveUnit="pagelist"] Page move unit.
- * 			<ul>
- * 				<li>pagelist : Move page for unit</li>
- * 				<li>page : Move one page</li>
- * 			</ul>
- * 		@param {Boolean}[options.isCenterAlign=false] Whether current page keep center or not
- * 		@param {String} [options.insertTextNode=""] The coupler between page links
- * 		@param {String} [options.classPrefix=""] A prefix of class name
- * 		@param {String} [options.firstItemClassName="first-child"] The class name is granted first page link item
- * 		@param {String} [options.lastItemClassName="last-child"] The class name is granted first page link item
- * 		@param {String} [options.pageTemplate="<a href='#'>{=page}</a>"]
- * 		                The markup template to show page item such as 1, 2, 3, ..
- * 		                {=page} will be changed each page number.
- * 		@param {String} [options.currentPageTemplate="<strong>{=page}</strong>"]
- * 		                The markup template for current page {=page} will be changed current page number.
- * 		@param {jQueryObject} [options.$pre_endOn] The button element to move first page.
- * 		                      If this option is not exist and the element that has class 'pre_end',
- * 		                      component do not create this button.
- * 		@param {jQueryObject} [options.$preOn] The button element to move previouse page.
- * 		                      If this option is not exist and the element that has class 'pre',
- * 		                      component do not create this button.
- * 		@param {jQueryObject} [options.$nextOn] The button element to move next page.
- * 		                      If this option is not exist and the element that has class 'next',
- * 		                      component do not create this button.
- * 		@param {jQueryObject} [options.$lastOn] The button element to move last page.
- * 		                      If this option is not exist and the element that has class 'last',
- * 		                      component do not create this button.
- * 		@param {jQueryObject} [options.$pre_endOff] The element to show that preEndOn button is not enable.
- * 		                      If this option is not exist and the element that has class 'pre_endOff',
- * 		                      component do not create this button.
- * 		@param {jQueryObject} [options.$preOff] The element to show that preOn button is not enable.
- * 		                      If this option is not exist and the element that has class 'preOff',
- * 		                      component do not create this button.
- * 		@param {jQueryObject} [options.$nextOff] The element to show that nextOn button is not enable.
- * 		                      If this option is not exist and the element that has class 'nextOff',
- * 		                      component do not create this button.
- * 		@param {jQueryObject} [options.$lastOff] The element to show that lastOn button is not enable.
- * 		                      If this option is not exist and the element that has class 'lastOff',
- * 		                      component do not create this button.
- * @param {jQueryObject} $element Pagination container
+ * Pagination class
+ * @class Pagination
+ * @param {string|HTMLElement|jQueryObject} container - Container element or id selector
+ * @param {object} options - Option object
+ *     @param {number} [options.totalItems=10] Total item count
+ *     @param {number} [options.itemsPerPage=10] Item count per page
+ *     @param {number} [options.visiblePages=10] Display page link count
+ *     @param {number} [options.page=1] Display page after pagination draw.
+ *     @param {boolean}[options.centerAlign=false] Whether current page keep center or not
+ *     @param {string} [options.firstItemClassName='first-child'] The class name of the first item
+ *     @param {string} [options.lastItemClassName='last-child'] The class name of the last item
+ *     @param {object} [options.template] A markup string set to make element
+ *         @param {string|function} [options.template.page] HTML template
+ *         @param {string|function} [options.template.currentPage] HTML template
+ *         @param {string|function} [options.template.moveButton] HTML template
+ *         @param {string|function} [options.template.disabledMoveButton] HTML template
+ *         @param {string|function} [options.template.moreButton] HTML template
+ * @example
+ * // Using id selector and no options
+ * var pagination1 = new tui.component.Pagination('pagination1');
+ *
+ * // Using DOM element and options
+ * var container = document.getElementById('pagination2');
+ * var options = { // below default values
+ *      totalItems: 10,
+ *      itemsPerPage: 10,
+ *      visiblePages: 10,
+ *      page: 1,
+ *      centerAlign: false,
+ *      firstItemClassName: 'tui-first-child',
+ *      lastItemClassName: 'tui-last-child',
+ *      template: {
+ *          page: '<a href="#" class="tui-page-btn">{{page}}</a>',
+ *          currentPage: '<strong class="tui-page-btn tui-is-selected">{{page}}</strong>',
+ *          moveButton:
+ *              '<a href="#" class="tui-page-btn tui-{{type}}">' +
+ *                  '<span class="tui-ico-{{type}}">{{type}}</span>' +
+ *              '</a>',
+ *          disabledMoveButton:
+ *              '<span class="tui-page-btn tui-is-disabled tui-{{type}}">' +
+ *                  '<span class="tui-ico-{{type}}">{{type}}</span>' +
+ *              '</span>',
+ *          moreButton:
+ *              '<a href="#" class="tui-page-btn tui-{{type}}-is-ellip">' +
+ *                  '<span class="tui-ico-ellip">...</span>' +
+ *              '</a>'
+ *      }
+ * };
+ * var pagination2 = new tui.component.Pagination(container, options);
  */
-var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
-    init: function(options, $element) {
-        var defaultOption = {
-            itemCount: 10,
-            itemPerPage: 10,
-            pagePerPageList: 10,
-            page: 1,
-            moveUnit: 'pagelist',
-            isCenterAlign: false,
-            insertTextNode: '',
-            classPrefix: '',
-            firstItemClassName: 'first-child',
-            lastItemClassName: 'last-child',
-            pageTemplate: '<a href="#">{=page}</a>',
-            currentPageTemplate: '<strong>{=page}</strong>'
-        };
-
-        this._options = tui.util.extend(defaultOption, options);
-
+var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
+    init: function(container, options) {
         /**
-         * Event handler savor
-         * @type {Object}
+         * Option object
+         * @type {object}
          * @private
          */
-        this._events = {};
+        this._options = snippet.extend({}, defaultOption, options);
 
         /**
-         * view instance
-         * @type {PaginationView}
+         * Current page number
+         * @type {number}
          * @private
          */
-        this._view = new View(this._options, $element);
-        this._view.attachEvent('click', tui.util.bind(this._onClickPageList, this));
+        this._currentPage = 0;
 
-        this.movePageTo(this.getOption('page'), false);
+        /**
+         * View instance
+         * @type {View}
+         * @private
+         */
+        this._view = new View(container, this._options, snippet.bind(this._onClickHandler, this));
+
+        this._paginate();
     },
 
     /**
-     * Reset pagination
-     * @api
-     * @param {*} itemCount Redraw page item count
-     * @example
-     *  pagination.reset();
-     */
-    reset: function(itemCount) {
-        var isExist = tui.util.isExisty((itemCount !== null) && (!tui.util.isUndefined(itemCount)));
-
-        if (!isExist) {
-            itemCount = this.getOption('itemCount');
-        }
-
-        this.setOption('itemCount', itemCount);
-        this.movePageTo(1, false);
-    },
-
-    /**
-     * Get options
-     * @param {String} optionKey Option key
-     * @private
-     * @returns {*}
-     */
-    getOption: function(optionKey) {
-        return this._options[optionKey];
-    },
-
-    /**
-     * Move to specific page, redraw list.
-     * Befor move fire beforeMove event, After move fire afterMove event.
-     * @api
-     * @param {Number} targetPage Target page
-     * @param {Boolean} isNotRunCustomEvent [isNotRunCustomEvent=true] Whether custom event fire or not
-     * @example
-     *  pagination.movePageTo(10); // Move without custom-events - "beforeMove", "afterMove"
-     *  pagination.movePageTo(10, false) // Move with custom-events - "beforeMove", "afterMove"
-     */
-    movePageTo: function(targetPage, isNotRunCustomEvent) {
-        targetPage = this._convertToAvailPage(targetPage);
-        this._currentPage = targetPage;
-
-        if (!isNotRunCustomEvent) {
-            /**
-             * Fire 'beforeMove' event(CustomEvent)
-             * @api
-             * @event Pagination#beforeMove
-             * @param {componentEvent} eventData
-             * @param {Number} eventData.page Target page
-             * @example
-             * paganation.on("beforeMove", function(eventData) {
-             *      var currentPage = eventData.page;
-             *      return false;
-             *      //return true;
-             * });
-             */
-            if (!this.invoke('beforeMove', {page: targetPage})) {
-                return;
-            }
-        }
-
-        this._paginate(targetPage);
-
-        if (!isNotRunCustomEvent) {
-            /**
-             * Fire 'afterMove'
-             * @api
-             * @event Pagination#afterMove
-             * @param {componentEvent} eventData
-             * @param {Number} eventData.page Moved page
-             * @example
-             * paganation.on("afterMove", function(eventData) {
-             *      var currentPage = eventData.page;
-             *      console.log(currentPage);
-             * });
-             */
-            this.fire('afterMove', {page: targetPage});
-        }
-    },
-
-    /**
-     * Change option value
-     * @param {String} optionKey The target option key
-     * @param {*} optionValue The target option value
+     * Set current page
+     * @param {number} page - Current page
      * @private
      */
-    setOption: function(optionKey, optionValue) {
-        this._options[optionKey] = optionValue;
+    _setCurrentPage: function(page) {
+        this._currentPage = page || this._options.page;
     },
 
     /**
      * Get current page
-     * @returns {Number} Current page
+     * @returns {number} Current page
      * @private
      */
-    getCurrentPage: function() {
+    _getCurrentPage: function() {
         return this._currentPage || this._options.page;
     },
 
     /**
-     * Get item  index from list
-     * @param {Number} pageNumber Page number
-     * @returns {number}
-     * @private
-     */
-    getIndexOfFirstItem: function(pageNumber) {
-        return this.getOption('itemPerPage') * (pageNumber - 1) + 1;
-    },
-
-    /**
-     * Get Last page number
-     * @returns {number}
+     * Get last page number
+     * @returns {number} Last page number
      * @private
      */
     _getLastPage: function() {
-        var lastPage = Math.ceil(this.getOption('itemCount') / this.getOption('itemPerPage'));
+        var lastPage = Math.ceil(this._options.totalItems / this._options.itemsPerPage);
 
         return (!lastPage) ? 1 : lastPage;
     },
 
     /**
      * Index of list in total lists
-     * @param {Number} pageNumber Page number
-     * @returns {Number}
+     * @param {number} pageNumber - Page number
+     * @returns {number} Page index or number
      * @private
      */
     _getPageIndex: function(pageNumber) {
         var left, pageIndex;
-        // IsCenterAlign == true case
-        if (this.getOption('isCenterAlign')) {
-            left = Math.floor(this.getOption('pagePerPageList') / 2);
+
+        if (this._options.centerAlign) {
+            left = Math.floor(this._options.visiblePages / 2);
             pageIndex = pageNumber - left;
             pageIndex = Math.max(pageIndex, 1);
-            pageIndex = Math.min(pageIndex, this._getLastPage() - this.getOption('pagePerPageList') + 1);
+            pageIndex = Math.min(pageIndex, this._getLastPage() - this._options.visiblePages + 1);
 
             return pageIndex;
         }
 
-        return Math.ceil(pageNumber / this.getOption('pagePerPageList'));
+        return Math.ceil(pageNumber / this._options.visiblePages);
     },
 
     /**
-     * Get page number of prev, next pages
-     * @param {String} relativeName Directions(pre_end, next_end, pre, next)
-     * @returns {Number}
+     * Get relative page
+     * @param {string} moveType - Move type ('prev' or 'next')
+     * @returns {number} Relative page number
      * @private
      */
-    /* eslint-disable complexity */
-    _getRelativePage: function(relativeName) {
-        var page = null,
-            isMovePage = this.getOption('moveUnit') === 'page',
-            currentPageIndex = this._getPageIndex(this.getCurrentPage());
-        if (this.getOption('isCenterAlign')) {
-            if (relativeName === 'pre') {
-                page = isMovePage ? this.getCurrentPage() - 1 : currentPageIndex - 1;
-            } else {
-                page = isMovePage ? this.getCurrentPage() + 1 : currentPageIndex + this.getOption('pagePerPageList');
-            }
+    _getRelativePage: function(moveType) {
+        var isPrevMove = (moveType === 'prev');
+        var currentPage = this._getCurrentPage();
+
+        return isPrevMove ? currentPage - 1 : currentPage + 1;
+    },
+
+    /**
+     * Get more page index
+     * @param {string} moveType - Move type ('prev' or 'next')
+     * @returns {number} Page index
+     * @private
+     */
+    _getMorePageIndex: function(moveType) {
+        var currentPageIndex = this._getPageIndex(this._getCurrentPage());
+        var pageCount = this._options.visiblePages;
+        var isPrevMove = (moveType === 'prev');
+        var pageIndex;
+
+        if (this._options.centerAlign) {
+            pageIndex = isPrevMove ? currentPageIndex - 1 : currentPageIndex + pageCount;
         } else {
-            if (relativeName === 'pre') {
-                page = isMovePage ? this.getCurrentPage() - 1 :
-                                    (currentPageIndex - 1) * this.getOption('pagePerPageList');
-            } else {
-                page = isMovePage ? this.getCurrentPage() + 1 :
-                                    currentPageIndex * this.getOption('pagePerPageList') + 1;
-            }
+            pageIndex = isPrevMove ? (currentPageIndex - 1) * pageCount : (currentPageIndex * pageCount) + 1;
         }
 
-        return page;
+        return pageIndex;
     },
     /* eslint-enable complexity */
 
     /**
-     * Get avail page number from over number
+     * Get available page number from over number
      * If total page is 23, but input number is 30 => return 23
-     * @param {Number} page Page number
-     * @returns {number}
+     * @param {number} page - Page number
+     * @returns {number} Replaced pgae number
      * @private
      */
-    _convertToAvailPage: function(page) {
+    _convertToValidPage: function(page) {
         var lastPageNumber = this._getLastPage();
         page = Math.max(page, 1);
         page = Math.min(page, lastPageNumber);
@@ -282,74 +191,174 @@ var Pagination = tui.util.defineClass(/**@lends Pagination.prototype */{
     },
 
     /**
-     * Create require view set, notify view to update.
-     * @param {Number} page Page number
+     * Create require view set, notify view to update
+     * @param {number} page - Page number
      * @private
      */
     _paginate: function(page) {
-        var viewSet = {};
+        var viewData = this._makeViewData(page || this._options.page);
+        this._setCurrentPage(page);
+        this._view.update(viewData);
+    },
 
-        // 뷰의 버튼 및 페이지를 모두 제거 및 복사
-        this._view.empty();
+    /**
+     * Create and get view data
+     * @param {number} page - Page number
+     * @returns {object} view data
+     * @private
+     */
+    _makeViewData: function(page) {
+        var viewData = {};
+        var lastPage = this._getLastPage();
+        var currentPageIndex = this._getPageIndex(page);
+        var lastPageListIndex = this._getPageIndex(lastPage);
+        var edges = this._getEdge(page);
 
-        viewSet.lastPage = this._getLastPage();
-        viewSet.currentPageIndex = this._getPageIndex(page);
-        viewSet.lastPageListIndex = this._getPageIndex(viewSet.lastPage);
-        viewSet.page = page;
+        viewData.leftPageNumber = edges.left;
+        viewData.rightPageNumber = edges.right;
 
-        this._view.update(viewSet, page);
+        viewData.prevMore = (currentPageIndex > 1);
+        viewData.nextMore = (currentPageIndex < lastPageListIndex);
+
+        viewData.page = page;
+        viewData.currentPageIndex = page;
+        viewData.lastPage = lastPage;
+        viewData.lastPageListIndex = lastPage;
+
+        return viewData;
+    },
+
+    /**
+     * Get each edge page
+     * @param {object} page - Page number
+     * @returns {{left: number, right: number}} Edge page numbers
+     * @private
+     */
+    _getEdge: function(page) {
+        var leftPageNumber, rightPageNumber, left;
+        var lastPage = this._getLastPage();
+        var visiblePages = this._options.visiblePages;
+        var currentPageIndex = this._getPageIndex(page);
+
+        if (this._options.centerAlign) {
+            left = Math.floor(visiblePages / 2);
+            leftPageNumber = Math.max(page - left, 1);
+            rightPageNumber = leftPageNumber + visiblePages - 1;
+
+            if (rightPageNumber > lastPage) {
+                leftPageNumber = Math.max(lastPage - visiblePages + 1, 1);
+                rightPageNumber = lastPage;
+            }
+        } else {
+            leftPageNumber = ((currentPageIndex - 1) * visiblePages) + 1;
+            rightPageNumber = (currentPageIndex) * visiblePages;
+            rightPageNumber = Math.min(rightPageNumber, lastPage);
+        }
+
+        return {
+            left: leftPageNumber,
+            right: rightPageNumber
+        };
     },
 
     /**
      * Pagelist click event hadnler
-     * @param {JQueryEvent} event Event object
+     * @param {?string} buttonType - Button type
+     * @param {?number} page - Page number
      * @private
      */
     /* eslint-disable complexity */
-    _onClickPageList: function(event) {
-        var page = null,
-            targetElement = $(event.target),
-            targetPage,
-            isFired;
-
-        event.preventDefault();
-
-        if (this._view.isIn(targetElement, this.getOption('$pre_endOn'))) {
-            page = 1;
-        } else if (this._view.isIn(targetElement, this.getOption('$lastOn'))) {
-            page = this._getLastPage();
-        } else if (this._view.isIn(targetElement, this.getOption('$preOn'))) {
-            page = this._getRelativePage('pre');
-        } else if (this._view.isIn(targetElement, this.getOption('$nextOn'))) {
-            page = this._getRelativePage('next');
-        } else {
-            targetPage = this._view.getPageElement(targetElement);
-
-            if (targetPage && targetPage.length) {
-                page = parseInt(targetPage.text(), 10);
-            } else {
-                return;
-            }
-        }
-
-        /**
-         Fire 'click' custom event when page button clicked
-         @param {componentEvent} eventData
-         @param {String} eventData.eventType Custom event name
-         @param {Number} eventData.page Page to move
-         @param {Function} eventData.stop Stop page move
-         **/
-
-        isFired = this.invoke('click', {'page': page});
-        if (!isFired) {
-            return;
+    _onClickHandler: function(buttonType, page) {
+        switch (buttonType) {
+            case 'first':
+                page = 1;
+                break;
+            case 'prev':
+                page = this._getRelativePage('prev');
+                break;
+            case 'next':
+                page = this._getRelativePage('next');
+                break;
+            case 'prevMore':
+                page = this._getMorePageIndex('prev');
+                break;
+            case 'nextMore':
+                page = this._getMorePageIndex('next');
+                break;
+            case 'last':
+                page = this._getLastPage();
+                break;
+            default:
+                if (!page) {
+                    return;
+                }
         }
 
         this.movePageTo(page);
+    },
+    /* eslint-enable complexity */
+
+    /**
+     * Reset pagination
+     * @param {*} totalItems - Redraw page item count
+     * @example
+     * pagination.reset();
+     * pagination.reset(100);
+     */
+    reset: function(totalItems) {
+        if (snippet.isUndefined(totalItems)) {
+            totalItems = this._options.totalItems;
+        }
+
+        this._options.totalItems = totalItems;
+        this._paginate(1);
+    },
+
+    /**
+     * Move to specific page, redraw list.
+     * Before move fire beforeMove event, After move fire afterMove event.
+     * @param {Number} targetPage - Target page
+     * @example
+     * pagination.movePageTo(10);
+     */
+    movePageTo: function(targetPage) {
+        targetPage = this._convertToValidPage(targetPage);
+
+         /**
+          * @event Pagination#beforeMove
+          * @param {object} eventData - Custom event object
+          *   @param {Number} page - Moved page
+          * @example
+          * paganation.on('afterMove', function(eventData) {
+          *     var currentPage = eventData.page;
+          *
+          *     if (currentPage === 10) {
+          *         return false;
+          *         // return true;
+          *     }
+          * });
+          */
+        if (!this.invoke('beforeMove', {page: targetPage})) {
+            return;
+        }
+
+        this._paginate(targetPage);
+
+        /**
+         * @event Pagination#afterMove
+         * @param {object} eventData - Custom event object
+         *   @param {number} page - Moved page
+         * @example
+         * paganation.on('afterMove', function(eventData) {
+         *      var currentPage = eventData.page;
+         *      console.log(currentPage);
+         * });
+         */
+        this.fire('afterMove', {page: targetPage});
     }
     /* eslint-enable complexity */
 });
-// CustomEvent  Mixin
-tui.util.CustomEvents.mixin(Pagination);
+
+snippet.CustomEvents.mixin(Pagination);
 
 module.exports = Pagination;

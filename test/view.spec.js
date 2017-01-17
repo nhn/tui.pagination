@@ -1,72 +1,140 @@
+'use strict';
+
 var View = require('../src/js/view.js');
 
-describe('Test Pagination view', function() {
-
-    jasmine.getFixtures().fixturesPath = "base/";
+describe('View', function() {
+    var pagination1, pagination2;
+    var $element1, $element2;
+    var viewData = {
+        page: 15,
+        currentPageIndex: 15,
+        lastPage: 50,
+        lastPageListIndex: 50,
+        leftPageNumber: 10,
+        rightPageNumber: 20,
+        prevMore: true,
+        nextMore: true
+    };
 
     beforeEach(function() {
-        loadFixtures("test/fixtures/pageview.html");
+        $element1 = $('<div id="pagination1"></div>');
+        $element2 = $('<div id="pagination2"></div>');
+
+        pagination1 = new View($element1[0], {
+            firstItemClassName: 'left-child',
+            lastItemClassName: 'right-child'
+        });
+
+        pagination1.update(viewData);
+
+        pagination2 = new View($element2, {
+            firstItemClassName: 'left-child',
+            lastItemClassName: 'right-child',
+            template: {
+                page: '<a class="page" href="#">{{page}}Num</a>',
+                currentPage: '<strong class="current page1">{{page}}</strong>',
+                moveButton: '<div class="custom {{type}}"></div>',
+                moreButton: function() {
+                    return '<div class="more"></div>';
+                }
+            }
+        });
+
+        pagination2.update(viewData);
     });
 
-    var pv = new View({
-    }, $('.paginate1'));
+    describe('basic opitons - ', function() {
+        it('When the value of "element" is string,' +
+            'the container DOM element is created and append on body.', function() {
+            var rootElement = pagination1._getContainerElement();
+            expect(rootElement).toEqual($element1[0]);
+        });
 
-    var pv2 = new View({
-        itemCount: 500,
-        itemPerPage: 10,
-        pagePerPageList: 10,
-        page: 15,
-        moveUnit: 'page',
-        isCenterAlign: true,
-        insertTextNode: 'P',
-        classPrefix: 'fe_',
-        firstItemClassName: 'left-child',
-        lastItemClassName: 'right-child',
-        pageTemplate: '<a href="#">{=page}Num</a>',
-        currentPageTemplate: '<strong>{=page}Sel</strong>'
-    }, $('.paginate2'));
+        it('"firstItemClassName" option add class name on the first button except move, more buttons.', function() {
+            var firstItem = $element1.find('.left-child')[0];
+            var prevMoreButton = pagination1._buttons.prevMore;
 
-    it('Are the views created?', function() {
-        expect(pv).toBeDefined();
-        expect(pv2).toBeDefined();
+            expect(firstItem).toEqual(prevMoreButton);
+        });
+
+        it('"lastItemClassName" option add class name on the last button except move, more buttons.', function() {
+            var lastItem = $element1.find('.right-child')[0];
+            var nextMoreButton = pagination1._buttons.nextMore;
+
+            expect(lastItem).toBe(nextMoreButton);
+        });
     });
 
+    describe('template options - ', function() {
+        it('When "page" value set, the component has customaized page buttons.', function() {
+            expect($element2.find('.page').eq(0).html()).toBe('10Num');
+        });
 
-    it('Check the prefix applied via _wrapPrefix()', function() {
-        var pfx = pv2._wrapPrefix('text');
-        expect(pfx).toBe('fe_text');
+        it('When "moveButton" value is not set, the component has each default move buttons.', function() {
+            expect($element1.find('.tui-first').length).toBe(1);
+            expect($element1.find('.tui-prev').length).toBe(1);
+            expect($element1.find('.tui-next').length).toBe(1);
+            expect($element1.find('.tui-last').length).toBe(1);
+        });
+
+        it('When "moveButton" value set, the component has each customaized move buttons.', function() {
+            expect($element2.find('.custom.first').length).toBe(1);
+            expect($element2.find('.custom.prev').length).toBe(1);
+            expect($element2.find('.custom.next').length).toBe(1);
+            expect($element2.find('.custom.last').length).toBe(1);
+        });
+
+        it('When "moreButton" value is not set, the component has each default more buttons.', function() {
+            expect($element1.find('.tui-prev-is-ellip').length).toBe(1);
+            expect($element1.find('.tui-next-is-ellip').length).toBe(1);
+        });
+
+        it('When "moreButton" value set, the component has each customaized more buttons.', function() {
+            expect($element2.find('.more').length).toBe(2);
+        });
     });
 
-    it('Set page number via _setPageNumbers(move page number)', function() {
-        var viewSet = {
-            leftPageNumber: 11,
-            rightPageNumber: 20,
-            page: 15
-        },
-        pageList;
-        pv2._setPageNumbers(viewSet);
-        pageList = pv2._pageItemList;
-        expect(pageList.length).toBe(9);
+    describe('Public method - ', function() {
+        it('When "empty" is called, the container element is _empty.', function() {
+            var rootElement = pagination1._getContainerElement();
+
+            pagination1._empty();
+
+            expect(rootElement.childNodes.length).toBe(0);
+        });
+
+        it('When "update" is called, the page elements are updated.', function() {
+            var prevPage = Number($element2.find('.page').html());
+            var currentPage;
+
+            pagination2.update({
+                page: 1,
+                currentPageIndex: 1,
+                lastPage: 1,
+                lastPageListIndex: 1,
+                leftPageNumber: 1,
+                rightPageNumber: 1,
+                prevMore: false,
+                nextMore: false
+            });
+
+            currentPage = Number($element2.find('.page').html());
+
+            expect(currentPage).not.toBe(prevPage);
+        });
+
+        it('When "findPageElement" is called, find the target element in the page elements.', function() {
+            var findElement, foundElement;
+
+            findElement = $element2.find('.page').eq(3)[0];
+            foundElement = pagination2._findPageElement(findElement);
+
+            expect(foundElement).toBe(findElement);
+
+            findElement = $element2.find('.current')[0];
+            foundElement = pagination2._findPageElement(findElement);
+
+            expect(foundElement).toBe(null);
+        });
     });
-
-    it('Get each edge via _getEdge()', function() {
-        var viewSet = {
-            lastPage: 50,
-            page: 5
-        },
-        set;
-        pv2._options.isCenterAlign = true;
-        set = pv2._getEdge(viewSet);
-        expect(set.left).toBe(1);
-        expect(set.right).toBe(10);
-
-        viewSet = {
-            lastPage: 50,
-            page: 51
-        };
-        set = pv2._getEdge(viewSet);
-        expect(set.left).toBe(41);
-        expect(set.right).toBe(50);
-    });
-
 });

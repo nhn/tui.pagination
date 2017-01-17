@@ -1,242 +1,254 @@
+'use strict';
+
 var Pagination = require('../src/js/pagination.js');
 
-describe('Test pagination behavior', function() {
-
-    jasmine.getFixtures().fixturesPath = "base/";
-
+describe('Pagination', function() {
+    var pagination1, pagination2, pagination3;
+    var $element1, $element2, $element3;
 
     beforeEach(function() {
-        loadFixtures("test/fixtures/pageview.html");
+        $element1 = $('<div id="pagination1"></div>');
+        $element2 = $('<div id="pagination2"></div>');
+        $element3 = $('<div id="pagination3"></div>');
+
+        pagination1 = new Pagination($element1);
+
+        pagination2 = new Pagination($element2, {
+            totalItems: 500,
+            itemsPerPage: 10,
+            visiblePages: 11,
+            page: 22
+        });
+
+        pagination3 = new Pagination($element3, {
+            totalItems: 500,
+            itemsPerPage: 10,
+            visiblePages: 11,
+            page: 15,
+            centerAlign: true,
+            template: {
+                page: '<a href="#" class="page">{{page}}</a>',
+                currentPage: '<span class="page">{{page}}</span>'
+            }
+        });
     });
 
-    describe('create object',  function() {
-        var pagination,
-            paginationOption;
-        beforeEach(function() {
-            pagination = new Pagination({
-                itemCount: 500,
-                itemPerPage: 10
-            }, $('.paginate3'));
-
-            paginationOption = new Pagination({
-                itemCount: 500,
-                itemPerPage: 10,
-                pagePerPageList: 20,
-                page: 15,
-                moveUnit: 'page',
-                isCenterAlign: true,
-                classPrefix: 'paging-',
-                firstItemClassName: 'left-child',
-                lastItemClassName: 'right-child',
-                pageTemplate: '<a href="#">{=page}Num</a>',
-                currentPageTemplate: '<strong>{=page}Sel</strong>'
-            }, $('.paginate4'));
+    describe('Private method - ', function() {
+        it('"getCurrentPage" returns page value in options', function() {
+            var page1, page2, page3;
+            page1 = pagination1._getCurrentPage();
+            expect(page1).toBe(1); // default
+            page2 = pagination2._getCurrentPage();
+            expect(page2).toBe(22);
+            page3 = pagination3._getCurrentPage();
+            expect(page3).toBe(15);
         });
 
-
-        it('Are paginations defined?', function() {
-            expect(pagination).toBeDefined();
-            expect(paginationOption).toBeDefined();
-        });
-        it('Are pationations defined, with options?', function() {
-
-            var itemCount = pagination.getOption('itemCount'),
-                itemPerPage = pagination.getOption('itemPerPage'),
-                pagePerPageList = pagination.getOption('pagePerPageList'),
-                page =  pagination.getOption('page'),
-                moveUnit = pagination.getOption('moveUnit'),
-                isCenterAlign =  pagination.getOption('isCenterAlign'),
-                insertTextNode = pagination.getOption('insertTextNode'),
-                classPrefix = pagination.getOption('classPrefix'),
-                firstItemClass = pagination.getOption('firstItemClassName'),
-                lastItemClass = pagination.getOption('lastItemClassName'),
-                pageTemplate = pagination.getOption('pageTemplate'),
-                currentPageTeplate = pagination.getOption('currentPageTemplate');
-
-            expect(pagePerPageList).toBe(10);
-            expect(page).toBe(1);
-            expect(moveUnit).toBe('pagelist');
-            expect(isCenterAlign).toBe(false);
-            expect(insertTextNode).toBe('');
-            expect(classPrefix).toBe('');
-            expect(firstItemClass).toBe('first-child');
-            expect(lastItemClass).toBe('last-child');
-            expect(pageTemplate).toBe('<a href="#">{=page}</a>');
-            expect(currentPageTeplate).toBe('<strong>{=page}</strong>');
-
-            itemCount = paginationOption.getOption('itemCount');
-            itemPerPage = paginationOption.getOption('itemPerPage');
-            pagePerPageList = paginationOption.getOption('pagePerPageList');
-            page =  paginationOption.getOption('page');
-            moveUnit = paginationOption.getOption('moveUnit');
-            isCenterAlign =  paginationOption.getOption('isCenterAlign');
-            insertTextNode = paginationOption.getOption('insertTextNode');
-            classPrefix = paginationOption.getOption('classPrefix');
-            firstItemClass = paginationOption.getOption('firstItemClassName');
-            lastItemClass = paginationOption.getOption('lastItemClassName');
-            pageTemplate = paginationOption.getOption('pageTemplate');
-            currentPageTeplate = paginationOption.getOption('currentPageTemplate');
-
-            expect(itemCount).toBe(500);
-            expect(itemPerPage).toBe(10);
-            expect(pagePerPageList).toBe(20);
-            expect(page).toBe(15);
-            expect(moveUnit).toBe('page');
-            expect(isCenterAlign).toBe(true);
-            expect(classPrefix).toBe('paging-');
-            expect(firstItemClass).toBe('left-child');
-            expect(lastItemClass).toBe('right-child');
-            expect(pageTemplate).toBe('<a href="#">{=page}Num</a>');
-            expect(currentPageTeplate).toBe('<strong>{=page}Sel</strong>');
-
+        it('"getLastPage" returns last page number on total pages.', function() {
+            var lastPage1, lastPage2, lastPage3;
+            lastPage1 = pagination1._getLastPage();
+            expect(lastPage1).toBe(1); // default
+            lastPage2 = pagination2._getLastPage();
+            expect(lastPage2).toBe(50);
+            lastPage3 = pagination3._getLastPage();
+            expect(lastPage3).toBe(50);
         });
 
-        it('Check correctly creating view via pagination.', function() {
-            var view = pagination._view;
-            var viewOfPaginationOption = paginationOption._view;
-            expect(view).toBeDefined();
-            expect(viewOfPaginationOption).toBeDefined();
+        it('"getPageIndex" returns different page index by "centerAlign" option.', function() {
+            var pageIndex1, pageIndex2;
+            pageIndex1 = pagination2._getPageIndex(12);
+            expect(pageIndex1).toBe(2);
+            pageIndex2 = pagination3._getPageIndex(12); // centerAlign: true
+            expect(pageIndex2).toBe(7);
         });
 
-
-        it('Change options via setOption() & getOption() with itemCount attribute', function() {
-            pagination.setOption('itemCount', 100);
-            expect(pagination.getOption('itemCount')).toBe(100);
-            pagination.setOption('itemCount', 500);
-            expect(pagination.getOption('itemCount')).toBe(500);
-            pagination.setOption('isCenterAlign', true);
-            expect(pagination.getOption('isCenterAlign')).toBe(true);
+        it('"getRelativePage" returns prev or next page by type.', function() {
+            var prevPage, nextPage;
+            prevPage = pagination2._getRelativePage('prev');
+            expect(prevPage).toBe(21);
+            nextPage = pagination2._getRelativePage('next');
+            expect(nextPage).toBe(23);
         });
 
-        it('Check current page via getCurrentPage()', function() {
-            var page = pagination.getCurrentPage();
-            expect(page).toBe(1);
+        it('"getMorePage" returns start or last page index of next page list by type.', function() {
+            var prevPageIndex, nextPageIndex, prevCenterPageIndex, nextCenterPageIndex;
+            prevPageIndex = pagination2._getMorePageIndex('prev');
+            expect(prevPageIndex).toBe(11);
+            nextPageIndex = pagination2._getMorePageIndex('next');
+            expect(nextPageIndex).toBe(23);
+            prevCenterPageIndex = pagination3._getMorePageIndex('prev');
+            expect(prevCenterPageIndex).toBe(9);
+            nextCenterPageIndex = pagination3._getMorePageIndex('next');
+            expect(nextCenterPageIndex).toBe(21);
         });
+    });
 
-        it('Get First Item via getIndexOfFirstItem()', function() {
-            var page = pagination.getIndexOfFirstItem(2);
-            expect(page).toBe(11);
-        });
+    describe('Public API -', function() {
+        it('When "movePageTo" is called, the page is changed.', function() {
+            var page1, page2, page3, page4, lastPage;
 
-        it('Get relative page via getRelativePage()', function() {
-            var result,
-                po = paginationOption;
-            result = po._getRelativePage('pre');
-            expect(result).toBe(14);
-            result = po._getRelativePage('next');
-            expect(result).toBe(16);
-        });
-
-        it('Check page after move via movePage(page number)', function() {
-            pagination.movePageTo(1);
-            var page1 = pagination.getCurrentPage();
-            pagination.movePageTo(2);
-            var page2 = pagination.getCurrentPage();
-            pagination.movePageTo(3);
-            var page3 = pagination.getCurrentPage();
-            pagination.movePageTo(100);
-            // 아이템의 갯수를 훨씬 넘어갈땐, 마지막 페이지가 된다
-            var page4 = pagination.getCurrentPage();
-            // 마지막 페이지를 구한다
-            var lastPage = pagination._getLastPage();
+            pagination2.movePageTo(1);
+            page1 = pagination2._getCurrentPage();
             expect(page1).toBe(1);
+
+            pagination2.movePageTo(2);
+            page2 = pagination2._getCurrentPage();
             expect(page2).toBe(2);
+
+            pagination2.movePageTo(3);
+            page3 = pagination2._getCurrentPage();
             expect(page3).toBe(3);
+
+            pagination2.movePageTo(100);
+            page4 = pagination2._getCurrentPage();
+            lastPage = pagination2._getLastPage();
             expect(page4).toBe(lastPage);
         });
 
-        it('Check first, prev, next, last pages.', function() {
-            var event,
-                currentPage1,
-                currentPage2,
-                currentPage3,
-                currentPage4,
-                po = paginationOption;
-            po._element = $('.paginate4');
+        it('When "reset" is called, the current page reset and total items is changed.', function() {
+            var currentPage;
 
-            po._options.$pre_endOn = $('.paginate4 a.paging-pre-end');
-            po._options.$preOn = $('.paginate4 a.paging-next');
-            po._options.$nextOn = $('.paginate4 a.paging-next-end');
-            po._options.$lastOn = $('.paginate4 a.paging-pre');
+            pagination3.reset();
+            currentPage = pagination3._getCurrentPage();
+            expect(currentPage).toBe(1);
 
-            event = jQuery.Event('click', {target: $('.paginate4 .paging-pre-end')});
-            po._onClickPageList(event);
-            currentPage1 = po.getCurrentPage();
-            event = jQuery.Event('click', {target: $('.paginate4 .paging-next')});
-            po._onClickPageList(event);
-            currentPage2 = po.getCurrentPage();
-            event = jQuery.Event('click', {target: $('.paginate4 .paging-next-end')});
-            po._onClickPageList(event);
-            currentPage3 = po.getCurrentPage();
-            event = jQuery.Event('click', {target: $('.paginate4 .paging-pre')});
-            po._onClickPageList(event);
-            currentPage4 = po.getCurrentPage();
-            expect(currentPage1).toBe(1);
-            expect(currentPage2).toBe(1);
-            expect(currentPage3).toBe(2);
-            expect(currentPage4).toBe(50);
+            pagination3.movePageTo(10);
+            pagination3.reset();
+            pagination3.movePageTo(10);
+            expect(currentPage).toBe(1);
         });
 
-        it('Redraw pagination via reset()', function() {
-            pagination.reset();
-            var page = pagination.getCurrentPage();
-            expect(page).toBe(1);
+        it('When "reset" is called with total items, the displaying pages are changed.', function() {
+            var pages;
+
+            pagination3.reset(0);
+            pages = $element3.find('.page').length;
+            expect(pages).toBe(1);
+
+            pagination3.reset(20);
+            pages = $element3.find('.page').length;
+            expect(pages).toBe(2);
+        });
+    });
+
+    describe('Event - ', function() {
+        it('When "movePageTo" is called and the "beforeMove" event is ignore,' +
+            'the current page is not changed.', function() {
+            var mock = jasmine.createSpy('"beforeMove" handler').and.returnValue(false);
+            var prevPage = pagination2._getCurrentPage();
+            var currentPage;
+
+            pagination2.on('beforeMove', mock);
+            pagination2.movePageTo(3);
+
+            currentPage = pagination2._getCurrentPage();
+            expect(currentPage).toBe(prevPage);
         });
 
-        it('Redraw pagination via reset() with new itemCount', function() {
-            pagination.reset(100);
-            var itemCount = pagination.getOption('itemCount');
-            expect(itemCount).toBe(100);
+        it('When "movePageTo" is called and the "beforeMove" event is fired,' +
+            'the current page is change.', function() {
+            var mock = jasmine.createSpy('"beforeMove" handler').and.returnValue(true);
+            var prevPage = pagination2._getCurrentPage();
+            var currentPage;
+
+            pagination2.on('beforeMove', mock);
+            pagination2.movePageTo(3);
+
+            currentPage = pagination2._getCurrentPage();
+            expect(currentPage).not.toBe(prevPage);
         });
 
-        it('Check custom event behavior after connect custom event handler.', function() {
+        it('When "movePageTo" is called and the "beforeMove" event is fired,' +
+            '"afterMove" event is fired.', function() {
+            var beforeMoveMock = jasmine.createSpy('"beforeMove" handler').and.returnValue(true);
+            var afterMoveMock = jasmine.createSpy('"afterMove" handler');
 
-            var isBeforeMoveFire1 = false,
-                page;
+            pagination2.on('beforeMove', beforeMoveMock);
+            pagination2.on('afterMove', afterMoveMock);
+            pagination2.movePageTo(3);
 
-            paginationOption.on('beforeMove', function() {
-                isBeforeMoveFire1 = true;
-            });
-
-            paginationOption.movePageTo(13, false);
-            page = paginationOption.getCurrentPage();
-
-            expect(page).toBe(13);
-            expect(isBeforeMoveFire1).toBeTruthy();
-
+            expect(afterMoveMock).toHaveBeenCalled();
         });
 
-        describe('When movePageTo() is called', function() {
-            var beforeMoveMock, afterMoveMock;
+        it('When the "first" move button is clicked, the page is changeed to 1 page.', function() {
+            var currentPage;
 
-            beforeEach(function() {
-                beforeMoveMock = jasmine.createSpy();
-                afterMoveMock = jasmine.createSpy();
+            pagination3._onClickHandler('first');
 
-                pagination.on('beforeMove', beforeMoveMock);
-                pagination.on('afterMove', afterMoveMock);
-            });
+            currentPage = pagination3._getCurrentPage();
+            expect(currentPage).toBe(1);
+        });
 
-            it('with no option, the custom events are fired.', function() {
-                pagination.movePageTo(10);
+        it('When the "prev" move button is clicked, the page is changed to previous page.', function() {
+            var prevPage = pagination3._getCurrentPage();
+            var currentPage;
 
-                expect(beforeMoveMock).toHaveBeenCalled();
-                expect(afterMoveMock).toHaveBeenCalled();
-            });
+            pagination3._onClickHandler('prev');
 
-            it('with "false" option, the custom events are fired.', function() {
-                pagination.movePageTo(10, false);
+            currentPage = pagination3._getCurrentPage();
+            expect(currentPage).toBe(prevPage - 1);
+        });
 
-                expect(beforeMoveMock).toHaveBeenCalled();
-                expect(afterMoveMock).toHaveBeenCalled();
-            });
+        it('When the "next" move button is clicked, the page is changed to next page.', function() {
+            var prevPage = pagination3._getCurrentPage();
+            var currentPage;
 
-            it('with "true" option, the custom events are not fired.', function() {
-                pagination.movePageTo(10, true);
+            pagination3._onClickHandler('next');
 
-                expect(beforeMoveMock).not.toHaveBeenCalled();
-                expect(afterMoveMock).not.toHaveBeenCalled();
-            });
+            currentPage = pagination3._getCurrentPage();
+            expect(currentPage).toBe(prevPage + 1);
+        });
+
+        it('When the "last" move button is clicked, the page is changed to last page.', function() {
+            var lastPage = pagination3._getLastPage();
+            var currentPage;
+
+            pagination3._onClickHandler('last');
+
+            currentPage = pagination3._getCurrentPage();
+            expect(currentPage).toBe(lastPage);
+        });
+
+        it('When the "prev" more button is clicked,' +
+            'the page is changed to last page number of previous page list.', function() {
+            var currentPage;
+
+            pagination3._onClickHandler('prevMore');
+
+            currentPage = pagination3._getCurrentPage();
+            expect(currentPage).toBe(9); // first page of current page list is 10 -> 9
+        });
+
+        it('When the "prev" more button is clicked,' +
+            'the page is changed to last page number of next page list.', function() {
+            var currentPage;
+
+            pagination3._onClickHandler('nextMore');
+
+            currentPage = pagination3._getCurrentPage();
+            expect(currentPage).toBe(21); // last page of current page list is 20 -> 21
+        });
+
+        it('When the page is clicked and is enabled, the current page is changed.', function() {
+            var prevPage = pagination3._getCurrentPage();
+            var currentPage;
+
+            pagination3._onClickHandler(null, 3);
+
+            currentPage = pagination3._getCurrentPage();
+            expect(currentPage).not.toBe(prevPage);
+        });
+
+        it('When the page is clicked and is selected already, the current page is not changed.', function() {
+            var prevPage, currentPage;
+
+            pagination3.movePageTo(3);
+            prevPage = pagination3._getCurrentPage();
+
+            pagination3._onClickHandler(null, 3);
+
+            currentPage = pagination3._getCurrentPage();
+            expect(currentPage).toBe(prevPage);
         });
     });
 });
