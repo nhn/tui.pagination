@@ -37,7 +37,7 @@
             </li>
         </ol>
     
-    <div class="lnb-examples hidden"><h3>Examples</h3><ul><li><a href="tutorial-sample1.html">Default Example</a><div class="hidden" id="sample1_sub"></div></li><li><a href="tutorial-sample2.html">CustomEvent Example</a><div class="hidden" id="sample2_sub"></div></li><li><a href="tutorial-sample3.html">Align Center Example</a><div class="hidden" id="sample3_sub"></div></li><li><a href="tutorial-sample4.html">Align Center unit move Example</a><div class="hidden" id="sample4_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="Pagination.html">Pagination</a><div class="hidden" id="Pagination_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Pagination.html#movePageTo">movePageTo</a></li><li><a href="Pagination.html#reset">reset</a></li></ul><div class="member-type">Events</div><ul class="inner"><li><a href="Pagination.html#event:afterMove">afterMove</a></li><li><a href="Pagination.html#event:beforeMove">beforeMove</a></li></ul></div></li></ul></div>
+    <div class="lnb-examples hidden"><h3>Examples</h3><ul><li><a href="tutorial-basic.html">Default Example</a><div class="hidden" id="basic_sub"></div></li><li><a href="tutorial-customevent.html">CustomEvent Example</a><div class="hidden" id="customevent_sub"></div></li><li><a href="tutorial-template.html">Using Template Example</a><div class="hidden" id="template_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="Pagination.html">Pagination</a><div class="hidden" id="Pagination_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Pagination.html#movePageTo">movePageTo</a></li><li><a href="Pagination.html#reset">reset</a></li></ul><div class="member-type">Events</div><ul class="inner"><li><a href="Pagination.html#event:afterMove">afterMove</a></li><li><a href="Pagination.html#event:beforeMove">beforeMove</a></li></ul></div></li></ul></div>
 </nav>
 <div id="resizer"></div>
 
@@ -67,38 +67,25 @@
         </ul>
         <article>
             
-            <iframe id="example-result" width="100%" height="800" frameborder="0" src=tutorials/sample2.html></iframe>
+            <iframe id="example-result" width="100%" height="800" frameborder="0" src=tutorials/customevent.html></iframe>
             <div id="example-js" class="hidden"><pre class="prettyprint source">
-    var pagination = new tui.component.Pagination({
-        itemCount: 500
-    }, $('.paginate1'));
 
-    pagination.on('beforeMove', function(eventData) {
-        $('#state').val(eventData.page + '로 이동합니다.\n' + $('#state').val());
-    });
+        var pagination = new tui.component.Pagination('pagination', {
+            totalItems: 500
+        });
 
-    pagination.on('afterMove', function(eventData) {
-        $('#state').val(eventData.page + '로 이동되었습니다.\n' + $('#state').val());
-    });
-</pre></div>
+        pagination.on('beforeMove', function(eventData) {
+            return confirm('Go to page ' + eventData.page + '?');
+        });
+
+        pagination.on('afterMove', function(eventData) {
+            alert('The current page is ' + eventData.page);
+        });
+
+    </pre></div>
             <div id="example-html" class="hidden"><pre class="prettyprint source">
-    &lt;div class="example">
-        &lt;div class="paginate1 pagination">
-            &lt;a href="#" class="pre_end">처음&lt;/a>
-            &lt;a href="#" class="pre">이전&lt;/a>
-            &lt;a href="#" class="next">다음&lt;/a>
-            &lt;a href="#" class="next_end">마지&lt;/a>
-        &lt;/div>
-    &lt;/div>
-    &lt;div class="explain">
-        &lt;p>- 전체 아이템 : 500&lt;/p>
-        &lt;p>- 기타기본 옵션 적용&lt;/p>
-        &lt;p>- 페이지 이동 전에 발생되는 beforeMove를 등록한다.&lt;/p>
-        &lt;p>- 페이지 이동 후에 발생되는 afterMove를 등록한다.&lt;/p>
-        &lt;textarea type="text" id="state">&lt;/textarea>
-    &lt;/div>
-
-</pre></div>
+        &lt;div id="pagination" class="tui-pagination">&lt;/div>
+    </pre></div>
         </article>
     
 </section>
