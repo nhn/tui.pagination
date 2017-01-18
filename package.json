@@ -34,7 +34,7 @@
     "test:ne": "KARMA_SERVER=ne karma start",
     "bundle": "webpack && webpack -p && cp -r src/css/*.css dist",
     "serve": "webpack-dev-server -d",
-    "cpy-dist2doc": "mkdir -p doc/dist && cp -f dist/tui-component-pagination.js doc/dist",
+    "cpy-dist2doc": "mkdir -p doc/dist && cp -f dist/tui-component-pagination.js dist/*.css doc/dist",
     "doc": "./node_modules/.bin/jsdoc -c jsdoc-conf.json && npm run cpy-dist2doc"
   }
 }
