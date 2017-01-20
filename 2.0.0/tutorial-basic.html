@@ -70,15 +70,13 @@
             <iframe id="example-result" width="100%" height="800" frameborder="0" src=tutorials/basic.html></iframe>
             <div id="example-js" class="hidden"><pre class="prettyprint source">
 
-        var pagination1 = new tui.component.Pagination('pagination1');
-
-        var pagination2 = new tui.component.Pagination('pagination2', {
+        var pagination1 = new tui.component.Pagination('pagination1', {
             totalItems: 500,
             itemsPerPage: 10,
             visiblePages: 5
         });
 
-        var pagination3 = new tui.component.Pagination(document.getElementById('pagination3'), {
+        var pagination2 = new tui.component.Pagination(document.getElementById('pagination2'), {
             totalItems: 500,
             itemsPerPage: 10,
             visiblePages: 5,
@@ -87,9 +85,11 @@
 
     </pre></div>
             <div id="example-html" class="hidden"><pre class="prettyprint source">
+        &lt;h3>Default&lt;/h3>
         &lt;div id="pagination1" class="tui-pagination">&lt;/div>
+
+        &lt;h3>Center the current page&lt;/h3>
         &lt;div id="pagination2" class="tui-pagination">&lt;/div>
-        &lt;div id="pagination3" class="tui-pagination">&lt;/div>
     </pre></div>
         </article>
     
