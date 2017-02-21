@@ -32,12 +32,8 @@ var snippet = tui.util;
  *         @param {string|function} [options.template.disabledMoveButton] HTML template
  *         @param {string|function} [options.template.moreButton] HTML template
  * @example
- * // Using id selector and no options
- * var pagination1 = new tui.component.Pagination('pagination1');
- *
- * // Using DOM element and options
- * var container = document.getElementById('pagination2');
- * var options = { // below default values
+ * var container = document.getElementById('pagination');
+ * var options = { // below default value of options
  *      totalItems: 10,
  *      itemsPerPage: 10,
  *      visiblePages: 10,
@@ -62,7 +58,7 @@ var snippet = tui.util;
  *              '</a>'
  *      }
  * };
- * var pagination2 = new tui.component.Pagination(container, options);
+ * var pagination = new tui.component.Pagination(container, options);
  */
 var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
     init: function(container, options) {
