@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Pagination</title>
+    <title>Tutorial: 1. Basic | Pagination</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -13,6 +13,8 @@
     <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+
+    
 </head>
 <body>
 <nav class="lnb" id="lnb">
@@ -37,7 +39,7 @@
             </li>
         </ol>
     
-    <div class="lnb-examples hidden"><h3>Examples</h3><ul><li><a href="tutorial-basic.html">Default Example</a><div class="hidden" id="basic_sub"></div></li><li><a href="tutorial-customevent.html">CustomEvent Example</a><div class="hidden" id="customevent_sub"></div></li><li><a href="tutorial-template.html">Using Template Example</a><div class="hidden" id="template_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="Pagination.html">Pagination</a><div class="hidden" id="Pagination_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Pagination.html#movePageTo">movePageTo</a></li><li><a href="Pagination.html#reset">reset</a></li></ul><div class="member-type">Events</div><ul class="inner"><li><a href="Pagination.html#event:afterMove">afterMove</a></li><li><a href="Pagination.html#event:beforeMove">beforeMove</a></li></ul></div></li></ul></div>
+    <div class="lnb-examples hidden"><h3>Examples</h3><ul><li><a href="tutorial-example1.html">1. Basic</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="example1_sub"></div></li><li><a href="tutorial-example2.html">2. Using custom events</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="example2_sub"></div></li><li><a href="tutorial-example3.html">3. Using template</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="example3_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="Pagination.html">Pagination</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Pagination_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Pagination.html#movePageTo">movePageTo</a></li><li><a href="Pagination.html#reset">reset</a></li></ul><div class="member-type">Events</div><ul class="inner"><li><a href="Pagination.html#event:afterMove">afterMove</a></li><li><a href="Pagination.html#event:beforeMove">beforeMove</a></li></ul></div></li></ul></div>
 </nav>
 <div id="resizer"></div>
 
@@ -48,7 +50,7 @@
     <header>
         
 
-        <h2>CustomEvent Example</h2>
+        <h2>1. Basic</h2>
     </header>
 
     
@@ -67,24 +69,29 @@
         </ul>
         <article>
             
-            <iframe id="example-result" width="100%" height="800" frameborder="0" src=tutorials/customevent.html></iframe>
+            <iframe id="example-result" width="100%" height="800" frameborder="0" src=tutorials/example1.html></iframe>
             <div id="example-js" class="hidden"><pre class="prettyprint source">
 
-        var pagination = new tui.component.Pagination('pagination', {
-            totalItems: 500
+        var pagination1 = new tui.component.Pagination('pagination1', {
+            totalItems: 500,
+            itemsPerPage: 10,
+            visiblePages: 5
         });
 
-        pagination.on('beforeMove', function(eventData) {
-            return confirm('Go to page ' + eventData.page + '?');
-        });
-
-        pagination.on('afterMove', function(eventData) {
-            alert('The current page is ' + eventData.page);
+        var pagination2 = new tui.component.Pagination(document.getElementById('pagination2'), {
+            totalItems: 500,
+            itemsPerPage: 10,
+            visiblePages: 5,
+            centerAlign: true
         });
 
     </pre></div>
             <div id="example-html" class="hidden"><pre class="prettyprint source">
-        &lt;div id="pagination" class="tui-pagination">&lt;/div>
+        &lt;h3>Default&lt;/h3>
+        &lt;div id="pagination1" class="tui-pagination">&lt;/div>
+
+        &lt;h3>Center the current page&lt;/h3>
+        &lt;div id="pagination2" class="tui-pagination">&lt;/div>
     </pre></div>
         </article>
     

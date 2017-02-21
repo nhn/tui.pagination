@@ -10,15 +10,15 @@
     <div class="code-html">
         <div id="pagination" class="tui-pagination"></div>
     </div>
-    <script type="text/javascript" src="//cdn.rawgit.com/nhnent/tui.code-snippet/1.2.1/code-snippet.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/nhnent/tui.code-snippet/1.2.1/code-snippet.js"></script>
     <script type="text/javascript" src="../dist/tui-component-pagination.js"></script>
     <script class="code-js">
 
         var pagination = new tui.component.Pagination('pagination', {
             totalItems: 500,
             template: {
-                page: '<a href="#" class="tui-page-btn">p.{{page}}</a>',
-                currentPage: '<strong class="tui-page-btn tui-is-selected">p.{{page}}</strong>',
+                page: '<a href="#" class="tui-page-btn">{{page}}p</a>',
+                currentPage: '<strong class="tui-page-btn tui-is-selected">{{page}}p</strong>',
                 moveButton:
                     '<a href="#" class="tui-page-btn tui-{{type}} custom-class-{{type}}">' +
                         '<span class="tui-ico-{{type}}">{{type}}</span>' +

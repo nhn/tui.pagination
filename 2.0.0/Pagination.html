@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Pagination</title>
+    <title>Class: Pagination | Pagination</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -13,6 +13,8 @@
     <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+
+    
 </head>
 <body>
 <nav class="lnb" id="lnb">
@@ -37,7 +39,7 @@
             </li>
         </ol>
     
-    <div class="lnb-examples hidden"><h3>Examples</h3><ul><li><a href="tutorial-basic.html">Default Example</a><div class="hidden" id="basic_sub"></div></li><li><a href="tutorial-customevent.html">CustomEvent Example</a><div class="hidden" id="customevent_sub"></div></li><li><a href="tutorial-template.html">Using Template Example</a><div class="hidden" id="template_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="Pagination.html">Pagination</a><div class="hidden" id="Pagination_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Pagination.html#movePageTo">movePageTo</a></li><li><a href="Pagination.html#reset">reset</a></li></ul><div class="member-type">Events</div><ul class="inner"><li><a href="Pagination.html#event:afterMove">afterMove</a></li><li><a href="Pagination.html#event:beforeMove">beforeMove</a></li></ul></div></li></ul></div>
+    <div class="lnb-examples hidden"><h3>Examples</h3><ul><li><a href="tutorial-example1.html">1. Basic</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="example1_sub"></div></li><li><a href="tutorial-example2.html">2. Using custom events</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="example2_sub"></div></li><li><a href="tutorial-example3.html">3. Using template</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="example3_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="Pagination.html">Pagination</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Pagination_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Pagination.html#movePageTo">movePageTo</a></li><li><a href="Pagination.html#reset">reset</a></li></ul><div class="member-type">Events</div><ul class="inner"><li><a href="Pagination.html#event:afterMove">afterMove</a></li><li><a href="Pagination.html#event:beforeMove">beforeMove</a></li></ul></div></li></ul></div>
 </nav>
 <div id="resizer"></div>
 
@@ -773,12 +775,8 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>// Using id selector and no options
-var pagination1 = new tui.component.Pagination('pagination1');
-
-// Using DOM element and options
-var container = document.getElementById('pagination2');
-var options = { // below default values
+    <pre class="prettyprint"><code>var container = document.getElementById('pagination');
+var options = { // below default value of options
      totalItems: 10,
      itemsPerPage: 10,
      visiblePages: 10,
@@ -803,7 +801,7 @@ var options = { // below default values
              '&lt;/a>'
      }
 };
-var pagination2 = new tui.component.Pagination(container, options);</code></pre>
+var pagination = new tui.component.Pagination(container, options);</code></pre>
 
     
 
@@ -840,7 +838,7 @@ var pagination2 = new tui.component.Pagination(container, options);</code></pre>
             
             <div class="container-source members">
                 <code><a href="pagination.js.html">pagination.js</a></code>,
-                <code><a href="pagination.js.html#line324">line 324</a></code>
+                <code><a href="pagination.js.html#line320">line 320</a></code>
             </div>
             
         </h4>
@@ -987,7 +985,7 @@ Before move fire beforeMove event, After move fire afterMove event.</p>
             
             <div class="container-source members">
                 <code><a href="pagination.js.html">pagination.js</a></code>,
-                <code><a href="pagination.js.html#line308">line 308</a></code>
+                <code><a href="pagination.js.html#line304">line 304</a></code>
             </div>
             
         </h4>
@@ -1142,7 +1140,7 @@ pagination.reset(100);</code></pre>
             
             <div class="container-source members">
                 <code><a href="pagination.js.html">pagination.js</a></code>,
-                <code><a href="pagination.js.html#line347">line 347</a></code>
+                <code><a href="pagination.js.html#line343">line 343</a></code>
             </div>
             
         </h4>
@@ -1310,7 +1308,7 @@ pagination.reset(100);</code></pre>
             
             <div class="container-source members">
                 <code><a href="pagination.js.html">pagination.js</a></code>,
-                <code><a href="pagination.js.html#line327">line 327</a></code>
+                <code><a href="pagination.js.html#line323">line 323</a></code>
             </div>
             
         </h4>
@@ -1491,9 +1489,11 @@ pagination.reset(100);</code></pre>
 
     <script>
         var id = 'Pagination_sub'.replace(/"/g, '_');
-        var element = document.getElementById(id); // do not use jquery selector
+        var selectedApi = document.getElementById(id); // do not use jquery selector
+        var $selectedApi = $(selectedApi);
 
-        $(element).removeClass('hidden');
+        $selectedApi.removeClass('hidden');
+        $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
         showLnbApi();
     </script>
 
