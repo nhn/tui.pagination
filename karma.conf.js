@@ -187,6 +187,14 @@ module.exports = function(config) {
                         include: /src/,
                         exclude: /(bower_components|node_modules)/,
                         loader: 'eslint-loader'
+                    },
+                    {
+                        test: /\.css$/,
+                        loader: 'style!css'
+                    },
+                    {
+                        test: /\.png$/,
+                        loader: 'url-loader'
                     }
                 ]
             },
