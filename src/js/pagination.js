@@ -351,8 +351,24 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
          * });
          */
         this.fire('afterMove', {page: targetPage});
-    }
+    },
     /* eslint-enable complexity */
+
+    /**
+     * Set total count of items
+     * @param {number} itemCount - Total item count
+     */
+    setTotalItems: function(itemCount) {
+        this._options.totalItems = itemCount;
+    },
+
+    /**
+     * Set count of items per page
+     * @param {number} itemCount - Item count
+     */
+    setItemsPerPage: function(itemCount) {
+        this._options.itemsPerPage = itemCount;
+    }
 });
 
 snippet.CustomEvents.mixin(Pagination);

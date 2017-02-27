@@ -1,6 +1,6 @@
 /*!
  * tui-component-pagination.js
- * @version 2.0.0
+ * @version 2.1.0
  * @author NHNEnt FE Development Team <dl_javascript@nhnent.com>
  * @license MIT
  */
@@ -40,7 +40,7 @@
 /******/ 	__webpack_require__.c = installedModules;
 
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
+/******/ 	__webpack_require__.p = "dist";
 
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
@@ -51,17 +51,28 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+	__webpack_require__(1);
 	tui.util.defineNamespace('tui.component');
-	tui.component.Pagination = __webpack_require__(1);
+	tui.component.Pagination = __webpack_require__(6);
 
 
 /***/ },
 /* 1 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var View = __webpack_require__(2);
+	var View = __webpack_require__(7);
 
 	var defaultOption = {
 	    totalItems: 10,
@@ -93,12 +104,8 @@
 	 *         @param {string|function} [options.template.disabledMoveButton] HTML template
 	 *         @param {string|function} [options.template.moreButton] HTML template
 	 * @example
-	 * // Using id selector and no options
-	 * var pagination1 = new tui.component.Pagination('pagination1');
-	 *
-	 * // Using DOM element and options
-	 * var container = document.getElementById('pagination2');
-	 * var options = { // below default values
+	 * var container = document.getElementById('pagination');
+	 * var options = { // below default value of options
 	 *      totalItems: 10,
 	 *      itemsPerPage: 10,
 	 *      visiblePages: 10,
@@ -123,7 +130,7 @@
 	 *              '</a>'
 	 *      }
 	 * };
-	 * var pagination2 = new tui.component.Pagination(container, options);
+	 * var pagination = new tui.component.Pagination(container, options);
 	 */
 	var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
 	    init: function(container, options) {
@@ -416,8 +423,24 @@
 	         * });
 	         */
 	        this.fire('afterMove', {page: targetPage});
-	    }
+	    },
 	    /* eslint-enable complexity */
+
+	    /**
+	     * Set total count of items
+	     * @param {number} itemCount - Total item count
+	     */
+	    setTotalItems: function(itemCount) {
+	        this._options.totalItems = itemCount;
+	    },
+
+	    /**
+	     * Set count of items per page
+	     * @param {number} itemCount - Item count
+	     */
+	    setItemsPerPage: function(itemCount) {
+	        this._options.itemsPerPage = itemCount;
+	    }
 	});
 
 	snippet.CustomEvents.mixin(Pagination);
@@ -426,12 +449,12 @@
 
 
 /***/ },
-/* 2 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var util = __webpack_require__(3);
+	var util = __webpack_require__(8);
 
 	var snippet = tui.util;
 	var extend = snippet.extend;
@@ -857,7 +880,7 @@
 
 
 /***/ },
-/* 3 */
+/* 8 */
 /***/ function(module, exports) {
 
 	'use strict';
