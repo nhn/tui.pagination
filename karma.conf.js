@@ -162,17 +162,11 @@ module.exports = function(config) {
         basePath: './',
         frameworks: ['jasmine'],
         files: [
-            'bower_components/tui-code-snippet/code-snippet.js',
+            'bower_components/tui-code-snippet/dist/code-snippet.js',
             'bower_components/jquery/jquery.min.js',
             'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
             'node_modules/es5-shim/es5-shim.js',
-            'test/index.js',
-            {
-                pattern: 'test/fixtures/*.html',
-                watched: false,
-                included: false,
-                served: true
-            }
+            'test/index.js'
         ],
         preprocessors: {
             'test/index.js': ['webpack', 'sourcemap']

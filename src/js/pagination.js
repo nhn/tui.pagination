@@ -325,7 +325,7 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
           * @param {object} eventData - Custom event object
           *   @param {Number} page - Moved page
           * @example
-          * paganation.on('afterMove', function(eventData) {
+          * paganation.on('beforeMove', function(eventData) {
           *     var currentPage = eventData.page;
           *
           *     if (currentPage === 10) {
@@ -352,7 +352,6 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
          */
         this.fire('afterMove', {page: targetPage});
     },
-    /* eslint-enable complexity */
 
     /**
      * Set total count of items
