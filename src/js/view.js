@@ -1,8 +1,9 @@
 'use strict';
 
+var snippet = require('tui-code-snippet');
+
 var util = require('./util.js');
 
-var snippet = tui.util;
 var extend = snippet.extend;
 var forEach = snippet.forEach;
 var isString = snippet.isString;

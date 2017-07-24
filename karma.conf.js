@@ -82,74 +82,6 @@ function setConfig(defaultConfig, server) {
             outputDir: 'report',
             suite: ''
         };
-    } else if (server === 'bs') {
-        defaultConfig.browserStack = {
-            username: process.env.BROWSER_STACK_USERNAME,
-            accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
-            project: pkg.name
-        };
-
-        defaultConfig.customLaunchers = {
-            bs_ie8: {
-                base: 'BrowserStack',
-                os: 'Windows',
-                os_version: 'XP',
-                browser_version: '8.0',
-                browser: 'ie'
-            },
-            bs_ie9: {
-                base: 'BrowserStack',
-                os: 'Windows',
-                os_version: '7',
-                browser_version: '9.0',
-                browser: 'ie'
-            },
-            bs_ie10: {
-                base: 'BrowserStack',
-                os: 'Windows',
-                os_version: '7',
-                browser_version: '10.0',
-                browser: 'ie'
-            },
-            bs_ie11: {
-                base: 'BrowserStack',
-                os: 'Windows',
-                os_version: '7',
-                browser_version: '11.0',
-                browser: 'ie'
-            },
-            bs_edge: {
-                base: 'BrowserStack',
-                os: 'Windows',
-                os_version: '10',
-                browser: 'edge',
-                browser_version: 'latest'
-            },
-            bs_chrome_mac: {
-                base: 'BrowserStack',
-                os: 'OS X',
-                os_version: 'sierra',
-                browser: 'chrome',
-                browser_version: 'latest'
-            },
-            bs_firefox_mac: {
-                base: 'BrowserStack',
-                os: 'OS X',
-                os_version: 'sierra',
-                browser: 'firefox',
-                browser_version: 'latest'
-            }
-        };
-        defaultConfig.browsers = [
-            'bs_ie8',
-            'bs_ie9',
-            'bs_ie10',
-            'bs_ie11',
-            'bs_edge',
-            'bs_chrome_mac',
-            'bs_firefox_mac'
-        ];
-        defaultConfig.browserNoActivityTimeout = 30000;
     } else {
         defaultConfig.browsers = [
             'Chrome'
@@ -160,12 +92,8 @@ function setConfig(defaultConfig, server) {
 module.exports = function(config) {
     var defaultConfig = {
         basePath: './',
-        frameworks: ['jasmine'],
+        frameworks: ['jquery-1.8.3', 'jasmine', 'es5-shim'],
         files: [
-            'bower_components/tui-code-snippet/dist/code-snippet.js',
-            'bower_components/jquery/jquery.min.js',
-            'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
-            'node_modules/es5-shim/es5-shim.js',
             'test/index.js'
         ],
         preprocessors: {

@@ -1,6 +1,6 @@
 'use strict';
 
-var isFunction = tui.util.isFunction;
+var isFunction = require('tui-code-snippet').isFunction;
 
 var util = {
     /**

@@ -1,5 +1,7 @@
 'use strict';
 
+var snippet = require('tui-code-snippet');
+
 var View = require('./view.js');
 
 var defaultOption = {
@@ -11,7 +13,6 @@ var defaultOption = {
     firstItemClassName: 'tui-first-child',
     lastItemClassName: 'tui-last-child'
 };
-var snippet = tui.util;
 
 /**
  * Pagination class
@@ -32,6 +33,8 @@ var snippet = tui.util;
  *         @param {string|function} [options.template.disabledMoveButton] HTML template
  *         @param {string|function} [options.template.moreButton] HTML template
  * @example
+ * var Pagination = tui.Pagination; // or require('tui-pagination')
+ *
  * var container = document.getElementById('pagination');
  * var options = { // below default value of options
  *      totalItems: 10,
@@ -58,7 +61,7 @@ var snippet = tui.util;
  *              '</a>'
  *      }
  * };
- * var pagination = new tui.component.Pagination(container, options);
+ * var pagination = new Pagination(container, options);
  */
 var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
     init: function(container, options) {
