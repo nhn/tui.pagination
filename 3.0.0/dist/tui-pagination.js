@@ -1,10 +1,20 @@
 /*!
- * tui-component-pagination.js
- * @version 2.1.0
+ * tui-pagination.js
+ * @version 3.0.0
  * @author NHNEnt FE Development Team <dl_javascript@nhnent.com>
  * @license MIT
  */
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory(require("tui-code-snippet"));
+	else if(typeof define === 'function' && define.amd)
+		define(["tui-code-snippet"], factory);
+	else if(typeof exports === 'object')
+		exports["Pagination"] = factory(require("tui-code-snippet"));
+	else
+		root["tui"] = root["tui"] || {}, root["tui"]["Pagination"] = factory((root["tui"] && root["tui"]["util"]));
+})(this, function(__WEBPACK_EXTERNAL_MODULE_7__) {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
@@ -48,31 +58,39 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
+
+	/**
+	 * @fileoverview The entry file of Pagination components
+	 * @author NHN Ent. FE Development Team
+	 */
 
 	'use strict';
+
 	__webpack_require__(1);
-	tui.util.defineNamespace('tui.component');
-	tui.component.Pagination = __webpack_require__(6);
+
+	module.exports = __webpack_require__(6);
 
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
-/***/ },
+/***/ }),
 /* 2 */,
 /* 3 */,
 /* 4 */,
 /* 5 */,
 /* 6 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var View = __webpack_require__(7);
+	var snippet = __webpack_require__(7);
+
+	var View = __webpack_require__(8);
 
 	var defaultOption = {
 	    totalItems: 10,
@@ -83,7 +101,6 @@
 	    firstItemClassName: 'tui-first-child',
 	    lastItemClassName: 'tui-last-child'
 	};
-	var snippet = tui.util;
 
 	/**
 	 * Pagination class
@@ -104,6 +121,8 @@
 	 *         @param {string|function} [options.template.disabledMoveButton] HTML template
 	 *         @param {string|function} [options.template.moreButton] HTML template
 	 * @example
+	 * var Pagination = tui.Pagination; // or require('tui-pagination')
+	 *
 	 * var container = document.getElementById('pagination');
 	 * var options = { // below default value of options
 	 *      totalItems: 10,
@@ -130,7 +149,7 @@
 	 *              '</a>'
 	 *      }
 	 * };
-	 * var pagination = new tui.component.Pagination(container, options);
+	 * var pagination = new Pagination(container, options);
 	 */
 	var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
 	    init: function(container, options) {
@@ -397,7 +416,7 @@
 	          * @param {object} eventData - Custom event object
 	          *   @param {Number} page - Moved page
 	          * @example
-	          * paganation.on('afterMove', function(eventData) {
+	          * paganation.on('beforeMove', function(eventData) {
 	          *     var currentPage = eventData.page;
 	          *
 	          *     if (currentPage === 10) {
@@ -424,7 +443,6 @@
 	         */
 	        this.fire('afterMove', {page: targetPage});
 	    },
-	    /* eslint-enable complexity */
 
 	    /**
 	     * Set total count of items
@@ -448,15 +466,22 @@
 	module.exports = Pagination;
 
 
-/***/ },
+/***/ }),
 /* 7 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var util = __webpack_require__(8);
+	var snippet = __webpack_require__(7);
 
-	var snippet = tui.util;
+	var util = __webpack_require__(9);
+
 	var extend = snippet.extend;
 	var forEach = snippet.forEach;
 	var isString = snippet.isString;
@@ -879,13 +904,13 @@
 	module.exports = View;
 
 
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isFunction = tui.util.isFunction;
+	var isFunction = __webpack_require__(7).isFunction;
 
 	var util = {
 	    /**
@@ -1034,5 +1059,7 @@
 	module.exports = util;
 
 
-/***/ }
-/******/ ]);
+/***/ })
+/******/ ])
+});
+;
