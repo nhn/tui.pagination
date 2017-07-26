@@ -63,7 +63,7 @@ var instance = new tui.Pagination(...);
 ```
 
 ### Download
-* [Download bundle files from `dist` folder](https://github.com/nhnent/tui.pagination/tree/master/dist)
+* [Download bundle files from `dist` folder](https://github.com/nhnent/tui.pagination/tree/production/dist)
 * [Download all sources for each version](https://github.com/nhnent/tui.pagination/releases)
 
 ## LICENSE
