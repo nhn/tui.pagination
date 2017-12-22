@@ -1,6 +1,6 @@
 /*!
  * tui-pagination.js
- * @version 3.0.0
+ * @version 3.1.0
  * @author NHNEnt FE Development Team <dl_javascript@nhnent.com>
  * @license MIT
  */
@@ -187,15 +187,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    /**
-	     * Get current page
-	     * @returns {number} Current page
-	     * @private
-	     */
-	    _getCurrentPage: function() {
-	        return this._currentPage || this._options.page;
-	    },
-
-	    /**
 	     * Get last page number
 	     * @returns {number} Last page number
 	     * @private
@@ -235,7 +226,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    _getRelativePage: function(moveType) {
 	        var isPrevMove = (moveType === 'prev');
-	        var currentPage = this._getCurrentPage();
+	        var currentPage = this.getCurrentPage();
 
 	        return isPrevMove ? currentPage - 1 : currentPage + 1;
 	    },
@@ -247,7 +238,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @private
 	     */
 	    _getMorePageIndex: function(moveType) {
-	        var currentPageIndex = this._getPageIndex(this._getCurrentPage());
+	        var currentPageIndex = this._getPageIndex(this.getCurrentPage());
 	        var pageCount = this._options.visiblePages;
 	        var isPrevMove = (moveType === 'prev');
 	        var pageIndex;
@@ -411,20 +402,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    movePageTo: function(targetPage) {
 	        targetPage = this._convertToValidPage(targetPage);
 
-	         /**
-	          * @event Pagination#beforeMove
-	          * @param {object} eventData - Custom event object
-	          *   @param {Number} page - Moved page
-	          * @example
-	          * paganation.on('beforeMove', function(eventData) {
-	          *     var currentPage = eventData.page;
-	          *
-	          *     if (currentPage === 10) {
-	          *         return false;
-	          *         // return true;
-	          *     }
-	          * });
-	          */
+	        /**
+	         * @event Pagination#beforeMove
+	         * @param {object} eventData - Custom event object
+	         *   @param {Number} page - Moved page
+	         * @example
+	         * paganation.on('beforeMove', function(eventData) {
+	         *     var currentPage = eventData.page;
+	         *
+	         *     if (currentPage === 10) {
+	         *         return false;
+	         *         // return true;
+	         *     }
+	         * });
+	         */
 	        if (!this.invoke('beforeMove', {page: targetPage})) {
 	            return;
 	        }
@@ -458,6 +449,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    setItemsPerPage: function(itemCount) {
 	        this._options.itemsPerPage = itemCount;
+	    },
+
+	    /**
+	     * Get current page
+	     * @returns {number} Current page
+	     */
+	    getCurrentPage: function() {
+	        return this._currentPage || this._options.page;
 	    }
 	});
 
