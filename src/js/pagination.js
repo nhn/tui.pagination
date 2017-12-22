@@ -323,20 +323,20 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
     movePageTo: function(targetPage) {
         targetPage = this._convertToValidPage(targetPage);
 
-         /**
-          * @event Pagination#beforeMove
-          * @param {object} eventData - Custom event object
-          *   @param {Number} page - Moved page
-          * @example
-          * paganation.on('beforeMove', function(eventData) {
-          *     var currentPage = eventData.page;
-          *
-          *     if (currentPage === 10) {
-          *         return false;
-          *         // return true;
-          *     }
-          * });
-          */
+        /**
+         * @event Pagination#beforeMove
+         * @param {object} eventData - Custom event object
+         *   @param {Number} page - Moved page
+         * @example
+         * paganation.on('beforeMove', function(eventData) {
+         *     var currentPage = eventData.page;
+         *
+         *     if (currentPage === 10) {
+         *         return false;
+         *         // return true;
+         *     }
+         * });
+         */
         if (!this.invoke('beforeMove', {page: targetPage})) {
             return;
         }

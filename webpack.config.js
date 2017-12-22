@@ -1,10 +1,10 @@
 /**
- * webpack.config.js updated on 2017. 07
+ * Configs file for bundling
  * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
+
 'use strict';
 
-/* eslint-disable vars-on-top, no-process-env, require-jsdoc */
 var pkg = require('./package.json');
 var webpack = require('webpack');
 

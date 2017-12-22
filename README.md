@@ -1,5 +1,5 @@
 # Pagination
-Components to make page list and provide indicator of pages
+Component to make page list and provide indicator of pages
 
 ## Feature
 * Move first page, last page
@@ -13,13 +13,15 @@ Components to make page list and provide indicator of pages
 * **Examples** : [https://nhnent.github.io/tui.pagination/latest/tutorial-example01-basic.html](https://nhnent.github.io/tui.pagination/latest/tutorial-example01-basic.html)
 
 ## Dependency
-* tui-code-snippet ~1.2.5
+* [tui-code-snippet](https://github.com/nhnent/tui.code-snippet) >=1.2.5
 
 ## Test Environment
 ### PC
 * IE8~11
+* Edge
 * Chrome
 * Firefox
+* Safari
 
 ## Usage
 ### Use `npm`
@@ -33,7 +35,7 @@ $ npm install tui-pagination --save
 or want to install the each version:
 
 ```
-$ npm install tui-pagination@<tag> --save
+$ npm install tui-pagination@<version> --save
 ```
 
 To access as module format in your code:
