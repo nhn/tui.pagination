@@ -1,12 +1,21 @@
+/**
+ * Config file for testing
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
 
-var pkg = require('./package.json');
-var webpack = require('webpack');
+'use strict';
+
 var webdriverConfig = {
     hostname: 'fe.nhnent.com',
     port: 4444,
     remoteHost: true
 };
 
+/**
+ * Set config by environment
+ * @param {object} defaultConfig - default config
+ * @param {string} server - server type ('ne' or local)
+ */
 function setConfig(defaultConfig, server) {
     if (server === 'ne') {
         defaultConfig.customLaunchers = {
@@ -14,25 +23,25 @@ function setConfig(defaultConfig, server) {
                 base: 'WebDriver',
                 config: webdriverConfig,
                 browserName: 'internet explorer',
-                version: 8
+                version: '8'
             },
             'IE9': {
                 base: 'WebDriver',
                 config: webdriverConfig,
                 browserName: 'internet explorer',
-                version: 9
+                version: '9'
             },
             'IE10': {
                 base: 'WebDriver',
                 config: webdriverConfig,
                 browserName: 'internet explorer',
-                version: 10
+                version: '10'
             },
             'IE11': {
                 base: 'WebDriver',
                 config: webdriverConfig,
                 browserName: 'internet explorer',
-                version: 11
+                version: '11'
             },
             'Edge': {
                 base: 'WebDriver',
@@ -55,8 +64,10 @@ function setConfig(defaultConfig, server) {
             'IE9',
             'IE10',
             'IE11',
+            'Edge',
             'Chrome-WebDriver',
             'Firefox-WebDriver'
+            // 'Safari-WebDriver' // active only when safari test is needed
         ];
         defaultConfig.reporters.push('coverage');
         defaultConfig.reporters.push('junit');
@@ -79,12 +90,12 @@ function setConfig(defaultConfig, server) {
             ]
         };
         defaultConfig.junitReporter = {
-            outputDir: 'report',
+            outputDir: 'report/junit',
             suite: ''
         };
     } else {
         defaultConfig.browsers = [
-            'Chrome'
+            'ChromeHeadless'
         ];
     }
 }
@@ -106,6 +117,11 @@ module.exports = function(config) {
                 preLoaders: [
                     {
                         test: /\.js$/,
+                        exclude: /(test|bower_components|node_modules)/,
+                        loader: 'istanbul-instrumenter'
+                    },
+                    {
+                        test: /\.js$/,
                         include: /src/,
                         exclude: /(bower_components|node_modules)/,
                         loader: 'eslint-loader'
@@ -119,10 +135,7 @@ module.exports = function(config) {
                         loader: 'url-loader'
                     }
                 ]
-            },
-            plugins: [
-                new webpack.HotModuleReplacementPlugin()
-            ]
+            }
         },
         port: 9876,
         colors: true,
@@ -131,6 +144,7 @@ module.exports = function(config) {
         singleRun: true
     };
 
+    /* eslint-disable */
     setConfig(defaultConfig, process.env.KARMA_SERVER);
     config.set(defaultConfig);
 };
