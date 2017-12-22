@@ -99,15 +99,6 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
     },
 
     /**
-     * Get current page
-     * @returns {number} Current page
-     * @private
-     */
-    _getCurrentPage: function() {
-        return this._currentPage || this._options.page;
-    },
-
-    /**
      * Get last page number
      * @returns {number} Last page number
      * @private
@@ -147,7 +138,7 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      */
     _getRelativePage: function(moveType) {
         var isPrevMove = (moveType === 'prev');
-        var currentPage = this._getCurrentPage();
+        var currentPage = this.getCurrentPage();
 
         return isPrevMove ? currentPage - 1 : currentPage + 1;
     },
@@ -159,7 +150,7 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      * @private
      */
     _getMorePageIndex: function(moveType) {
-        var currentPageIndex = this._getPageIndex(this._getCurrentPage());
+        var currentPageIndex = this._getPageIndex(this.getCurrentPage());
         var pageCount = this._options.visiblePages;
         var isPrevMove = (moveType === 'prev');
         var pageIndex;
@@ -370,6 +361,14 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      */
     setItemsPerPage: function(itemCount) {
         this._options.itemsPerPage = itemCount;
+    },
+
+    /**
+     * Get current page
+     * @returns {number} Current page
+     */
+    getCurrentPage: function() {
+        return this._currentPage || this._options.page;
     }
 });
 
