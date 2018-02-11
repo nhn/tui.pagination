@@ -283,7 +283,7 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @param {object} viewData - View data to render pagination
      * @private
      */
-    _appendPages: function(viewData) {
+    _appendPages: function(viewData) { // eslint-disable-line complexity
         var template = this._template;
         var firstPage = viewData.leftPageNumber;
         var lastPage = viewData.rightPageNumber;
