@@ -3,6 +3,7 @@
 var snippet = require('tui-code-snippet');
 
 var View = require('./view.js');
+var util = require('./util.js');
 
 var defaultOption = {
     totalItems: 10,
@@ -11,7 +12,8 @@ var defaultOption = {
     page: 1,
     centerAlign: false,
     firstItemClassName: 'tui-first-child',
-    lastItemClassName: 'tui-last-child'
+    lastItemClassName: 'tui-last-child',
+    usageStatistics: true
 };
 
 /**
@@ -32,6 +34,8 @@ var defaultOption = {
  *         @param {string|function} [options.template.moveButton] HTML template
  *         @param {string|function} [options.template.disabledMoveButton] HTML template
  *         @param {string|function} [options.template.moreButton] HTML template
+ *     @param {boolean} [options.usageStatistics=true] Send the hostname to google analytics.
+ *         If you do not want to send the hostname, this option set to false.
  * @example
  * var Pagination = tui.Pagination; // or require('tui-pagination')
  *
@@ -87,6 +91,10 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
         this._view = new View(container, this._options, snippet.bind(this._onClickHandler, this));
 
         this._paginate();
+
+        if (this._options.usageStatistics) {
+            util.sendHostNameToGA();
+        }
     },
 
     /**
