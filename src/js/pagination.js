@@ -34,8 +34,8 @@ var defaultOption = {
  *         @param {string|function} [options.template.moveButton] HTML template
  *         @param {string|function} [options.template.disabledMoveButton] HTML template
  *         @param {string|function} [options.template.moreButton] HTML template
- *     @param {boolean} [options.usageStatistics=true] Send the host name to google analytics.
- *         If you do not want to send the host name, this option set to false.
+ *     @param {boolean} [options.usageStatistics=true] Send the hostname to google analytics.
+ *         If you do not want to send the hostname, this option set to false.
  * @example
  * var Pagination = tui.Pagination; // or require('tui-pagination')
  *
