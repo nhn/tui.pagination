@@ -1,5 +1,6 @@
 'use strict';
 
+var snippet = require('tui-code-snippet');
 var Pagination = require('../src/js/pagination.js');
 
 describe('Pagination', function() {
@@ -30,6 +31,25 @@ describe('Pagination', function() {
                 page: '<a href="#" class="page">{{page}}</a>',
                 currentPage: '<span class="page">{{page}}</span>'
             }
+        });
+    });
+
+    describe('Using "usageStatistics" option', function() {
+        beforeEach(function() {
+            spyOn(snippet, 'imagePing');
+        });
+
+        it('when the value set to true by default, the host name is send to server.', function() {
+            pagination1 = new Pagination($element1);
+            expect(snippet.imagePing).toHaveBeenCalled();
+        });
+
+        it('when the value set to false, the host name is not send to server.', function() {
+            pagination1 = new Pagination($element1, {
+                usageStatistics: false
+            });
+
+            expect(snippet.imagePing).not.toHaveBeenCalled();
         });
     });
 

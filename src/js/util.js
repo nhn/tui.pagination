@@ -1,6 +1,6 @@
 'use strict';
 
-var isFunction = require('tui-code-snippet').isFunction;
+var snippet = require('tui-code-snippet');
 
 var util = {
     /**
@@ -123,7 +123,7 @@ var util = {
     changeTemplateToElement: function(template, props) {
         var html;
 
-        if (isFunction(template)) {
+        if (snippet.isFunction(template)) {
             html = template(props);
         } else {
             html = util.replaceTemplate(template, props);
@@ -143,6 +143,22 @@ var util = {
         tempElement.innerHTML = template;
 
         return tempElement.children[0];
+    },
+
+    /**
+     * Send information to google analytics
+     */
+    sendHostNameToGA: function() {
+        var hostname = location.hostname;
+
+        snippet.imagePing('https://www.google-analytics.com/collect', {
+            v: 1,
+            t: 'event',
+            tid: 'UA-115377265-9',
+            cid: hostname,
+            dp: hostname,
+            dh: 'pagination'
+        });
     }
 };
 
