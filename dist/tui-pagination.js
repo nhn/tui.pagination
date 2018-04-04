@@ -1,6 +1,6 @@
 /*!
  * tui-pagination.js
- * @version 3.1.0
+ * @version 3.2.0
  * @author NHNEnt FE Development Team <dl_javascript@nhnent.com>
  * @license MIT
  */
@@ -91,6 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var snippet = __webpack_require__(7);
 
 	var View = __webpack_require__(8);
+	var util = __webpack_require__(9);
 
 	var defaultOption = {
 	    totalItems: 10,
@@ -99,7 +100,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    page: 1,
 	    centerAlign: false,
 	    firstItemClassName: 'tui-first-child',
-	    lastItemClassName: 'tui-last-child'
+	    lastItemClassName: 'tui-last-child',
+	    usageStatistics: true
 	};
 
 	/**
@@ -120,6 +122,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *         @param {string|function} [options.template.moveButton] HTML template
 	 *         @param {string|function} [options.template.disabledMoveButton] HTML template
 	 *         @param {string|function} [options.template.moreButton] HTML template
+	 *     @param {boolean} [options.usageStatistics=true] Send the hostname to google analytics.
+	 *         If you do not want to send the hostname, this option set to false.
 	 * @example
 	 * var Pagination = tui.Pagination; // or require('tui-pagination')
 	 *
@@ -175,6 +179,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._view = new View(container, this._options, snippet.bind(this._onClickHandler, this));
 
 	        this._paginate();
+
+	        if (this._options.usageStatistics) {
+	            util.sendHostNameToGA();
+	        }
 	    },
 
 	    /**
@@ -760,7 +768,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {object} viewData - View data to render pagination
 	     * @private
 	     */
-	    _appendPages: function(viewData) {
+	    _appendPages: function(viewData) { // eslint-disable-line complexity
 	        var template = this._template;
 	        var firstPage = viewData.leftPageNumber;
 	        var lastPage = viewData.rightPageNumber;
@@ -909,7 +917,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var isFunction = __webpack_require__(7).isFunction;
+	var snippet = __webpack_require__(7);
 
 	var util = {
 	    /**
@@ -1032,7 +1040,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    changeTemplateToElement: function(template, props) {
 	        var html;
 
-	        if (isFunction(template)) {
+	        if (snippet.isFunction(template)) {
 	            html = template(props);
 	        } else {
 	            html = util.replaceTemplate(template, props);
@@ -1052,6 +1060,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        tempElement.innerHTML = template;
 
 	        return tempElement.children[0];
+	    },
+
+	    /**
+	     * Send information to google analytics
+	     */
+	    sendHostNameToGA: function() {
+	        var hostname = location.hostname;
+
+	        snippet.imagePing('https://www.google-analytics.com/collect', {
+	            v: 1,
+	            t: 'event',
+	            tid: 'UA-115377265-9',
+	            cid: hostname,
+	            dp: hostname,
+	            dh: 'pagination'
+	        });
 	    }
 	};
 
