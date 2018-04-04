@@ -1,0 +1,11 @@
+{
+    "example01-basic": {
+        "title": "1. Basic"
+    },
+    "example02-custom-event": {
+        "title": "2. Using custom events"
+    },
+    "example03-using-template": {
+        "title": "3. Using template"
+    }
+}

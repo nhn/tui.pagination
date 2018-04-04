@@ -30,7 +30,7 @@
     <div class="title">
         <h1><a href="index.html" class="link">Pagination</a></h1>
         
-            <span class="version">v3.2.0</span>
+            <span class="version">v3.1.0</span>
         
     </div>
     <div class="search-container" id="search-container">
@@ -61,7 +61,7 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
 
-var snippet = require('tui-code-snippet');
+var isFunction = require('tui-code-snippet').isFunction;
 
 var util = {
     /**
@@ -184,7 +184,7 @@ var util = {
     changeTemplateToElement: function(template, props) {
         var html;
 
-        if (snippet.isFunction(template)) {
+        if (isFunction(template)) {
             html = template(props);
         } else {
             html = util.replaceTemplate(template, props);
@@ -204,22 +204,6 @@ var util = {
         tempElement.innerHTML = template;
 
         return tempElement.children[0];
-    },
-
-    /**
-     * Send information to google analytics
-     */
-    sendHostNameToGA: function() {
-        var hostname = location.hostname;
-
-        snippet.imagePing('https://www.google-analytics.com/collect', {
-            v: 1,
-            t: 'event',
-            tid: 'UA-115377265-9',
-            cid: hostname,
-            dp: hostname,
-            dh: 'pagination'
-        });
     }
 };
 

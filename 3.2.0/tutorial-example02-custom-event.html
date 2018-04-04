@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Tutorial: 1. Basic | Pagination</title>
+    <title>Tutorial: 2. Using custom events | Pagination</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -28,7 +28,7 @@
     <div class="title">
         <h1><a href="index.html" class="link">Pagination</a></h1>
         
-            <span class="version">v3.2.0</span>
+            <span class="version">v3.1.0</span>
         
     </div>
     <div class="search-container" id="search-container">
@@ -56,7 +56,7 @@
     <header>
         
 
-        <h2>1. Basic</h2>
+        <h2>2. Using custom events</h2>
     </header>
 
     
@@ -75,29 +75,24 @@
         </ul>
         <article>
             
-            <iframe id="example-result" width="100%" height="800" frameborder="0" src=tutorials/example01-basic.html></iframe>
+            <iframe id="example-result" width="100%" height="800" frameborder="0" src=tutorials/example02-custom-event.html></iframe>
             <div id="example-js" class="hidden"><pre class="prettyprint source">
 
-        var pagination1 = new tui.Pagination('pagination1', {
-            totalItems: 500,
-            itemsPerPage: 10,
-            visiblePages: 5
+        var pagination = new tui.Pagination('pagination', {
+            totalItems: 500
         });
 
-        var pagination2 = new tui.Pagination(document.getElementById('pagination2'), {
-            totalItems: 500,
-            itemsPerPage: 10,
-            visiblePages: 5,
-            centerAlign: true
+        pagination.on('beforeMove', function(eventData) {
+            return confirm('Go to page ' + eventData.page + '?');
+        });
+
+        pagination.on('afterMove', function(eventData) {
+            alert('The current page is ' + eventData.page);
         });
 
     </pre></div>
             <div id="example-html" class="hidden"><pre class="prettyprint source">
-        &lt;h3>Default&lt;/h3>
-        &lt;div id="pagination1" class="tui-pagination">&lt;/div>
-
-        &lt;h3>Center the current page&lt;/h3>
-        &lt;div id="pagination2" class="tui-pagination">&lt;/div>
+        &lt;div id="pagination" class="tui-pagination">&lt;/div>
     </pre></div>
         </article>
     
