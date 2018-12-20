@@ -150,7 +150,7 @@ var Pagination = require('tui-pagination'); /* CommonJS */
 ```
 
 ``` javascript
-import {Pagination} from 'tui-pagination'; /* ES6 */
+import Pagination from 'tui-pagination'; /* ES6 */
 ```
 
 You can create an instance with [options](https://nhnent.github.io/tui.pagination/latest/Pagination.html) and call various APIs after creating an instance.
