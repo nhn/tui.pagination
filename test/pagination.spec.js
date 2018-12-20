@@ -36,12 +36,12 @@ describe('Pagination', function() {
 
     describe('Using "usageStatistics" option', function() {
         beforeEach(function() {
-            spyOn(snippet, 'imagePing');
+            spyOn(snippet, 'sendHostname');
         });
 
         it('when the value set to true by default, the host name is send to server.', function() {
             pagination1 = new Pagination($element1);
-            expect(snippet.imagePing).toHaveBeenCalled();
+            expect(snippet.sendHostname).toHaveBeenCalled();
         });
 
         it('when the value set to false, the host name is not send to server.', function() {
@@ -49,7 +49,7 @@ describe('Pagination', function() {
                 usageStatistics: false
             });
 
-            expect(snippet.imagePing).not.toHaveBeenCalled();
+            expect(snippet.sendHostname).not.toHaveBeenCalled();
         });
     });
 
