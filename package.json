@@ -1,6 +1,6 @@
 {
   "name": "tui-pagination",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "TOAST UI Components: Pagination",
   "main": "dist/tui-pagination",
   "scripts": {
@@ -56,6 +56,6 @@
     "webpack-dev-server": "^1.11.0"
   },
   "dependencies": {
-    "tui-code-snippet": "^1.3.0"
+    "tui-code-snippet": "^1.5.0"
   }
 }

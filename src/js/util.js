@@ -149,16 +149,7 @@ var util = {
      * Send information to google analytics
      */
     sendHostNameToGA: function() {
-        var hostname = location.hostname;
-
-        snippet.imagePing('https://www.google-analytics.com/collect', {
-            v: 1,
-            t: 'event',
-            tid: 'UA-115377265-9',
-            cid: hostname,
-            dp: hostname,
-            dh: 'pagination'
-        });
+        snippet.sendHostname('pagination', 'UA-129987462-1');
     }
 };
 
