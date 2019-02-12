@@ -14,19 +14,17 @@
     <script type="text/javascript" src="https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.min.js"></script>
     <script type="text/javascript" src="../dist/tui-pagination.js"></script>
     <script class="code-js">
+    var pagination = new tui.Pagination('pagination', {
+        totalItems: 500
+    });
 
-        var pagination = new tui.Pagination('pagination', {
-            totalItems: 500
-        });
+    pagination.on('beforeMove', function(eventData) {
+        return confirm('Go to page ' + eventData.page + '?');
+    });
 
-        pagination.on('beforeMove', function(eventData) {
-            return confirm('Go to page ' + eventData.page + '?');
-        });
-
-        pagination.on('afterMove', function(eventData) {
-            alert('The current page is ' + eventData.page);
-        });
-
+    pagination.on('afterMove', function(eventData) {
+        alert('The current page is ' + eventData.page);
+    });
     </script>
 </body>
 </html>

@@ -21,20 +21,18 @@
     <script type="text/javascript" src="https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.min.js"></script>
     <script type="text/javascript" src="../dist/tui-pagination.js"></script>
     <script class="code-js">
+    var pagination1 = new tui.Pagination('pagination1', {
+        totalItems: 500,
+        itemsPerPage: 10,
+        visiblePages: 5
+    });
 
-        var pagination1 = new tui.Pagination('pagination1', {
-            totalItems: 500,
-            itemsPerPage: 10,
-            visiblePages: 5
-        });
-
-        var pagination2 = new tui.Pagination(document.getElementById('pagination2'), {
-            totalItems: 500,
-            itemsPerPage: 10,
-            visiblePages: 5,
-            centerAlign: true
-        });
-
+    var pagination2 = new tui.Pagination(document.getElementById('pagination2'), {
+        totalItems: 500,
+        itemsPerPage: 10,
+        visiblePages: 5,
+        centerAlign: true
+    });
     </script>
 </body>
 </html>
