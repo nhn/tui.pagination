@@ -1,6 +1,6 @@
 /*!
  * tui-pagination.js
- * @version 3.3.0
+ * @version 3.3.1
  * @author NHNEnt FE Development Team <dl_javascript@nhnent.com>
  * @license MIT
  */
@@ -412,11 +412,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * @event Pagination#beforeMove
-	         * @param {object} eventData - Custom event object
-	         *   @param {Number} page - Moved page
+	         * @type {object} evt - Custom event object
+	         * @property {number} page - Moved page
 	         * @example
-	         * paganation.on('beforeMove', function(eventData) {
-	         *     var currentPage = eventData.page;
+	         * paganation.on('beforeMove', function(evt) {
+	         *     var currentPage = evt.page;
 	         *
 	         *     if (currentPage === 10) {
 	         *         return false;
@@ -432,11 +432,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * @event Pagination#afterMove
-	         * @param {object} eventData - Custom event object
-	         *   @param {number} page - Moved page
+	         * @type {object} evt - Custom event object
+	         * @property {number} page - Moved page
 	         * @example
-	         * paganation.on('afterMove', function(eventData) {
-	         *      var currentPage = eventData.page;
+	         * paganation.on('afterMove', function(evt) {
+	         *      var currentPage = evt.page;
 	         *      console.log(currentPage);
 	         * });
 	         */
