@@ -324,11 +324,11 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
 
         /**
          * @event Pagination#beforeMove
-         * @param {object} eventData - Custom event object
-         *   @param {Number} page - Moved page
+         * @type {object} evt - Custom event object
+         * @property {number} page - Moved page
          * @example
-         * paganation.on('beforeMove', function(eventData) {
-         *     var currentPage = eventData.page;
+         * paganation.on('beforeMove', function(evt) {
+         *     var currentPage = evt.page;
          *
          *     if (currentPage === 10) {
          *         return false;
@@ -344,11 +344,11 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
 
         /**
          * @event Pagination#afterMove
-         * @param {object} eventData - Custom event object
-         *   @param {number} page - Moved page
+         * @type {object} evt - Custom event object
+         * @property {number} page - Moved page
          * @example
-         * paganation.on('afterMove', function(eventData) {
-         *      var currentPage = eventData.page;
+         * paganation.on('afterMove', function(evt) {
+         *      var currentPage = evt.page;
          *      console.log(currentPage);
          * });
          */
