@@ -3,6 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>1. Basic</title>
+    <link rel="stylesheet" type="text/css" href="./css/tui-example-style.css" />
     <link rel="stylesheet" type="text/css" href="../dist/tui-pagination.css" />
     <style type="text/css">
         h3{text-align: center;margin-top:50px;}
@@ -20,20 +21,18 @@
     <script type="text/javascript" src="https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.min.js"></script>
     <script type="text/javascript" src="../dist/tui-pagination.js"></script>
     <script class="code-js">
+    var pagination1 = new tui.Pagination('pagination1', {
+        totalItems: 500,
+        itemsPerPage: 10,
+        visiblePages: 5
+    });
 
-        var pagination1 = new tui.Pagination('pagination1', {
-            totalItems: 500,
-            itemsPerPage: 10,
-            visiblePages: 5
-        });
-
-        var pagination2 = new tui.Pagination(document.getElementById('pagination2'), {
-            totalItems: 500,
-            itemsPerPage: 10,
-            visiblePages: 5,
-            centerAlign: true
-        });
-
+    var pagination2 = new tui.Pagination(document.getElementById('pagination2'), {
+        totalItems: 500,
+        itemsPerPage: 10,
+        visiblePages: 5,
+        centerAlign: true
+    });
     </script>
 </body>
 </html>
