@@ -1,7 +1,7 @@
 /*!
  * tui-pagination.js
- * @version 3.3.1
- * @author NHNEnt FE Development Team <dl_javascript@nhnent.com>
+ * @version 3.3.2
+ * @author NHN FE Development Team <dl_javascript@nhn.com>
  * @license MIT
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -62,7 +62,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/**
 	 * @fileoverview The entry file of Pagination components
-	 * @author NHN Ent. FE Development Team
+	 * @author NHN. FE Development Lab <dl_javascript@nhn.com>
 	 */
 
 	'use strict';
