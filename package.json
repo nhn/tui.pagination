@@ -24,9 +24,10 @@
     "tui",
     "component",
     "pagination",
-    "tui-pagination"
+    "tui-pagination",
+    "nhn"
   ],
-  "author": "NHNEnt FE Development Team <dl_javascript@nhnent.com>",
+  "author": "NHN FE Development Team <dl_javascript@nhn.com>",
   "license": "MIT",
   "devDependencies": {
     "css-loader": "^0.26.1",

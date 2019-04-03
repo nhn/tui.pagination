@@ -1,7 +1,7 @@
 {
     "name": "tui-pagination",
     "authors": [
-        "NHN Ent. FE Dev team.<dl_javascript@nhnent.com>"
+        "NHN. FE Dev Lab.<dl_javascript@nhn.com>"
     ],
     "main": [
         "dist/tui-pagination.js",
