@@ -171,4 +171,4 @@ pagination.on('afterMove', function(evt) {
 });
 ```
 
-For more information, see the [API](https://nhnent.github.io/tui.pagination/latest/).
+For more information, see the [API](https://nhn.github.io/tui.pagination/latest/).

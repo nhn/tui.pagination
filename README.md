@@ -1,11 +1,11 @@
 # TOAST UI Component : Pagination
 > Component that automatically calculate and generate page numbers.
 
-[![GitHub release](https://img.shields.io/github/release/nhnent/tui.pagination.svg)](https://github.com/nhnent/tui.pagination/releases/latest)
+[![GitHub release](https://img.shields.io/github/release/nhn/tui.pagination.svg)](https://github.com/nhn/tui.pagination/releases/latest)
 [![npm](https://img.shields.io/npm/v/tui-pagination.svg)](https://www.npmjs.com/package/tui-pagination)
-[![GitHub license](https://img.shields.io/github/license/nhnent/tui.pagination.svg)](https://github.com/nhnent/tui.pagination/blob/production/LICENSE)
-[![PRs welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg)](https://github.com/nhnent/tui.project-name/labels/help%20wanted)
-[![code with hearth by NHN](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-NHN-ff1414.svg)](https://github.com/nhnent)
+[![GitHub license](https://img.shields.io/github/license/nhn/tui.pagination.svg)](https://github.com/nhn/tui.pagination/blob/production/LICENSE)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg)](https://github.com/nhn/tui.project-name/labels/help%20wanted)
+[![code with hearth by NHN](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-NHN-ff1414.svg)](https://github.com/nhn)
 
 
 ## 🚩 Table of Contents
@@ -44,7 +44,7 @@ var options = {
 var instance = new Pagination(container, options);
 ```
 
-Or, include [`tui-code-snippet`](https://github.com/nhnent/tui.code-snippet)(**v1.5.0** or **later**) and then immediately write the options as follows:
+Or, include [`tui-code-snippet`](https://github.com/nhn/tui.code-snippet)(**v1.5.0** or **later**) and then immediately write the options as follows:
 
 ```js
 tui.usageStatistics = false;
@@ -65,7 +65,7 @@ tui.usageStatistics = false;
 
 
 ## 🐾 Examples
-* [Basic](https://nhnent.github.io/tui.pagination/latest/tutorial-example01-basic) : Example of using default options.
+* [Basic](https://nhn.github.io/tui.pagination/latest/tutorial-example01-basic) : Example of using default options.
 
 More examples can be found on the left sidebar of each example page, and have fun with it.
 
@@ -120,8 +120,8 @@ tui.pagination/
 ```
 
 ### Download Source Files
-* [Download bundle files](https://github.com/nhnent/tui.pagination/tree/production/dist)
-* [Download all sources for each version](https://github.com/nhnent/tui.pagination/releases)
+* [Download bundle files](https://github.com/nhn/tui.pagination/tree/production/dist)
+* [Download all sources for each version](https://github.com/nhn/tui.pagination/releases)
 
 
 ## 🔨 Usage
@@ -153,7 +153,7 @@ var Pagination = require('tui-pagination'); /* CommonJS */
 import Pagination from 'tui-pagination'; /* ES6 */
 ```
 
-You can create an instance with [options](https://nhnent.github.io/tui.pagination/latest/Pagination) and call various APIs after creating an instance.
+You can create an instance with [options](https://nhn.github.io/tui.pagination/latest/Pagination) and call various APIs after creating an instance.
 
 ``` javascript
 var container = document.getElementById('tui-pagination-container');
@@ -162,7 +162,7 @@ var instance = new Pagination(container, { ... });
 instance.getCurrentPage();
 ```
 
-For more information about the API, please see [here](https://nhnent.github.io/tui.pagination/latest/Pagination).
+For more information about the API, please see [here](https://nhn.github.io/tui.pagination/latest/Pagination).
 
 
 ## 🔧 Pull Request Steps
@@ -211,24 +211,24 @@ For more information on PR's step, please see links of Contributing section.
 
 
 ## 📙 Documents
-* [Getting Started](https://github.com/nhnent/tui.pagination/blob/production/docs/getting-started.md)
-* [Tutorials](https://github.com/nhnent/tui.pagination/tree/production/docs)
-* [APIs](https://nhnent.github.io/tui.pagination/latest)
+* [Getting Started](https://github.com/nhn/tui.pagination/blob/production/docs/getting-started.md)
+* [Tutorials](https://github.com/nhn/tui.pagination/tree/production/docs)
+* [APIs](https://nhn.github.io/tui.pagination/latest)
 
-You can also see the older versions of API page on the [releases page](https://github.com/nhnent/tui.pagination/releases).
+You can also see the older versions of API page on the [releases page](https://github.com/nhn/tui.pagination/releases).
 
 
 ## 💬 Contributing
-* [Code of Conduct](https://github.com/nhnent/tui.pagination/blob/production/CODE_OF_CONDUCT.md)
-* [Contributing guideline](https://github.com/nhnent/tui.pagination/blob/production/CONTRIBUTING.md)
-* [Issue guideline](https://github.com/nhnent/tui.pagination/blob/production/docs/ISSUE_TEMPLATE.md)
-* [Commit convention](https://github.com/nhnent/tui.pagination/blob/production/docs/COMMIT_MESSAGE_CONVENTION.md)
+* [Code of Conduct](https://github.com/nhn/tui.pagination/blob/production/CODE_OF_CONDUCT.md)
+* [Contributing guideline](https://github.com/nhn/tui.pagination/blob/production/CONTRIBUTING.md)
+* [Issue guideline](https://github.com/nhn/tui.pagination/blob/production/docs/ISSUE_TEMPLATE.md)
+* [Commit convention](https://github.com/nhn/tui.pagination/blob/production/docs/COMMIT_MESSAGE_CONVENTION.md)
 
 
 ## 🔩 Dependency
-* [tui-code-snippet](https://github.com/nhnent/tui.code-snippet) >=1.5.0
+* [tui-code-snippet](https://github.com/nhn/tui.code-snippet) >=1.5.0
 
 
 ## 📜 License
 
-This software is licensed under the [MIT](https://github.com/nhnent/tui.pagination/blob/production/LICENSE) © [NHN](https://github.com/nhnent).
+This software is licensed under the [MIT](https://github.com/nhn/tui.pagination/blob/production/LICENSE) © [NHN](https://github.com/nhn).
