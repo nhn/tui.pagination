@@ -1,6 +1,6 @@
 {
   "name": "tui-pagination",
-  "version": "3.3.1",
+  "version": "3.3.2",
   "description": "TOAST UI Components: Pagination",
   "main": "dist/tui-pagination",
   "files": [
@@ -12,7 +12,8 @@
     "bundle": "webpack && webpack -p",
     "serve": "webpack-dev-server --inline --hot -d",
     "serve:ie8": "webpack-dev-server -d",
-    "doc": "tuidoc && tuidoc --serv"
+    "doc:serve": "tuidoc --serv",
+    "doc": "tuidoc"
   },
   "repository": {
     "type": "git",
