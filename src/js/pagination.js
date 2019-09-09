@@ -6,14 +6,14 @@ var View = require('./view.js');
 var util = require('./util.js');
 
 var defaultOption = {
-    totalItems: 10,
-    itemsPerPage: 10,
-    visiblePages: 10,
-    page: 1,
-    centerAlign: false,
-    firstItemClassName: 'tui-first-child',
-    lastItemClassName: 'tui-last-child',
-    usageStatistics: true
+  totalItems: 10,
+  itemsPerPage: 10,
+  visiblePages: 10,
+  page: 1,
+  centerAlign: false,
+  firstItemClassName: 'tui-first-child',
+  lastItemClassName: 'tui-last-child',
+  usageStatistics: true
 };
 
 /**
@@ -67,34 +67,35 @@ var defaultOption = {
  * };
  * var pagination = new Pagination(container, options);
  */
-var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
+var Pagination = snippet.defineClass(
+  /** @lends Pagination.prototype */ {
     init: function(container, options) {
-        /**
-         * Option object
-         * @type {object}
-         * @private
-         */
-        this._options = snippet.extend({}, defaultOption, options);
+      /**
+       * Option object
+       * @type {object}
+       * @private
+       */
+      this._options = snippet.extend({}, defaultOption, options);
 
-        /**
-         * Current page number
-         * @type {number}
-         * @private
-         */
-        this._currentPage = 0;
+      /**
+       * Current page number
+       * @type {number}
+       * @private
+       */
+      this._currentPage = 0;
 
-        /**
-         * View instance
-         * @type {View}
-         * @private
-         */
-        this._view = new View(container, this._options, snippet.bind(this._onClickHandler, this));
+      /**
+       * View instance
+       * @type {View}
+       * @private
+       */
+      this._view = new View(container, this._options, snippet.bind(this._onClickHandler, this));
 
-        this._paginate();
+      this._paginate();
 
-        if (this._options.usageStatistics) {
-            util.sendHostNameToGA();
-        }
+      if (this._options.usageStatistics) {
+        util.sendHostNameToGA();
+      }
     },
 
     /**
@@ -103,7 +104,7 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      * @private
      */
     _setCurrentPage: function(page) {
-        this._currentPage = page || this._options.page;
+      this._currentPage = page || this._options.page;
     },
 
     /**
@@ -112,9 +113,9 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      * @private
      */
     _getLastPage: function() {
-        var lastPage = Math.ceil(this._options.totalItems / this._options.itemsPerPage);
+      var lastPage = Math.ceil(this._options.totalItems / this._options.itemsPerPage);
 
-        return (!lastPage) ? 1 : lastPage;
+      return !lastPage ? 1 : lastPage;
     },
 
     /**
@@ -124,18 +125,18 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      * @private
      */
     _getPageIndex: function(pageNumber) {
-        var left, pageIndex;
+      var left, pageIndex;
 
-        if (this._options.centerAlign) {
-            left = Math.floor(this._options.visiblePages / 2);
-            pageIndex = pageNumber - left;
-            pageIndex = Math.max(pageIndex, 1);
-            pageIndex = Math.min(pageIndex, this._getLastPage() - this._options.visiblePages + 1);
+      if (this._options.centerAlign) {
+        left = Math.floor(this._options.visiblePages / 2);
+        pageIndex = pageNumber - left;
+        pageIndex = Math.max(pageIndex, 1);
+        pageIndex = Math.min(pageIndex, this._getLastPage() - this._options.visiblePages + 1);
 
-            return pageIndex;
-        }
+        return pageIndex;
+      }
 
-        return Math.ceil(pageNumber / this._options.visiblePages);
+      return Math.ceil(pageNumber / this._options.visiblePages);
     },
 
     /**
@@ -145,10 +146,10 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      * @private
      */
     _getRelativePage: function(moveType) {
-        var isPrevMove = (moveType === 'prev');
-        var currentPage = this.getCurrentPage();
+      var isPrevMove = moveType === 'prev';
+      var currentPage = this.getCurrentPage();
 
-        return isPrevMove ? currentPage - 1 : currentPage + 1;
+      return isPrevMove ? currentPage - 1 : currentPage + 1;
     },
 
     /**
@@ -158,18 +159,20 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      * @private
      */
     _getMorePageIndex: function(moveType) {
-        var currentPageIndex = this._getPageIndex(this.getCurrentPage());
-        var pageCount = this._options.visiblePages;
-        var isPrevMove = (moveType === 'prev');
-        var pageIndex;
+      var currentPageIndex = this._getPageIndex(this.getCurrentPage());
+      var pageCount = this._options.visiblePages;
+      var isPrevMove = moveType === 'prev';
+      var pageIndex;
 
-        if (this._options.centerAlign) {
-            pageIndex = isPrevMove ? currentPageIndex - 1 : currentPageIndex + pageCount;
-        } else {
-            pageIndex = isPrevMove ? (currentPageIndex - 1) * pageCount : (currentPageIndex * pageCount) + 1;
-        }
+      if (this._options.centerAlign) {
+        pageIndex = isPrevMove ? currentPageIndex - 1 : currentPageIndex + pageCount;
+      } else {
+        pageIndex = isPrevMove
+          ? (currentPageIndex - 1) * pageCount
+          : (currentPageIndex * pageCount) + 1;
+      }
 
-        return pageIndex;
+      return pageIndex;
     },
     /* eslint-enable complexity */
 
@@ -181,11 +184,11 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      * @private
      */
     _convertToValidPage: function(page) {
-        var lastPageNumber = this._getLastPage();
-        page = Math.max(page, 1);
-        page = Math.min(page, lastPageNumber);
+      var lastPageNumber = this._getLastPage();
+      page = Math.max(page, 1);
+      page = Math.min(page, lastPageNumber);
 
-        return page;
+      return page;
     },
 
     /**
@@ -194,9 +197,9 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      * @private
      */
     _paginate: function(page) {
-        var viewData = this._makeViewData(page || this._options.page);
-        this._setCurrentPage(page);
-        this._view.update(viewData);
+      var viewData = this._makeViewData(page || this._options.page);
+      this._setCurrentPage(page);
+      this._view.update(viewData);
     },
 
     /**
@@ -206,24 +209,24 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      * @private
      */
     _makeViewData: function(page) {
-        var viewData = {};
-        var lastPage = this._getLastPage();
-        var currentPageIndex = this._getPageIndex(page);
-        var lastPageListIndex = this._getPageIndex(lastPage);
-        var edges = this._getEdge(page);
+      var viewData = {};
+      var lastPage = this._getLastPage();
+      var currentPageIndex = this._getPageIndex(page);
+      var lastPageListIndex = this._getPageIndex(lastPage);
+      var edges = this._getEdge(page);
 
-        viewData.leftPageNumber = edges.left;
-        viewData.rightPageNumber = edges.right;
+      viewData.leftPageNumber = edges.left;
+      viewData.rightPageNumber = edges.right;
 
-        viewData.prevMore = (currentPageIndex > 1);
-        viewData.nextMore = (currentPageIndex < lastPageListIndex);
+      viewData.prevMore = currentPageIndex > 1;
+      viewData.nextMore = currentPageIndex < lastPageListIndex;
 
-        viewData.page = page;
-        viewData.currentPageIndex = page;
-        viewData.lastPage = lastPage;
-        viewData.lastPageListIndex = lastPage;
+      viewData.page = page;
+      viewData.currentPageIndex = page;
+      viewData.lastPage = lastPage;
+      viewData.lastPageListIndex = lastPage;
 
-        return viewData;
+      return viewData;
     },
 
     /**
@@ -233,30 +236,30 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      * @private
      */
     _getEdge: function(page) {
-        var leftPageNumber, rightPageNumber, left;
-        var lastPage = this._getLastPage();
-        var visiblePages = this._options.visiblePages;
-        var currentPageIndex = this._getPageIndex(page);
+      var leftPageNumber, rightPageNumber, left;
+      var lastPage = this._getLastPage();
+      var visiblePages = this._options.visiblePages;
+      var currentPageIndex = this._getPageIndex(page);
 
-        if (this._options.centerAlign) {
-            left = Math.floor(visiblePages / 2);
-            leftPageNumber = Math.max(page - left, 1);
-            rightPageNumber = leftPageNumber + visiblePages - 1;
+      if (this._options.centerAlign) {
+        left = Math.floor(visiblePages / 2);
+        leftPageNumber = Math.max(page - left, 1);
+        rightPageNumber = leftPageNumber + visiblePages - 1;
 
-            if (rightPageNumber > lastPage) {
-                leftPageNumber = Math.max(lastPage - visiblePages + 1, 1);
-                rightPageNumber = lastPage;
-            }
-        } else {
-            leftPageNumber = ((currentPageIndex - 1) * visiblePages) + 1;
-            rightPageNumber = (currentPageIndex) * visiblePages;
-            rightPageNumber = Math.min(rightPageNumber, lastPage);
+        if (rightPageNumber > lastPage) {
+          leftPageNumber = Math.max(lastPage - visiblePages + 1, 1);
+          rightPageNumber = lastPage;
         }
+      } else {
+        leftPageNumber = ((currentPageIndex - 1) * visiblePages) + 1;
+        rightPageNumber = currentPageIndex * visiblePages;
+        rightPageNumber = Math.min(rightPageNumber, lastPage);
+      }
 
-        return {
-            left: leftPageNumber,
-            right: rightPageNumber
-        };
+      return {
+        left: leftPageNumber,
+        right: rightPageNumber
+      };
     },
 
     /**
@@ -267,32 +270,32 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      */
     /* eslint-disable complexity */
     _onClickHandler: function(buttonType, page) {
-        switch (buttonType) {
-            case 'first':
-                page = 1;
-                break;
-            case 'prev':
-                page = this._getRelativePage('prev');
-                break;
-            case 'next':
-                page = this._getRelativePage('next');
-                break;
-            case 'prevMore':
-                page = this._getMorePageIndex('prev');
-                break;
-            case 'nextMore':
-                page = this._getMorePageIndex('next');
-                break;
-            case 'last':
-                page = this._getLastPage();
-                break;
-            default:
-                if (!page) {
-                    return;
-                }
-        }
+      switch (buttonType) {
+        case 'first':
+          page = 1;
+          break;
+        case 'prev':
+          page = this._getRelativePage('prev');
+          break;
+        case 'next':
+          page = this._getRelativePage('next');
+          break;
+        case 'prevMore':
+          page = this._getMorePageIndex('prev');
+          break;
+        case 'nextMore':
+          page = this._getMorePageIndex('next');
+          break;
+        case 'last':
+          page = this._getLastPage();
+          break;
+        default:
+          if (!page) {
+            return;
+          }
+      }
 
-        this.movePageTo(page);
+      this.movePageTo(page);
     },
     /* eslint-enable complexity */
 
@@ -304,12 +307,12 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      * pagination.reset(100);
      */
     reset: function(totalItems) {
-        if (snippet.isUndefined(totalItems)) {
-            totalItems = this._options.totalItems;
-        }
+      if (snippet.isUndefined(totalItems)) {
+        totalItems = this._options.totalItems;
+      }
 
-        this._options.totalItems = totalItems;
-        this._paginate(1);
+      this._options.totalItems = totalItems;
+      this._paginate(1);
     },
 
     /**
@@ -320,39 +323,39 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      * pagination.movePageTo(10);
      */
     movePageTo: function(targetPage) {
-        targetPage = this._convertToValidPage(targetPage);
+      targetPage = this._convertToValidPage(targetPage);
 
-        /**
-         * @event Pagination#beforeMove
-         * @type {object} evt - Custom event object
-         * @property {number} page - Moved page
-         * @example
-         * paganation.on('beforeMove', function(evt) {
-         *     var currentPage = evt.page;
-         *
-         *     if (currentPage === 10) {
-         *         return false;
-         *         // return true;
-         *     }
-         * });
-         */
-        if (!this.invoke('beforeMove', {page: targetPage})) {
-            return;
-        }
+      /**
+       * @event Pagination#beforeMove
+       * @type {object} evt - Custom event object
+       * @property {number} page - Moved page
+       * @example
+       * paganation.on('beforeMove', function(evt) {
+       *     var currentPage = evt.page;
+       *
+       *     if (currentPage === 10) {
+       *         return false;
+       *         // return true;
+       *     }
+       * });
+       */
+      if (!this.invoke('beforeMove', {page: targetPage})) {
+        return;
+      }
 
-        this._paginate(targetPage);
+      this._paginate(targetPage);
 
-        /**
-         * @event Pagination#afterMove
-         * @type {object} evt - Custom event object
-         * @property {number} page - Moved page
-         * @example
-         * paganation.on('afterMove', function(evt) {
-         *      var currentPage = evt.page;
-         *      console.log(currentPage);
-         * });
-         */
-        this.fire('afterMove', {page: targetPage});
+      /**
+       * @event Pagination#afterMove
+       * @type {object} evt - Custom event object
+       * @property {number} page - Moved page
+       * @example
+       * paganation.on('afterMove', function(evt) {
+       *      var currentPage = evt.page;
+       *      console.log(currentPage);
+       * });
+       */
+      this.fire('afterMove', {page: targetPage});
     },
 
     /**
@@ -360,7 +363,7 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      * @param {number} itemCount - Total item count
      */
     setTotalItems: function(itemCount) {
-        this._options.totalItems = itemCount;
+      this._options.totalItems = itemCount;
     },
 
     /**
@@ -368,7 +371,7 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      * @param {number} itemCount - Item count
      */
     setItemsPerPage: function(itemCount) {
-        this._options.itemsPerPage = itemCount;
+      this._options.itemsPerPage = itemCount;
     },
 
     /**
@@ -376,9 +379,10 @@ var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
      * @returns {number} Current page
      */
     getCurrentPage: function() {
-        return this._currentPage || this._options.page;
+      return this._currentPage || this._options.page;
     }
-});
+  }
+);
 
 snippet.CustomEvents.mixin(Pagination);
 

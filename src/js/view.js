@@ -11,20 +11,20 @@ var bind = snippet.bind;
 var isHTMLNode = snippet.isHTMLNode;
 
 var defaultTemplate = {
-    page: '<a href="#" class="tui-page-btn">{{page}}</a>',
-    currentPage: '<strong class="tui-page-btn tui-is-selected">{{page}}</strong>',
-    moveButton:
-        '<a href="#" class="tui-page-btn tui-{{type}}">' +
-            '<span class="tui-ico-{{type}}">{{type}}</span>' +
-        '</a>',
-    disabledMoveButton:
-        '<span class="tui-page-btn tui-is-disabled tui-{{type}}">' +
-            '<span class="tui-ico-{{type}}">{{type}}</span>' +
-        '</span>',
-    moreButton:
-        '<a href="#" class="tui-page-btn tui-{{type}}-is-ellip">' +
-            '<span class="tui-ico-ellip">...</span>' +
-        '</a>'
+  page: '<a href="#" class="tui-page-btn">{{page}}</a>',
+  currentPage: '<strong class="tui-page-btn tui-is-selected">{{page}}</strong>',
+  moveButton:
+    '<a href="#" class="tui-page-btn tui-{{type}}">' +
+    '<span class="tui-ico-{{type}}">{{type}}</span>' +
+    '</a>',
+  disabledMoveButton:
+    '<span class="tui-page-btn tui-is-disabled tui-{{type}}">' +
+    '<span class="tui-ico-{{type}}">{{type}}</span>' +
+    '</span>',
+  moreButton:
+    '<a href="#" class="tui-page-btn tui-{{type}}-is-ellip">' +
+    '<span class="tui-ico-ellip">...</span>' +
+    '</a>'
 };
 var moveButtons = ['first', 'prev', 'next', 'last'];
 var moreButtons = ['prev', 'next'];
@@ -52,56 +52,57 @@ var INVALID_CONTAINER_ELEMENT = 'The container element is invalid.';
  * @param {function} handler - Event handler
  * @ignore
  */
-var View = snippet.defineClass(/** @lends View.prototype */{
+var View = snippet.defineClass(
+  /** @lends View.prototype */ {
     init: function(container, options, handler) {
-        /**
-         * Root element
-         * @type {HTMLElement}
-         * @private
-         */
-        this._containerElement = null;
+      /**
+       * Root element
+       * @type {HTMLElement}
+       * @private
+       */
+      this._containerElement = null;
 
-        /**
-         * First item's class name
-         * @type {string}
-         * @private
-         */
-        this._firstItemClassName = options.firstItemClassName;
+      /**
+       * First item's class name
+       * @type {string}
+       * @private
+       */
+      this._firstItemClassName = options.firstItemClassName;
 
-        /**
-         * Last item's class name
-         * @type {string}
-         * @private
-         */
-        this._lastItemClassName = options.lastItemClassName;
+      /**
+       * Last item's class name
+       * @type {string}
+       * @private
+       */
+      this._lastItemClassName = options.lastItemClassName;
 
-        /**
-         * Default template
-         * @type {object.<string, string|function>}
-         * @private
-         */
-        this._template = extend({}, defaultTemplate, options.template);
+      /**
+       * Default template
+       * @type {object.<string, string|function>}
+       * @private
+       */
+      this._template = extend({}, defaultTemplate, options.template);
 
-        /**
-         * Map of buttons
-         * @type {object.<string, HTMLElement>}
-         * @private
-         */
-        this._buttons = {};
+      /**
+       * Map of buttons
+       * @type {object.<string, HTMLElement>}
+       * @private
+       */
+      this._buttons = {};
 
-        /**
-         * Enabled page elements list
-         * @type {array}
-         * @private
-         */
+      /**
+       * Enabled page elements list
+       * @type {array}
+       * @private
+       */
 
-        this._enabledPageElements = [];
+      this._enabledPageElements = [];
 
-        this._setRootElement(container);
-        this._setMoveButtons();
-        this._setDisabledMoveButtons();
-        this._setMoreButtons();
-        this._attachClickEvent(handler);
+      this._setRootElement(container);
+      this._setMoveButtons();
+      this._setDisabledMoveButtons();
+      this._setMoreButtons();
+      this._attachClickEvent(handler);
     },
     /* eslint-enable complexity */
 
@@ -111,17 +112,17 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @private
      */
     _setRootElement: function(container) {
-        if (isString(container)) {
-            container = document.getElementById(container);
-        } else if (container.jquery) {
-            container = container[0];
-        }
+      if (isString(container)) {
+        container = document.getElementById(container);
+      } else if (container.jquery) {
+        container = container[0];
+      }
 
-        if (!isHTMLNode(container)) {
-            throw new Error(INVALID_CONTAINER_ELEMENT);
-        }
+      if (!isHTMLNode(container)) {
+        throw new Error(INVALID_CONTAINER_ELEMENT);
+      }
 
-        this._containerElement = container;
+      this._containerElement = container;
     },
 
     /**
@@ -129,13 +130,17 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @private
      */
     _setMoveButtons: function() {
-        var template = this._template.moveButton;
+      var template = this._template.moveButton;
 
-        forEach(moveButtons, function(type) {
-            this._buttons[type] = util.changeTemplateToElement(template, {
-                type: type
-            });
-        }, this);
+      forEach(
+        moveButtons,
+        function(type) {
+          this._buttons[type] = util.changeTemplateToElement(template, {
+            type: type
+          });
+        },
+        this
+      );
     },
 
     /**
@@ -143,15 +148,19 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @private
      */
     _setDisabledMoveButtons: function() {
-        var template = this._template.disabledMoveButton;
-        var key;
+      var template = this._template.disabledMoveButton;
+      var key;
 
-        forEach(moveButtons, function(type) {
-            key = 'disabled' + util.capitalizeFirstLetter(type);
-            this._buttons[key] = util.changeTemplateToElement(template, {
-                type: type
-            });
-        }, this);
+      forEach(
+        moveButtons,
+        function(type) {
+          key = 'disabled' + util.capitalizeFirstLetter(type);
+          this._buttons[key] = util.changeTemplateToElement(template, {
+            type: type
+          });
+        },
+        this
+      );
     },
 
     /**
@@ -159,15 +168,19 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @private
      */
     _setMoreButtons: function() {
-        var template = this._template.moreButton;
-        var key;
+      var template = this._template.moreButton;
+      var key;
 
-        forEach(moreButtons, function(type) {
-            key = type + 'More';
-            this._buttons[key] = util.changeTemplateToElement(template, {
-                type: type
-            });
-        }, this);
+      forEach(
+        moreButtons,
+        function(type) {
+          key = type + 'More';
+          this._buttons[key] = util.changeTemplateToElement(template, {
+            type: type
+          });
+        },
+        this
+      );
     },
     /* eslint-enable camelcase */
 
@@ -177,7 +190,7 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @private
      */
     _getContainerElement: function() {
-        return this._containerElement;
+      return this._containerElement;
     },
 
     /**
@@ -186,15 +199,15 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @private
      */
     _appendFirstButton: function(viewData) {
-        var button;
+      var button;
 
-        if (viewData.page > 1) {
-            button = this._buttons.first;
-        } else {
-            button = this._buttons.disabledFirst;
-        }
+      if (viewData.page > 1) {
+        button = this._buttons.first;
+      } else {
+        button = this._buttons.disabledFirst;
+      }
 
-        this._getContainerElement().appendChild(button);
+      this._getContainerElement().appendChild(button);
     },
 
     /**
@@ -203,15 +216,15 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @private
      */
     _appendPrevButton: function(viewData) {
-        var button;
+      var button;
 
-        if (viewData.currentPageIndex > 1) {
-            button = this._buttons.prev;
-        } else {
-            button = this._buttons.disabledPrev;
-        }
+      if (viewData.currentPageIndex > 1) {
+        button = this._buttons.prev;
+      } else {
+        button = this._buttons.disabledPrev;
+      }
 
-        this._getContainerElement().appendChild(button);
+      this._getContainerElement().appendChild(button);
     },
 
     /**
@@ -220,15 +233,15 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @private
      */
     _appendNextButton: function(viewData) {
-        var button;
+      var button;
 
-        if (viewData.currentPageIndex < viewData.lastPageListIndex) {
-            button = this._buttons.next;
-        } else {
-            button = this._buttons.disabledNext;
-        }
+      if (viewData.currentPageIndex < viewData.lastPageListIndex) {
+        button = this._buttons.next;
+      } else {
+        button = this._buttons.disabledNext;
+      }
 
-        this._getContainerElement().appendChild(button);
+      this._getContainerElement().appendChild(button);
     },
 
     /**
@@ -237,15 +250,15 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @private
      */
     _appendLastButton: function(viewData) {
-        var button;
+      var button;
 
-        if (viewData.page < viewData.lastPage) {
-            button = this._buttons.last;
-        } else {
-            button = this._buttons.disabledLast;
-        }
+      if (viewData.page < viewData.lastPage) {
+        button = this._buttons.last;
+      } else {
+        button = this._buttons.disabledLast;
+      }
 
-        this._getContainerElement().appendChild(button);
+      this._getContainerElement().appendChild(button);
     },
 
     /**
@@ -254,13 +267,13 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @private
      */
     _appendPrevMoreButton: function(viewData) {
-        var button;
+      var button;
 
-        if (viewData.prevMore) {
-            button = this._buttons.prevMore;
-            util.addClass(button, this._firstItemClassName);
-            this._getContainerElement().appendChild(button);
-        }
+      if (viewData.prevMore) {
+        button = this._buttons.prevMore;
+        util.addClass(button, this._firstItemClassName);
+        this._getContainerElement().appendChild(button);
+      }
     },
 
     /**
@@ -269,13 +282,13 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @private
      */
     _appendNextMoreButton: function(viewData) {
-        var button;
+      var button;
 
-        if (viewData.nextMore) {
-            button = this._buttons.nextMore;
-            util.addClass(button, this._lastItemClassName);
-            this._getContainerElement().appendChild(button);
-        }
+      if (viewData.nextMore) {
+        button = this._buttons.nextMore;
+        util.addClass(button, this._lastItemClassName);
+        this._getContainerElement().appendChild(button);
+      }
     },
 
     /**
@@ -283,28 +296,29 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @param {object} viewData - View data to render pagination
      * @private
      */
-    _appendPages: function(viewData) { // eslint-disable-line complexity
-        var template = this._template;
-        var firstPage = viewData.leftPageNumber;
-        var lastPage = viewData.rightPageNumber;
-        var pageItem, i;
+    // eslint-disable-next-line complexity
+    _appendPages: function(viewData) {
+      var template = this._template;
+      var firstPage = viewData.leftPageNumber;
+      var lastPage = viewData.rightPageNumber;
+      var pageItem, i;
 
-        for (i = firstPage; i <= lastPage; i += 1) {
-            if (i === viewData.page) {
-                pageItem = util.changeTemplateToElement(template.currentPage, {page: i});
-            } else {
-                pageItem = util.changeTemplateToElement(template.page, {page: i});
-                this._enabledPageElements.push(pageItem);
-            }
-
-            if (i === firstPage && !viewData.prevMore) {
-                util.addClass(pageItem, this._firstItemClassName);
-            }
-            if (i === lastPage && !viewData.nextMore) {
-                util.addClass(pageItem, this._lastItemClassName);
-            }
-            this._getContainerElement().appendChild(pageItem);
+      for (i = firstPage; i <= lastPage; i += 1) {
+        if (i === viewData.page) {
+          pageItem = util.changeTemplateToElement(template.currentPage, {page: i});
+        } else {
+          pageItem = util.changeTemplateToElement(template.page, {page: i});
+          this._enabledPageElements.push(pageItem);
         }
+
+        if (i === firstPage && !viewData.prevMore) {
+          util.addClass(pageItem, this._firstItemClassName);
+        }
+        if (i === lastPage && !viewData.nextMore) {
+          util.addClass(pageItem, this._lastItemClassName);
+        }
+        this._getContainerElement().appendChild(pageItem);
+      }
     },
 
     /**
@@ -313,22 +327,26 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @private
      */
     _attachClickEvent: function(callback) {
-        var rootElement = this._getContainerElement();
+      var rootElement = this._getContainerElement();
 
-        util.addEventListener(rootElement, 'click', bind(function(event) {
-            var target = util.getTargetElement(event);
-            var page, buttonType;
+      util.addEventListener(
+        rootElement,
+        'click',
+        bind(function(event) {
+          var target = util.getTargetElement(event);
+          var page, buttonType;
 
-            util.preventDefault(event);
+          util.preventDefault(event);
 
-            buttonType = this._getButtonType(target);
+          buttonType = this._getButtonType(target);
 
-            if (!buttonType) {
-                page = this._getPageNumber(target);
-            }
+          if (!buttonType) {
+            page = this._getPageNumber(target);
+          }
 
-            callback(buttonType, page);
-        }, this));
+          callback(buttonType, page);
+        }, this)
+      );
     },
 
     /**
@@ -338,20 +356,24 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @private
      */
     _getButtonType: function(targetElement) {
-        var buttonType;
-        var buttons = this._buttons;
+      var buttonType;
+      var buttons = this._buttons;
 
-        forEach(buttons, function(button, type) {
-            if (util.isContained(targetElement, button)) {
-                buttonType = type;
+      forEach(
+        buttons,
+        function(button, type) {
+          if (util.isContained(targetElement, button)) {
+            buttonType = type;
 
-                return false;
-            }
+            return false;
+          }
 
-            return true;
-        }, this);
+          return true;
+        },
+        this
+      );
 
-        return buttonType;
+      return buttonType;
     },
     /* eslint-enable no-lonely-if */
 
@@ -362,14 +384,14 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @private
      */
     _getPageNumber: function(targetElement) {
-        var targetPage = this._findPageElement(targetElement);
-        var page;
+      var targetPage = this._findPageElement(targetElement);
+      var page;
 
-        if (targetPage) {
-            page = parseInt(targetPage.innerText, 10);
-        }
+      if (targetPage) {
+        page = parseInt(targetPage.innerText, 10);
+      }
 
-        return page;
+      return page;
     },
 
     /**
@@ -379,17 +401,17 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @ignore
      */
     _findPageElement: function(targetElement) {
-        var i, length, pickedItem;
+      var i, length, pickedItem;
 
-        for (i = 0, length = this._enabledPageElements.length; i < length; i += 1) {
-            pickedItem = this._enabledPageElements[i];
+      for (i = 0, length = this._enabledPageElements.length; i < length; i += 1) {
+        pickedItem = this._enabledPageElements[i];
 
-            if (util.isContained(targetElement, pickedItem)) {
-                return pickedItem;
-            }
+        if (util.isContained(targetElement, pickedItem)) {
+          return pickedItem;
         }
+      }
 
-        return null;
+      return null;
     },
 
     /**
@@ -397,13 +419,17 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @private
      */
     _empty: function() {
-        this._enabledPageElements = [];
+      this._enabledPageElements = [];
 
-        forEach(this._buttons, function(buttonElement, type) {
-            this._buttons[type] = buttonElement.cloneNode(true);
-        }, this);
+      forEach(
+        this._buttons,
+        function(buttonElement, type) {
+          this._buttons[type] = buttonElement.cloneNode(true);
+        },
+        this
+      );
 
-        this._getContainerElement().innerHTML = '';
+      this._getContainerElement().innerHTML = '';
     },
 
     /**
@@ -412,15 +438,16 @@ var View = snippet.defineClass(/** @lends View.prototype */{
      * @ignore
      */
     update: function(viewData) {
-        this._empty();
-        this._appendFirstButton(viewData);
-        this._appendPrevButton(viewData);
-        this._appendPrevMoreButton(viewData);
-        this._appendPages(viewData);
-        this._appendNextMoreButton(viewData);
-        this._appendNextButton(viewData);
-        this._appendLastButton(viewData);
+      this._empty();
+      this._appendFirstButton(viewData);
+      this._appendPrevButton(viewData);
+      this._appendPrevMoreButton(viewData);
+      this._appendPages(viewData);
+      this._appendNextMoreButton(viewData);
+      this._appendNextButton(viewData);
+      this._appendLastButton(viewData);
     }
-});
+  }
+);
 
 module.exports = View;
