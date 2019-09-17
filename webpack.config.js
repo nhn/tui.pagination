@@ -5,68 +5,72 @@
 
 'use strict';
 
+var path = require('path');
 var pkg = require('./package.json');
 var webpack = require('webpack');
+var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var SafeUmdPlugin = require('safe-umd-webpack-plugin');
-
-var isProduction = process.argv.indexOf('-p') > -1;
-
-var FILENAME = pkg.name + (isProduction ? '.min.js' : '.js');
-var BANNER = [
-    FILENAME,
+module.exports = function(env, argv) {
+  var isProduction = argv.mode === 'production';
+  var FILENAME = pkg.name + (isProduction ? '.min.js' : '.js');
+  var BANNER = [
+    'TOAST UI Pagination',
     '@version ' + pkg.version,
     '@author ' + pkg.author,
     '@license ' + pkg.license
-].join('\n');
+  ].join('\n');
 
-module.exports = {
-    eslint: {
-        failOnError: isProduction
-    },
+  return {
+    mode: 'development',
     entry: './src/js/index.js',
     output: {
-        library: ['tui', 'Pagination'],
-        libraryTarget: 'umd',
-        path: 'dist',
-        publicPath: 'dist',
-        filename: FILENAME
+      library: ['tui', 'Pagination'],
+      libraryTarget: 'umd',
+      path: path.resolve(__dirname, 'dist'),
+      publicPath: 'dist',
+      filename: FILENAME
     },
     externals: {
-        'tui-code-snippet': {
-            'commonjs': 'tui-code-snippet',
-            'commonjs2': 'tui-code-snippet',
-            'amd': 'tui-code-snippet',
-            'root': ['tui', 'util']
-        }
+      'tui-code-snippet': {
+        commonjs: 'tui-code-snippet',
+        commonjs2: 'tui-code-snippet',
+        amd: 'tui-code-snippet',
+        root: ['tui', 'util']
+      }
     },
     module: {
-        preLoaders: [
-            {
-                test: /\.js$/,
-                exclude: /(test|node_modules)/,
-                loader: 'eslint-loader'
-            },
-            {
-                test: /\.css$/,
-                loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
-            },
-            {
-                test: /\.png$/,
-                loader: 'url-loader'
-            }
-        ]
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /(test|node_modules)/,
+          loader: 'eslint-loader',
+          enforce: 'pre',
+          options: {
+            failOnError: isProduction
+          }
+        },
+        {
+          test: /\.css$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            'css-loader'
+          ]
+        },
+        {
+          test: /\.png$/,
+          loader: 'url-loader'
+        }
+      ]
     },
     plugins: [
-        new SafeUmdPlugin(),
-        new webpack.BannerPlugin(BANNER),
-        new ExtractTextPlugin(pkg.name + '.css')
+      new webpack.BannerPlugin(BANNER),
+      new MiniCssExtractPlugin({filename: pkg.name + '.css'})
     ],
     devServer: {
-        historyApiFallback: false,
-        progress: true,
-        host: '0.0.0.0',
-        disableHostCheck: true
+      historyApiFallback: false,
+      progress: true,
+      host: '0.0.0.0',
+      disableHostCheck: true
     }
+  };
 };
