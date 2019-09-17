@@ -1,6 +1,6 @@
 /*!
- * tui-pagination.js
- * @version 3.3.2
+ * TOAST UI Pagination
+ * @version 3.3.3
  * @author NHN FE Development Team <dl_javascript@nhn.com>
  * @license MIT
  */
@@ -12,1068 +12,165 @@
 	else if(typeof exports === 'object')
 		exports["Pagination"] = factory(require("tui-code-snippet"));
 	else
-		root["tui"] = root["tui"] || {}, root["tui"]["Pagination"] = factory((root["tui"] && root["tui"]["util"]));
-})(this, function(__WEBPACK_EXTERNAL_MODULE_7__) {
+		root["tui"] = root["tui"] || {}, root["tui"]["Pagination"] = factory(root["tui"]["util"]);
+})(window, function(__WEBPACK_EXTERNAL_MODULE_tui_code_snippet__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-
+/******/ 		module.l = true;
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "dist";
-
+/******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/js/index.js");
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ "./src/css/pagination.css":
+/*!********************************!*\
+  !*** ./src/css/pagination.css ***!
+  \********************************/
+/*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-	/**
-	 * @fileoverview The entry file of Pagination components
-	 * @author NHN. FE Development Lab <dl_javascript@nhn.com>
-	 */
-
-	'use strict';
-
-	__webpack_require__(1);
-
-	module.exports = __webpack_require__(6);
-
+eval("// extracted by mini-css-extract-plugin\n\n//# sourceURL=webpack://tui.Pagination/./src/css/pagination.css?");
 
 /***/ }),
-/* 1 */
+
+/***/ "./src/js/index.js":
+/*!*************************!*\
+  !*** ./src/js/index.js ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("/**\n * @fileoverview The entry file of Pagination components\n * @author NHN. FE Development Lab <dl_javascript@nhn.com>\n */\n\n\n\n__webpack_require__(/*! ../css/pagination.css */ \"./src/css/pagination.css\");\n\nmodule.exports = __webpack_require__(/*! ./pagination.js */ \"./src/js/pagination.js\");\n\n\n//# sourceURL=webpack://tui.Pagination/./src/js/index.js?");
+
+/***/ }),
+
+/***/ "./src/js/pagination.js":
+/*!******************************!*\
+  !*** ./src/js/pagination.js ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nvar snippet = __webpack_require__(/*! tui-code-snippet */ \"tui-code-snippet\");\n\nvar View = __webpack_require__(/*! ./view.js */ \"./src/js/view.js\");\nvar util = __webpack_require__(/*! ./util.js */ \"./src/js/util.js\");\n\nvar defaultOption = {\n  totalItems: 10,\n  itemsPerPage: 10,\n  visiblePages: 10,\n  page: 1,\n  centerAlign: false,\n  firstItemClassName: 'tui-first-child',\n  lastItemClassName: 'tui-last-child',\n  usageStatistics: true\n};\n\n/**\n * Pagination class\n * @class Pagination\n * @param {string|HTMLElement|jQueryObject} container - Container element or id selector\n * @param {object} options - Option object\n *     @param {number} [options.totalItems=10] Total item count\n *     @param {number} [options.itemsPerPage=10] Item count per page\n *     @param {number} [options.visiblePages=10] Display page link count\n *     @param {number} [options.page=1] Display page after pagination draw.\n *     @param {boolean}[options.centerAlign=false] Whether current page keep center or not\n *     @param {string} [options.firstItemClassName='first-child'] The class name of the first item\n *     @param {string} [options.lastItemClassName='last-child'] The class name of the last item\n *     @param {object} [options.template] A markup string set to make element\n *         @param {string|function} [options.template.page] HTML template\n *         @param {string|function} [options.template.currentPage] HTML template\n *         @param {string|function} [options.template.moveButton] HTML template\n *         @param {string|function} [options.template.disabledMoveButton] HTML template\n *         @param {string|function} [options.template.moreButton] HTML template\n *     @param {boolean} [options.usageStatistics=true] Send the hostname to google analytics.\n *         If you do not want to send the hostname, this option set to false.\n * @example\n * var Pagination = tui.Pagination; // or require('tui-pagination')\n *\n * var container = document.getElementById('pagination');\n * var options = { // below default value of options\n *      totalItems: 10,\n *      itemsPerPage: 10,\n *      visiblePages: 10,\n *      page: 1,\n *      centerAlign: false,\n *      firstItemClassName: 'tui-first-child',\n *      lastItemClassName: 'tui-last-child',\n *      template: {\n *          page: '<a href=\"#\" class=\"tui-page-btn\">{{page}}</a>',\n *          currentPage: '<strong class=\"tui-page-btn tui-is-selected\">{{page}}</strong>',\n *          moveButton:\n *              '<a href=\"#\" class=\"tui-page-btn tui-{{type}}\">' +\n *                  '<span class=\"tui-ico-{{type}}\">{{type}}</span>' +\n *              '</a>',\n *          disabledMoveButton:\n *              '<span class=\"tui-page-btn tui-is-disabled tui-{{type}}\">' +\n *                  '<span class=\"tui-ico-{{type}}\">{{type}}</span>' +\n *              '</span>',\n *          moreButton:\n *              '<a href=\"#\" class=\"tui-page-btn tui-{{type}}-is-ellip\">' +\n *                  '<span class=\"tui-ico-ellip\">...</span>' +\n *              '</a>'\n *      }\n * };\n * var pagination = new Pagination(container, options);\n */\nvar Pagination = snippet.defineClass(\n  /** @lends Pagination.prototype */ {\n    init: function(container, options) {\n      /**\n       * Option object\n       * @type {object}\n       * @private\n       */\n      this._options = snippet.extend({}, defaultOption, options);\n\n      /**\n       * Current page number\n       * @type {number}\n       * @private\n       */\n      this._currentPage = 0;\n\n      /**\n       * View instance\n       * @type {View}\n       * @private\n       */\n      this._view = new View(container, this._options, snippet.bind(this._onClickHandler, this));\n\n      this._paginate();\n\n      if (this._options.usageStatistics) {\n        util.sendHostNameToGA();\n      }\n    },\n\n    /**\n     * Set current page\n     * @param {number} page - Current page\n     * @private\n     */\n    _setCurrentPage: function(page) {\n      this._currentPage = page || this._options.page;\n    },\n\n    /**\n     * Get last page number\n     * @returns {number} Last page number\n     * @private\n     */\n    _getLastPage: function() {\n      var lastPage = Math.ceil(this._options.totalItems / this._options.itemsPerPage);\n\n      return !lastPage ? 1 : lastPage;\n    },\n\n    /**\n     * Index of list in total lists\n     * @param {number} pageNumber - Page number\n     * @returns {number} Page index or number\n     * @private\n     */\n    _getPageIndex: function(pageNumber) {\n      var left, pageIndex;\n\n      if (this._options.centerAlign) {\n        left = Math.floor(this._options.visiblePages / 2);\n        pageIndex = pageNumber - left;\n        pageIndex = Math.max(pageIndex, 1);\n        pageIndex = Math.min(pageIndex, this._getLastPage() - this._options.visiblePages + 1);\n\n        return pageIndex;\n      }\n\n      return Math.ceil(pageNumber / this._options.visiblePages);\n    },\n\n    /**\n     * Get relative page\n     * @param {string} moveType - Move type ('prev' or 'next')\n     * @returns {number} Relative page number\n     * @private\n     */\n    _getRelativePage: function(moveType) {\n      var isPrevMove = moveType === 'prev';\n      var currentPage = this.getCurrentPage();\n\n      return isPrevMove ? currentPage - 1 : currentPage + 1;\n    },\n\n    /**\n     * Get more page index\n     * @param {string} moveType - Move type ('prev' or 'next')\n     * @returns {number} Page index\n     * @private\n     */\n    _getMorePageIndex: function(moveType) {\n      var currentPageIndex = this._getPageIndex(this.getCurrentPage());\n      var pageCount = this._options.visiblePages;\n      var isPrevMove = moveType === 'prev';\n      var pageIndex;\n\n      if (this._options.centerAlign) {\n        pageIndex = isPrevMove ? currentPageIndex - 1 : currentPageIndex + pageCount;\n      } else {\n        pageIndex = isPrevMove\n          ? (currentPageIndex - 1) * pageCount\n          : (currentPageIndex * pageCount) + 1;\n      }\n\n      return pageIndex;\n    },\n    /* eslint-enable complexity */\n\n    /**\n     * Get available page number from over number\n     * If total page is 23, but input number is 30 => return 23\n     * @param {number} page - Page number\n     * @returns {number} Replaced pgae number\n     * @private\n     */\n    _convertToValidPage: function(page) {\n      var lastPageNumber = this._getLastPage();\n      page = Math.max(page, 1);\n      page = Math.min(page, lastPageNumber);\n\n      return page;\n    },\n\n    /**\n     * Create require view set, notify view to update\n     * @param {number} page - Page number\n     * @private\n     */\n    _paginate: function(page) {\n      var viewData = this._makeViewData(page || this._options.page);\n      this._setCurrentPage(page);\n      this._view.update(viewData);\n    },\n\n    /**\n     * Create and get view data\n     * @param {number} page - Page number\n     * @returns {object} view data\n     * @private\n     */\n    _makeViewData: function(page) {\n      var viewData = {};\n      var lastPage = this._getLastPage();\n      var currentPageIndex = this._getPageIndex(page);\n      var lastPageListIndex = this._getPageIndex(lastPage);\n      var edges = this._getEdge(page);\n\n      viewData.leftPageNumber = edges.left;\n      viewData.rightPageNumber = edges.right;\n\n      viewData.prevMore = currentPageIndex > 1;\n      viewData.nextMore = currentPageIndex < lastPageListIndex;\n\n      viewData.page = page;\n      viewData.currentPageIndex = page;\n      viewData.lastPage = lastPage;\n      viewData.lastPageListIndex = lastPage;\n\n      return viewData;\n    },\n\n    /**\n     * Get each edge page\n     * @param {object} page - Page number\n     * @returns {{left: number, right: number}} Edge page numbers\n     * @private\n     */\n    _getEdge: function(page) {\n      var leftPageNumber, rightPageNumber, left;\n      var lastPage = this._getLastPage();\n      var visiblePages = this._options.visiblePages;\n      var currentPageIndex = this._getPageIndex(page);\n\n      if (this._options.centerAlign) {\n        left = Math.floor(visiblePages / 2);\n        leftPageNumber = Math.max(page - left, 1);\n        rightPageNumber = leftPageNumber + visiblePages - 1;\n\n        if (rightPageNumber > lastPage) {\n          leftPageNumber = Math.max(lastPage - visiblePages + 1, 1);\n          rightPageNumber = lastPage;\n        }\n      } else {\n        leftPageNumber = ((currentPageIndex - 1) * visiblePages) + 1;\n        rightPageNumber = currentPageIndex * visiblePages;\n        rightPageNumber = Math.min(rightPageNumber, lastPage);\n      }\n\n      return {\n        left: leftPageNumber,\n        right: rightPageNumber\n      };\n    },\n\n    /**\n     * Pagelist click event hadnler\n     * @param {?string} buttonType - Button type\n     * @param {?number} page - Page number\n     * @private\n     */\n    /* eslint-disable complexity */\n    _onClickHandler: function(buttonType, page) {\n      switch (buttonType) {\n        case 'first':\n          page = 1;\n          break;\n        case 'prev':\n          page = this._getRelativePage('prev');\n          break;\n        case 'next':\n          page = this._getRelativePage('next');\n          break;\n        case 'prevMore':\n          page = this._getMorePageIndex('prev');\n          break;\n        case 'nextMore':\n          page = this._getMorePageIndex('next');\n          break;\n        case 'last':\n          page = this._getLastPage();\n          break;\n        default:\n          if (!page) {\n            return;\n          }\n      }\n\n      this.movePageTo(page);\n    },\n    /* eslint-enable complexity */\n\n    /**\n     * Reset pagination\n     * @param {*} totalItems - Redraw page item count\n     * @example\n     * pagination.reset();\n     * pagination.reset(100);\n     */\n    reset: function(totalItems) {\n      if (snippet.isUndefined(totalItems)) {\n        totalItems = this._options.totalItems;\n      }\n\n      this._options.totalItems = totalItems;\n      this._paginate(1);\n    },\n\n    /**\n     * Move to specific page, redraw list.\n     * Before move fire beforeMove event, After move fire afterMove event.\n     * @param {Number} targetPage - Target page\n     * @example\n     * pagination.movePageTo(10);\n     */\n    movePageTo: function(targetPage) {\n      targetPage = this._convertToValidPage(targetPage);\n\n      /**\n       * @event Pagination#beforeMove\n       * @type {object} evt - Custom event object\n       * @property {number} page - Moved page\n       * @example\n       * paganation.on('beforeMove', function(evt) {\n       *     var currentPage = evt.page;\n       *\n       *     if (currentPage === 10) {\n       *         return false;\n       *         // return true;\n       *     }\n       * });\n       */\n      if (!this.invoke('beforeMove', {page: targetPage})) {\n        return;\n      }\n\n      this._paginate(targetPage);\n\n      /**\n       * @event Pagination#afterMove\n       * @type {object} evt - Custom event object\n       * @property {number} page - Moved page\n       * @example\n       * paganation.on('afterMove', function(evt) {\n       *      var currentPage = evt.page;\n       *      console.log(currentPage);\n       * });\n       */\n      this.fire('afterMove', {page: targetPage});\n    },\n\n    /**\n     * Set total count of items\n     * @param {number} itemCount - Total item count\n     */\n    setTotalItems: function(itemCount) {\n      this._options.totalItems = itemCount;\n    },\n\n    /**\n     * Set count of items per page\n     * @param {number} itemCount - Item count\n     */\n    setItemsPerPage: function(itemCount) {\n      this._options.itemsPerPage = itemCount;\n    },\n\n    /**\n     * Get current page\n     * @returns {number} Current page\n     */\n    getCurrentPage: function() {\n      return this._currentPage || this._options.page;\n    }\n  }\n);\n\nsnippet.CustomEvents.mixin(Pagination);\n\nmodule.exports = Pagination;\n\n\n//# sourceURL=webpack://tui.Pagination/./src/js/pagination.js?");
+
+/***/ }),
+
+/***/ "./src/js/util.js":
+/*!************************!*\
+  !*** ./src/js/util.js ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nvar snippet = __webpack_require__(/*! tui-code-snippet */ \"tui-code-snippet\");\n\nvar util = {\n  /**\n   * Bind event to element\n   * @param {HTMLElement} element - DOM element to attach the event handler on\n   * @param {string} eventType - Event type\n   * @param {Function} callback - Event handler function\n   */\n  addEventListener: function(element, eventType, callback) {\n    if (element.addEventListener) {\n      element.addEventListener(eventType, callback, false);\n    } else {\n      element.attachEvent('on' + eventType, callback);\n    }\n  },\n\n  /**\n   * Prevent default event\n   * @param {Event} event - Event object\n   */\n  preventDefault: function(event) {\n    if (event.preventDefault) {\n      event.preventDefault();\n    } else {\n      event.returnValue = false;\n    }\n  },\n\n  /**\n   * Get target from event object\n   * @param {Event} event - Event object\n   * @returns {HTMLElement} Target element\n   */\n  getTargetElement: function(event) {\n    return event.target || event.srcElement;\n  },\n\n  /**\n   * Add classname\n   * @param {HTMLElement} element - Target element\n   * @param {string} className - Classname\n   */\n  addClass: function(element, className) {\n    if (!element) {\n      return;\n    }\n\n    if (element.className === '') {\n      element.className = className;\n    } else if (!util.hasClass(element, className)) {\n      element.className += ' ' + className;\n    }\n  },\n\n  /**\n   * Check the element has specific class or not\n   * @param {HTMLElement} element - A target element\n   * @param {string} className - A name of class to find\n   * @returns {boolean} Whether the element has the class\n   */\n  hasClass: function(element, className) {\n    var elClassName = util.getClass(element);\n\n    return elClassName.indexOf(className) > -1;\n  },\n\n  /**\n   * Get class name\n   * @param {HTMLElement} element - HTMLElement\n   * @returns {string} Class name\n   */\n  getClass: function(element) {\n    return (\n      element &&\n      element.getAttribute &&\n      (element.getAttribute('class') || element.getAttribute('className') || '')\n    );\n  },\n\n  /**\n   * Capitalize first letter\n   * @param {string} str - String to change\n   * @returns {string} Changed string\n   */\n  capitalizeFirstLetter: function(str) {\n    return str.substring(0, 1).toUpperCase() + str.substring(1, str.length);\n  },\n\n  /**\n   * Check the element is contained\n   * @param {HTMLElement} find - Target element\n   * @param {HTMLElement} parent - Wrapper element\n   * @returns {boolean} Whether contained or not\n   */\n  isContained: function(find, parent) {\n    if (!parent) {\n      return false;\n    }\n\n    return find === parent ? true : parent.contains(find);\n  },\n\n  /**\n   * Replace matched property with template\n   * @param {string} template - String of template\n   * @param {object} props - Properties\n   * @returns {string} Replaced template string\n   */\n  replaceTemplate: function(template, props) {\n    var newTemplate = template.replace(/\\{\\{(\\w*)\\}\\}/g, function(value, prop) {\n      return props.hasOwnProperty(prop) ? props[prop] : '';\n    });\n\n    return newTemplate;\n  },\n\n  /**\n   * Change template string to element\n   * @param {string|Function} template - Template option\n   * @param {object} props - Template props\n   * @returns {string} Replaced template\n   */\n  changeTemplateToElement: function(template, props) {\n    var html;\n\n    if (snippet.isFunction(template)) {\n      html = template(props);\n    } else {\n      html = util.replaceTemplate(template, props);\n    }\n\n    return util.getElementFromTemplate(html);\n  },\n\n  /**\n   * Get element from template string\n   * @param {string} template - Template string\n   * @returns {HTMLElement} Changed element\n   */\n  getElementFromTemplate: function(template) {\n    var tempElement = document.createElement('div');\n\n    tempElement.innerHTML = template;\n\n    return tempElement.children[0];\n  },\n\n  /**\n   * Send information to google analytics\n   */\n  sendHostNameToGA: function() {\n    snippet.sendHostname('pagination', 'UA-129987462-1');\n  }\n};\n\nmodule.exports = util;\n\n\n//# sourceURL=webpack://tui.Pagination/./src/js/util.js?");
+
+/***/ }),
+
+/***/ "./src/js/view.js":
+/*!************************!*\
+  !*** ./src/js/view.js ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nvar snippet = __webpack_require__(/*! tui-code-snippet */ \"tui-code-snippet\");\n\nvar util = __webpack_require__(/*! ./util.js */ \"./src/js/util.js\");\n\nvar extend = snippet.extend;\nvar forEach = snippet.forEach;\nvar isString = snippet.isString;\nvar bind = snippet.bind;\nvar isHTMLNode = snippet.isHTMLNode;\n\nvar defaultTemplate = {\n  page: '<a href=\"#\" class=\"tui-page-btn\">{{page}}</a>',\n  currentPage: '<strong class=\"tui-page-btn tui-is-selected\">{{page}}</strong>',\n  moveButton:\n    '<a href=\"#\" class=\"tui-page-btn tui-{{type}}\">' +\n    '<span class=\"tui-ico-{{type}}\">{{type}}</span>' +\n    '</a>',\n  disabledMoveButton:\n    '<span class=\"tui-page-btn tui-is-disabled tui-{{type}}\">' +\n    '<span class=\"tui-ico-{{type}}\">{{type}}</span>' +\n    '</span>',\n  moreButton:\n    '<a href=\"#\" class=\"tui-page-btn tui-{{type}}-is-ellip\">' +\n    '<span class=\"tui-ico-ellip\">...</span>' +\n    '</a>'\n};\nvar moveButtons = ['first', 'prev', 'next', 'last'];\nvar moreButtons = ['prev', 'next'];\n\nvar INVALID_CONTAINER_ELEMENT = 'The container element is invalid.';\n\n/**\n * Pagination view class\n * @class View\n * @param {string|HTMLElement|jQueryObject} container - Container element or id selector\n * @param {object} options - Option object\n *     @param {number} [options.totalItems=10] Total item count\n *     @param {number} [options.itemsPerPage=10] Item count per page\n *     @param {number} [options.visiblePages=10] Display page link count\n *     @param {number} [options.page=1] Display page after pagination draw.\n *     @param {boolean}[options.centerAlign=false] Whether current page keep center or not\n *     @param {string} [options.firstItemClassName='first-child'] The class name of the first item\n *     @param {string} [options.lastItemClassName='last-child'] The class name of the last item\n *     @param {object} [options.template] A markup string set to make element\n *         @param {string|function} [options.template.page] HTML template\n *         @param {string|function} [options.template.currentPage] HTML template\n *         @param {string|function} [options.template.moveButton] HTML template\n *         @param {string|function} [options.template.disabledMoveButton] HTML template\n *         @param {string|function} [options.template.moreButton] HTML template\n * @param {function} handler - Event handler\n * @ignore\n */\nvar View = snippet.defineClass(\n  /** @lends View.prototype */ {\n    init: function(container, options, handler) {\n      /**\n       * Root element\n       * @type {HTMLElement}\n       * @private\n       */\n      this._containerElement = null;\n\n      /**\n       * First item's class name\n       * @type {string}\n       * @private\n       */\n      this._firstItemClassName = options.firstItemClassName;\n\n      /**\n       * Last item's class name\n       * @type {string}\n       * @private\n       */\n      this._lastItemClassName = options.lastItemClassName;\n\n      /**\n       * Default template\n       * @type {object.<string, string|function>}\n       * @private\n       */\n      this._template = extend({}, defaultTemplate, options.template);\n\n      /**\n       * Map of buttons\n       * @type {object.<string, HTMLElement>}\n       * @private\n       */\n      this._buttons = {};\n\n      /**\n       * Enabled page elements list\n       * @type {array}\n       * @private\n       */\n\n      this._enabledPageElements = [];\n\n      this._setRootElement(container);\n      this._setMoveButtons();\n      this._setDisabledMoveButtons();\n      this._setMoreButtons();\n      this._attachClickEvent(handler);\n    },\n    /* eslint-enable complexity */\n\n    /**\n     * Set root element\n     * @param {string|HTMLElement|jQueryObject} container - Container element or id selector\n     * @private\n     */\n    _setRootElement: function(container) {\n      if (isString(container)) {\n        container = document.getElementById(container);\n      } else if (container.jquery) {\n        container = container[0];\n      }\n\n      if (!isHTMLNode(container)) {\n        throw new Error(INVALID_CONTAINER_ELEMENT);\n      }\n\n      this._containerElement = container;\n    },\n\n    /**\n     * Assign move buttons to option\n     * @private\n     */\n    _setMoveButtons: function() {\n      var template = this._template.moveButton;\n\n      forEach(\n        moveButtons,\n        function(type) {\n          this._buttons[type] = util.changeTemplateToElement(template, {\n            type: type\n          });\n        },\n        this\n      );\n    },\n\n    /**\n     * Assign disabled move buttons to option\n     * @private\n     */\n    _setDisabledMoveButtons: function() {\n      var template = this._template.disabledMoveButton;\n      var key;\n\n      forEach(\n        moveButtons,\n        function(type) {\n          key = 'disabled' + util.capitalizeFirstLetter(type);\n          this._buttons[key] = util.changeTemplateToElement(template, {\n            type: type\n          });\n        },\n        this\n      );\n    },\n\n    /**\n     * Assign more buttons to option\n     * @private\n     */\n    _setMoreButtons: function() {\n      var template = this._template.moreButton;\n      var key;\n\n      forEach(\n        moreButtons,\n        function(type) {\n          key = type + 'More';\n          this._buttons[key] = util.changeTemplateToElement(template, {\n            type: type\n          });\n        },\n        this\n      );\n    },\n    /* eslint-enable camelcase */\n\n    /**\n     * Get container element\n     * @returns {HTMLElement} Container element\n     * @private\n     */\n    _getContainerElement: function() {\n      return this._containerElement;\n    },\n\n    /**\n     * Append first button on container element\n     * @param {object} viewData - View data to render pagination\n     * @private\n     */\n    _appendFirstButton: function(viewData) {\n      var button;\n\n      if (viewData.page > 1) {\n        button = this._buttons.first;\n      } else {\n        button = this._buttons.disabledFirst;\n      }\n\n      this._getContainerElement().appendChild(button);\n    },\n\n    /**\n     * Append previous button on container element\n     * @param {object} viewData - View data to render pagination\n     * @private\n     */\n    _appendPrevButton: function(viewData) {\n      var button;\n\n      if (viewData.currentPageIndex > 1) {\n        button = this._buttons.prev;\n      } else {\n        button = this._buttons.disabledPrev;\n      }\n\n      this._getContainerElement().appendChild(button);\n    },\n\n    /**\n     * Append next button on container element\n     * @param {object} viewData - View data to render pagination\n     * @private\n     */\n    _appendNextButton: function(viewData) {\n      var button;\n\n      if (viewData.currentPageIndex < viewData.lastPageListIndex) {\n        button = this._buttons.next;\n      } else {\n        button = this._buttons.disabledNext;\n      }\n\n      this._getContainerElement().appendChild(button);\n    },\n\n    /**\n     * Append last button on container element\n     * @param {object} viewData - View data to render pagination\n     * @private\n     */\n    _appendLastButton: function(viewData) {\n      var button;\n\n      if (viewData.page < viewData.lastPage) {\n        button = this._buttons.last;\n      } else {\n        button = this._buttons.disabledLast;\n      }\n\n      this._getContainerElement().appendChild(button);\n    },\n\n    /**\n     * Append previous more button on container element\n     * @param {object} viewData - View data to render pagination\n     * @private\n     */\n    _appendPrevMoreButton: function(viewData) {\n      var button;\n\n      if (viewData.prevMore) {\n        button = this._buttons.prevMore;\n        util.addClass(button, this._firstItemClassName);\n        this._getContainerElement().appendChild(button);\n      }\n    },\n\n    /**\n     * Append next more button on container element\n     * @param {object} viewData - View data to render pagination\n     * @private\n     */\n    _appendNextMoreButton: function(viewData) {\n      var button;\n\n      if (viewData.nextMore) {\n        button = this._buttons.nextMore;\n        util.addClass(button, this._lastItemClassName);\n        this._getContainerElement().appendChild(button);\n      }\n    },\n\n    /**\n     * Append page number elements on container element\n     * @param {object} viewData - View data to render pagination\n     * @private\n     */\n    // eslint-disable-next-line complexity\n    _appendPages: function(viewData) {\n      var template = this._template;\n      var firstPage = viewData.leftPageNumber;\n      var lastPage = viewData.rightPageNumber;\n      var pageItem, i;\n\n      for (i = firstPage; i <= lastPage; i += 1) {\n        if (i === viewData.page) {\n          pageItem = util.changeTemplateToElement(template.currentPage, {page: i});\n        } else {\n          pageItem = util.changeTemplateToElement(template.page, {page: i});\n          this._enabledPageElements.push(pageItem);\n        }\n\n        if (i === firstPage && !viewData.prevMore) {\n          util.addClass(pageItem, this._firstItemClassName);\n        }\n        if (i === lastPage && !viewData.nextMore) {\n          util.addClass(pageItem, this._lastItemClassName);\n        }\n        this._getContainerElement().appendChild(pageItem);\n      }\n    },\n\n    /**\n     * Attach click event\n     * @param {function} callback - Callback function\n     * @private\n     */\n    _attachClickEvent: function(callback) {\n      var rootElement = this._getContainerElement();\n\n      util.addEventListener(\n        rootElement,\n        'click',\n        bind(function(event) {\n          var target = util.getTargetElement(event);\n          var page, buttonType;\n\n          util.preventDefault(event);\n\n          buttonType = this._getButtonType(target);\n\n          if (!buttonType) {\n            page = this._getPageNumber(target);\n          }\n\n          callback(buttonType, page);\n        }, this)\n      );\n    },\n\n    /**\n     * Get button type to move button elements\n     * @param {HTMLElement} targetElement - Each move button element\n     * @returns {?string} Button type\n     * @private\n     */\n    _getButtonType: function(targetElement) {\n      var buttonType;\n      var buttons = this._buttons;\n\n      forEach(\n        buttons,\n        function(button, type) {\n          if (util.isContained(targetElement, button)) {\n            buttonType = type;\n\n            return false;\n          }\n\n          return true;\n        },\n        this\n      );\n\n      return buttonType;\n    },\n    /* eslint-enable no-lonely-if */\n\n    /**\n     * Get number to page elements\n     * @param {HTMLElement} targetElement - Each page element\n     * @returns {?number} Page number\n     * @private\n     */\n    _getPageNumber: function(targetElement) {\n      var targetPage = this._findPageElement(targetElement);\n      var page;\n\n      if (targetPage) {\n        page = parseInt(targetPage.innerText, 10);\n      }\n\n      return page;\n    },\n\n    /**\n     * Find target element from page elements\n     * @param {HTMLElement} targetElement - Each page element\n     * @returns {HTMLElement} Found element\n     * @ignore\n     */\n    _findPageElement: function(targetElement) {\n      var i, length, pickedItem;\n\n      for (i = 0, length = this._enabledPageElements.length; i < length; i += 1) {\n        pickedItem = this._enabledPageElements[i];\n\n        if (util.isContained(targetElement, pickedItem)) {\n          return pickedItem;\n        }\n      }\n\n      return null;\n    },\n\n    /**\n     * Reset container element\n     * @private\n     */\n    _empty: function() {\n      this._enabledPageElements = [];\n\n      forEach(\n        this._buttons,\n        function(buttonElement, type) {\n          this._buttons[type] = buttonElement.cloneNode(true);\n        },\n        this\n      );\n\n      this._getContainerElement().innerHTML = '';\n    },\n\n    /**\n     * Update view\n     * @param {object} viewData - View data to render pagination\n     * @ignore\n     */\n    update: function(viewData) {\n      this._empty();\n      this._appendFirstButton(viewData);\n      this._appendPrevButton(viewData);\n      this._appendPrevMoreButton(viewData);\n      this._appendPages(viewData);\n      this._appendNextMoreButton(viewData);\n      this._appendNextButton(viewData);\n      this._appendLastButton(viewData);\n    }\n  }\n);\n\nmodule.exports = View;\n\n\n//# sourceURL=webpack://tui.Pagination/./src/js/view.js?");
+
+/***/ }),
+
+/***/ "tui-code-snippet":
+/*!******************************************************************************************************************************!*\
+  !*** external {"commonjs":"tui-code-snippet","commonjs2":"tui-code-snippet","amd":"tui-code-snippet","root":["tui","util"]} ***!
+  \******************************************************************************************************************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
-	// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var snippet = __webpack_require__(7);
-
-	var View = __webpack_require__(8);
-	var util = __webpack_require__(9);
-
-	var defaultOption = {
-	    totalItems: 10,
-	    itemsPerPage: 10,
-	    visiblePages: 10,
-	    page: 1,
-	    centerAlign: false,
-	    firstItemClassName: 'tui-first-child',
-	    lastItemClassName: 'tui-last-child',
-	    usageStatistics: true
-	};
-
-	/**
-	 * Pagination class
-	 * @class Pagination
-	 * @param {string|HTMLElement|jQueryObject} container - Container element or id selector
-	 * @param {object} options - Option object
-	 *     @param {number} [options.totalItems=10] Total item count
-	 *     @param {number} [options.itemsPerPage=10] Item count per page
-	 *     @param {number} [options.visiblePages=10] Display page link count
-	 *     @param {number} [options.page=1] Display page after pagination draw.
-	 *     @param {boolean}[options.centerAlign=false] Whether current page keep center or not
-	 *     @param {string} [options.firstItemClassName='first-child'] The class name of the first item
-	 *     @param {string} [options.lastItemClassName='last-child'] The class name of the last item
-	 *     @param {object} [options.template] A markup string set to make element
-	 *         @param {string|function} [options.template.page] HTML template
-	 *         @param {string|function} [options.template.currentPage] HTML template
-	 *         @param {string|function} [options.template.moveButton] HTML template
-	 *         @param {string|function} [options.template.disabledMoveButton] HTML template
-	 *         @param {string|function} [options.template.moreButton] HTML template
-	 *     @param {boolean} [options.usageStatistics=true] Send the hostname to google analytics.
-	 *         If you do not want to send the hostname, this option set to false.
-	 * @example
-	 * var Pagination = tui.Pagination; // or require('tui-pagination')
-	 *
-	 * var container = document.getElementById('pagination');
-	 * var options = { // below default value of options
-	 *      totalItems: 10,
-	 *      itemsPerPage: 10,
-	 *      visiblePages: 10,
-	 *      page: 1,
-	 *      centerAlign: false,
-	 *      firstItemClassName: 'tui-first-child',
-	 *      lastItemClassName: 'tui-last-child',
-	 *      template: {
-	 *          page: '<a href="#" class="tui-page-btn">{{page}}</a>',
-	 *          currentPage: '<strong class="tui-page-btn tui-is-selected">{{page}}</strong>',
-	 *          moveButton:
-	 *              '<a href="#" class="tui-page-btn tui-{{type}}">' +
-	 *                  '<span class="tui-ico-{{type}}">{{type}}</span>' +
-	 *              '</a>',
-	 *          disabledMoveButton:
-	 *              '<span class="tui-page-btn tui-is-disabled tui-{{type}}">' +
-	 *                  '<span class="tui-ico-{{type}}">{{type}}</span>' +
-	 *              '</span>',
-	 *          moreButton:
-	 *              '<a href="#" class="tui-page-btn tui-{{type}}-is-ellip">' +
-	 *                  '<span class="tui-ico-ellip">...</span>' +
-	 *              '</a>'
-	 *      }
-	 * };
-	 * var pagination = new Pagination(container, options);
-	 */
-	var Pagination = snippet.defineClass(/** @lends Pagination.prototype */{
-	    init: function(container, options) {
-	        /**
-	         * Option object
-	         * @type {object}
-	         * @private
-	         */
-	        this._options = snippet.extend({}, defaultOption, options);
-
-	        /**
-	         * Current page number
-	         * @type {number}
-	         * @private
-	         */
-	        this._currentPage = 0;
-
-	        /**
-	         * View instance
-	         * @type {View}
-	         * @private
-	         */
-	        this._view = new View(container, this._options, snippet.bind(this._onClickHandler, this));
-
-	        this._paginate();
-
-	        if (this._options.usageStatistics) {
-	            util.sendHostNameToGA();
-	        }
-	    },
-
-	    /**
-	     * Set current page
-	     * @param {number} page - Current page
-	     * @private
-	     */
-	    _setCurrentPage: function(page) {
-	        this._currentPage = page || this._options.page;
-	    },
-
-	    /**
-	     * Get last page number
-	     * @returns {number} Last page number
-	     * @private
-	     */
-	    _getLastPage: function() {
-	        var lastPage = Math.ceil(this._options.totalItems / this._options.itemsPerPage);
-
-	        return (!lastPage) ? 1 : lastPage;
-	    },
-
-	    /**
-	     * Index of list in total lists
-	     * @param {number} pageNumber - Page number
-	     * @returns {number} Page index or number
-	     * @private
-	     */
-	    _getPageIndex: function(pageNumber) {
-	        var left, pageIndex;
-
-	        if (this._options.centerAlign) {
-	            left = Math.floor(this._options.visiblePages / 2);
-	            pageIndex = pageNumber - left;
-	            pageIndex = Math.max(pageIndex, 1);
-	            pageIndex = Math.min(pageIndex, this._getLastPage() - this._options.visiblePages + 1);
-
-	            return pageIndex;
-	        }
-
-	        return Math.ceil(pageNumber / this._options.visiblePages);
-	    },
-
-	    /**
-	     * Get relative page
-	     * @param {string} moveType - Move type ('prev' or 'next')
-	     * @returns {number} Relative page number
-	     * @private
-	     */
-	    _getRelativePage: function(moveType) {
-	        var isPrevMove = (moveType === 'prev');
-	        var currentPage = this.getCurrentPage();
-
-	        return isPrevMove ? currentPage - 1 : currentPage + 1;
-	    },
-
-	    /**
-	     * Get more page index
-	     * @param {string} moveType - Move type ('prev' or 'next')
-	     * @returns {number} Page index
-	     * @private
-	     */
-	    _getMorePageIndex: function(moveType) {
-	        var currentPageIndex = this._getPageIndex(this.getCurrentPage());
-	        var pageCount = this._options.visiblePages;
-	        var isPrevMove = (moveType === 'prev');
-	        var pageIndex;
-
-	        if (this._options.centerAlign) {
-	            pageIndex = isPrevMove ? currentPageIndex - 1 : currentPageIndex + pageCount;
-	        } else {
-	            pageIndex = isPrevMove ? (currentPageIndex - 1) * pageCount : (currentPageIndex * pageCount) + 1;
-	        }
-
-	        return pageIndex;
-	    },
-	    /* eslint-enable complexity */
-
-	    /**
-	     * Get available page number from over number
-	     * If total page is 23, but input number is 30 => return 23
-	     * @param {number} page - Page number
-	     * @returns {number} Replaced pgae number
-	     * @private
-	     */
-	    _convertToValidPage: function(page) {
-	        var lastPageNumber = this._getLastPage();
-	        page = Math.max(page, 1);
-	        page = Math.min(page, lastPageNumber);
-
-	        return page;
-	    },
-
-	    /**
-	     * Create require view set, notify view to update
-	     * @param {number} page - Page number
-	     * @private
-	     */
-	    _paginate: function(page) {
-	        var viewData = this._makeViewData(page || this._options.page);
-	        this._setCurrentPage(page);
-	        this._view.update(viewData);
-	    },
-
-	    /**
-	     * Create and get view data
-	     * @param {number} page - Page number
-	     * @returns {object} view data
-	     * @private
-	     */
-	    _makeViewData: function(page) {
-	        var viewData = {};
-	        var lastPage = this._getLastPage();
-	        var currentPageIndex = this._getPageIndex(page);
-	        var lastPageListIndex = this._getPageIndex(lastPage);
-	        var edges = this._getEdge(page);
-
-	        viewData.leftPageNumber = edges.left;
-	        viewData.rightPageNumber = edges.right;
-
-	        viewData.prevMore = (currentPageIndex > 1);
-	        viewData.nextMore = (currentPageIndex < lastPageListIndex);
-
-	        viewData.page = page;
-	        viewData.currentPageIndex = page;
-	        viewData.lastPage = lastPage;
-	        viewData.lastPageListIndex = lastPage;
-
-	        return viewData;
-	    },
-
-	    /**
-	     * Get each edge page
-	     * @param {object} page - Page number
-	     * @returns {{left: number, right: number}} Edge page numbers
-	     * @private
-	     */
-	    _getEdge: function(page) {
-	        var leftPageNumber, rightPageNumber, left;
-	        var lastPage = this._getLastPage();
-	        var visiblePages = this._options.visiblePages;
-	        var currentPageIndex = this._getPageIndex(page);
-
-	        if (this._options.centerAlign) {
-	            left = Math.floor(visiblePages / 2);
-	            leftPageNumber = Math.max(page - left, 1);
-	            rightPageNumber = leftPageNumber + visiblePages - 1;
-
-	            if (rightPageNumber > lastPage) {
-	                leftPageNumber = Math.max(lastPage - visiblePages + 1, 1);
-	                rightPageNumber = lastPage;
-	            }
-	        } else {
-	            leftPageNumber = ((currentPageIndex - 1) * visiblePages) + 1;
-	            rightPageNumber = (currentPageIndex) * visiblePages;
-	            rightPageNumber = Math.min(rightPageNumber, lastPage);
-	        }
-
-	        return {
-	            left: leftPageNumber,
-	            right: rightPageNumber
-	        };
-	    },
-
-	    /**
-	     * Pagelist click event hadnler
-	     * @param {?string} buttonType - Button type
-	     * @param {?number} page - Page number
-	     * @private
-	     */
-	    /* eslint-disable complexity */
-	    _onClickHandler: function(buttonType, page) {
-	        switch (buttonType) {
-	            case 'first':
-	                page = 1;
-	                break;
-	            case 'prev':
-	                page = this._getRelativePage('prev');
-	                break;
-	            case 'next':
-	                page = this._getRelativePage('next');
-	                break;
-	            case 'prevMore':
-	                page = this._getMorePageIndex('prev');
-	                break;
-	            case 'nextMore':
-	                page = this._getMorePageIndex('next');
-	                break;
-	            case 'last':
-	                page = this._getLastPage();
-	                break;
-	            default:
-	                if (!page) {
-	                    return;
-	                }
-	        }
-
-	        this.movePageTo(page);
-	    },
-	    /* eslint-enable complexity */
-
-	    /**
-	     * Reset pagination
-	     * @param {*} totalItems - Redraw page item count
-	     * @example
-	     * pagination.reset();
-	     * pagination.reset(100);
-	     */
-	    reset: function(totalItems) {
-	        if (snippet.isUndefined(totalItems)) {
-	            totalItems = this._options.totalItems;
-	        }
-
-	        this._options.totalItems = totalItems;
-	        this._paginate(1);
-	    },
-
-	    /**
-	     * Move to specific page, redraw list.
-	     * Before move fire beforeMove event, After move fire afterMove event.
-	     * @param {Number} targetPage - Target page
-	     * @example
-	     * pagination.movePageTo(10);
-	     */
-	    movePageTo: function(targetPage) {
-	        targetPage = this._convertToValidPage(targetPage);
-
-	        /**
-	         * @event Pagination#beforeMove
-	         * @type {object} evt - Custom event object
-	         * @property {number} page - Moved page
-	         * @example
-	         * paganation.on('beforeMove', function(evt) {
-	         *     var currentPage = evt.page;
-	         *
-	         *     if (currentPage === 10) {
-	         *         return false;
-	         *         // return true;
-	         *     }
-	         * });
-	         */
-	        if (!this.invoke('beforeMove', {page: targetPage})) {
-	            return;
-	        }
-
-	        this._paginate(targetPage);
-
-	        /**
-	         * @event Pagination#afterMove
-	         * @type {object} evt - Custom event object
-	         * @property {number} page - Moved page
-	         * @example
-	         * paganation.on('afterMove', function(evt) {
-	         *      var currentPage = evt.page;
-	         *      console.log(currentPage);
-	         * });
-	         */
-	        this.fire('afterMove', {page: targetPage});
-	    },
-
-	    /**
-	     * Set total count of items
-	     * @param {number} itemCount - Total item count
-	     */
-	    setTotalItems: function(itemCount) {
-	        this._options.totalItems = itemCount;
-	    },
-
-	    /**
-	     * Set count of items per page
-	     * @param {number} itemCount - Item count
-	     */
-	    setItemsPerPage: function(itemCount) {
-	        this._options.itemsPerPage = itemCount;
-	    },
-
-	    /**
-	     * Get current page
-	     * @returns {number} Current page
-	     */
-	    getCurrentPage: function() {
-	        return this._currentPage || this._options.page;
-	    }
-	});
-
-	snippet.CustomEvents.mixin(Pagination);
-
-	module.exports = Pagination;
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var snippet = __webpack_require__(7);
-
-	var util = __webpack_require__(9);
-
-	var extend = snippet.extend;
-	var forEach = snippet.forEach;
-	var isString = snippet.isString;
-	var bind = snippet.bind;
-	var isHTMLNode = snippet.isHTMLNode;
-
-	var defaultTemplate = {
-	    page: '<a href="#" class="tui-page-btn">{{page}}</a>',
-	    currentPage: '<strong class="tui-page-btn tui-is-selected">{{page}}</strong>',
-	    moveButton:
-	        '<a href="#" class="tui-page-btn tui-{{type}}">' +
-	            '<span class="tui-ico-{{type}}">{{type}}</span>' +
-	        '</a>',
-	    disabledMoveButton:
-	        '<span class="tui-page-btn tui-is-disabled tui-{{type}}">' +
-	            '<span class="tui-ico-{{type}}">{{type}}</span>' +
-	        '</span>',
-	    moreButton:
-	        '<a href="#" class="tui-page-btn tui-{{type}}-is-ellip">' +
-	            '<span class="tui-ico-ellip">...</span>' +
-	        '</a>'
-	};
-	var moveButtons = ['first', 'prev', 'next', 'last'];
-	var moreButtons = ['prev', 'next'];
-
-	var INVALID_CONTAINER_ELEMENT = 'The container element is invalid.';
-
-	/**
-	 * Pagination view class
-	 * @class View
-	 * @param {string|HTMLElement|jQueryObject} container - Container element or id selector
-	 * @param {object} options - Option object
-	 *     @param {number} [options.totalItems=10] Total item count
-	 *     @param {number} [options.itemsPerPage=10] Item count per page
-	 *     @param {number} [options.visiblePages=10] Display page link count
-	 *     @param {number} [options.page=1] Display page after pagination draw.
-	 *     @param {boolean}[options.centerAlign=false] Whether current page keep center or not
-	 *     @param {string} [options.firstItemClassName='first-child'] The class name of the first item
-	 *     @param {string} [options.lastItemClassName='last-child'] The class name of the last item
-	 *     @param {object} [options.template] A markup string set to make element
-	 *         @param {string|function} [options.template.page] HTML template
-	 *         @param {string|function} [options.template.currentPage] HTML template
-	 *         @param {string|function} [options.template.moveButton] HTML template
-	 *         @param {string|function} [options.template.disabledMoveButton] HTML template
-	 *         @param {string|function} [options.template.moreButton] HTML template
-	 * @param {function} handler - Event handler
-	 * @ignore
-	 */
-	var View = snippet.defineClass(/** @lends View.prototype */{
-	    init: function(container, options, handler) {
-	        /**
-	         * Root element
-	         * @type {HTMLElement}
-	         * @private
-	         */
-	        this._containerElement = null;
-
-	        /**
-	         * First item's class name
-	         * @type {string}
-	         * @private
-	         */
-	        this._firstItemClassName = options.firstItemClassName;
-
-	        /**
-	         * Last item's class name
-	         * @type {string}
-	         * @private
-	         */
-	        this._lastItemClassName = options.lastItemClassName;
-
-	        /**
-	         * Default template
-	         * @type {object.<string, string|function>}
-	         * @private
-	         */
-	        this._template = extend({}, defaultTemplate, options.template);
-
-	        /**
-	         * Map of buttons
-	         * @type {object.<string, HTMLElement>}
-	         * @private
-	         */
-	        this._buttons = {};
-
-	        /**
-	         * Enabled page elements list
-	         * @type {array}
-	         * @private
-	         */
-
-	        this._enabledPageElements = [];
-
-	        this._setRootElement(container);
-	        this._setMoveButtons();
-	        this._setDisabledMoveButtons();
-	        this._setMoreButtons();
-	        this._attachClickEvent(handler);
-	    },
-	    /* eslint-enable complexity */
-
-	    /**
-	     * Set root element
-	     * @param {string|HTMLElement|jQueryObject} container - Container element or id selector
-	     * @private
-	     */
-	    _setRootElement: function(container) {
-	        if (isString(container)) {
-	            container = document.getElementById(container);
-	        } else if (container.jquery) {
-	            container = container[0];
-	        }
-
-	        if (!isHTMLNode(container)) {
-	            throw new Error(INVALID_CONTAINER_ELEMENT);
-	        }
-
-	        this._containerElement = container;
-	    },
-
-	    /**
-	     * Assign move buttons to option
-	     * @private
-	     */
-	    _setMoveButtons: function() {
-	        var template = this._template.moveButton;
-
-	        forEach(moveButtons, function(type) {
-	            this._buttons[type] = util.changeTemplateToElement(template, {
-	                type: type
-	            });
-	        }, this);
-	    },
-
-	    /**
-	     * Assign disabled move buttons to option
-	     * @private
-	     */
-	    _setDisabledMoveButtons: function() {
-	        var template = this._template.disabledMoveButton;
-	        var key;
-
-	        forEach(moveButtons, function(type) {
-	            key = 'disabled' + util.capitalizeFirstLetter(type);
-	            this._buttons[key] = util.changeTemplateToElement(template, {
-	                type: type
-	            });
-	        }, this);
-	    },
-
-	    /**
-	     * Assign more buttons to option
-	     * @private
-	     */
-	    _setMoreButtons: function() {
-	        var template = this._template.moreButton;
-	        var key;
-
-	        forEach(moreButtons, function(type) {
-	            key = type + 'More';
-	            this._buttons[key] = util.changeTemplateToElement(template, {
-	                type: type
-	            });
-	        }, this);
-	    },
-	    /* eslint-enable camelcase */
-
-	    /**
-	     * Get container element
-	     * @returns {HTMLElement} Container element
-	     * @private
-	     */
-	    _getContainerElement: function() {
-	        return this._containerElement;
-	    },
-
-	    /**
-	     * Append first button on container element
-	     * @param {object} viewData - View data to render pagination
-	     * @private
-	     */
-	    _appendFirstButton: function(viewData) {
-	        var button;
-
-	        if (viewData.page > 1) {
-	            button = this._buttons.first;
-	        } else {
-	            button = this._buttons.disabledFirst;
-	        }
-
-	        this._getContainerElement().appendChild(button);
-	    },
-
-	    /**
-	     * Append previous button on container element
-	     * @param {object} viewData - View data to render pagination
-	     * @private
-	     */
-	    _appendPrevButton: function(viewData) {
-	        var button;
-
-	        if (viewData.currentPageIndex > 1) {
-	            button = this._buttons.prev;
-	        } else {
-	            button = this._buttons.disabledPrev;
-	        }
-
-	        this._getContainerElement().appendChild(button);
-	    },
-
-	    /**
-	     * Append next button on container element
-	     * @param {object} viewData - View data to render pagination
-	     * @private
-	     */
-	    _appendNextButton: function(viewData) {
-	        var button;
-
-	        if (viewData.currentPageIndex < viewData.lastPageListIndex) {
-	            button = this._buttons.next;
-	        } else {
-	            button = this._buttons.disabledNext;
-	        }
-
-	        this._getContainerElement().appendChild(button);
-	    },
-
-	    /**
-	     * Append last button on container element
-	     * @param {object} viewData - View data to render pagination
-	     * @private
-	     */
-	    _appendLastButton: function(viewData) {
-	        var button;
-
-	        if (viewData.page < viewData.lastPage) {
-	            button = this._buttons.last;
-	        } else {
-	            button = this._buttons.disabledLast;
-	        }
-
-	        this._getContainerElement().appendChild(button);
-	    },
-
-	    /**
-	     * Append previous more button on container element
-	     * @param {object} viewData - View data to render pagination
-	     * @private
-	     */
-	    _appendPrevMoreButton: function(viewData) {
-	        var button;
-
-	        if (viewData.prevMore) {
-	            button = this._buttons.prevMore;
-	            util.addClass(button, this._firstItemClassName);
-	            this._getContainerElement().appendChild(button);
-	        }
-	    },
-
-	    /**
-	     * Append next more button on container element
-	     * @param {object} viewData - View data to render pagination
-	     * @private
-	     */
-	    _appendNextMoreButton: function(viewData) {
-	        var button;
-
-	        if (viewData.nextMore) {
-	            button = this._buttons.nextMore;
-	            util.addClass(button, this._lastItemClassName);
-	            this._getContainerElement().appendChild(button);
-	        }
-	    },
-
-	    /**
-	     * Append page number elements on container element
-	     * @param {object} viewData - View data to render pagination
-	     * @private
-	     */
-	    _appendPages: function(viewData) { // eslint-disable-line complexity
-	        var template = this._template;
-	        var firstPage = viewData.leftPageNumber;
-	        var lastPage = viewData.rightPageNumber;
-	        var pageItem, i;
-
-	        for (i = firstPage; i <= lastPage; i += 1) {
-	            if (i === viewData.page) {
-	                pageItem = util.changeTemplateToElement(template.currentPage, {page: i});
-	            } else {
-	                pageItem = util.changeTemplateToElement(template.page, {page: i});
-	                this._enabledPageElements.push(pageItem);
-	            }
-
-	            if (i === firstPage && !viewData.prevMore) {
-	                util.addClass(pageItem, this._firstItemClassName);
-	            }
-	            if (i === lastPage && !viewData.nextMore) {
-	                util.addClass(pageItem, this._lastItemClassName);
-	            }
-	            this._getContainerElement().appendChild(pageItem);
-	        }
-	    },
-
-	    /**
-	     * Attach click event
-	     * @param {function} callback - Callback function
-	     * @private
-	     */
-	    _attachClickEvent: function(callback) {
-	        var rootElement = this._getContainerElement();
-
-	        util.addEventListener(rootElement, 'click', bind(function(event) {
-	            var target = util.getTargetElement(event);
-	            var page, buttonType;
-
-	            util.preventDefault(event);
-
-	            buttonType = this._getButtonType(target);
-
-	            if (!buttonType) {
-	                page = this._getPageNumber(target);
-	            }
-
-	            callback(buttonType, page);
-	        }, this));
-	    },
-
-	    /**
-	     * Get button type to move button elements
-	     * @param {HTMLElement} targetElement - Each move button element
-	     * @returns {?string} Button type
-	     * @private
-	     */
-	    _getButtonType: function(targetElement) {
-	        var buttonType;
-	        var buttons = this._buttons;
-
-	        forEach(buttons, function(button, type) {
-	            if (util.isContained(targetElement, button)) {
-	                buttonType = type;
-
-	                return false;
-	            }
-
-	            return true;
-	        }, this);
-
-	        return buttonType;
-	    },
-	    /* eslint-enable no-lonely-if */
-
-	    /**
-	     * Get number to page elements
-	     * @param {HTMLElement} targetElement - Each page element
-	     * @returns {?number} Page number
-	     * @private
-	     */
-	    _getPageNumber: function(targetElement) {
-	        var targetPage = this._findPageElement(targetElement);
-	        var page;
-
-	        if (targetPage) {
-	            page = parseInt(targetPage.innerText, 10);
-	        }
-
-	        return page;
-	    },
-
-	    /**
-	     * Find target element from page elements
-	     * @param {HTMLElement} targetElement - Each page element
-	     * @returns {HTMLElement} Found element
-	     * @ignore
-	     */
-	    _findPageElement: function(targetElement) {
-	        var i, length, pickedItem;
-
-	        for (i = 0, length = this._enabledPageElements.length; i < length; i += 1) {
-	            pickedItem = this._enabledPageElements[i];
-
-	            if (util.isContained(targetElement, pickedItem)) {
-	                return pickedItem;
-	            }
-	        }
-
-	        return null;
-	    },
-
-	    /**
-	     * Reset container element
-	     * @private
-	     */
-	    _empty: function() {
-	        this._enabledPageElements = [];
-
-	        forEach(this._buttons, function(buttonElement, type) {
-	            this._buttons[type] = buttonElement.cloneNode(true);
-	        }, this);
-
-	        this._getContainerElement().innerHTML = '';
-	    },
-
-	    /**
-	     * Update view
-	     * @param {object} viewData - View data to render pagination
-	     * @ignore
-	     */
-	    update: function(viewData) {
-	        this._empty();
-	        this._appendFirstButton(viewData);
-	        this._appendPrevButton(viewData);
-	        this._appendPrevMoreButton(viewData);
-	        this._appendPages(viewData);
-	        this._appendNextMoreButton(viewData);
-	        this._appendNextButton(viewData);
-	        this._appendLastButton(viewData);
-	    }
-	});
-
-	module.exports = View;
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var snippet = __webpack_require__(7);
-
-	var util = {
-	    /**
-	     * Bind event to element
-	     * @param {HTMLElement} element - DOM element to attach the event handler on
-	     * @param {string} eventType - Event type
-	     * @param {Function} callback - Event handler function
-	     */
-	    addEventListener: function(element, eventType, callback) {
-	        if (element.addEventListener) {
-	            element.addEventListener(eventType, callback, false);
-	        } else {
-	            element.attachEvent('on' + eventType, callback);
-	        }
-	    },
-
-	    /**
-	     * Prevent default event
-	     * @param {Event} event - Event object
-	     */
-	    preventDefault: function(event) {
-	        if (event.preventDefault) {
-	            event.preventDefault();
-	        } else {
-	            event.returnValue = false;
-	        }
-	    },
-
-	    /**
-	     * Get target from event object
-	     * @param {Event} event - Event object
-	     * @returns {HTMLElement} Target element
-	     */
-	    getTargetElement: function(event) {
-	        return event.target || event.srcElement;
-	    },
-
-	    /**
-	     * Add classname
-	     * @param {HTMLElement} element - Target element
-	     * @param {string} className - Classname
-	     */
-	    addClass: function(element, className) {
-	        if (!element) {
-	            return;
-	        }
-
-	        if (element.className === '') {
-	            element.className = className;
-	        } else if (!util.hasClass(element, className)) {
-	            element.className += ' ' + className;
-	        }
-	    },
-
-	    /**
-	     * Check the element has specific class or not
-	     * @param {HTMLElement} element - A target element
-	     * @param {string} className - A name of class to find
-	     * @returns {boolean} Whether the element has the class
-	     */
-	    hasClass: function(element, className) {
-	        var elClassName = util.getClass(element);
-
-	        return elClassName.indexOf(className) > -1;
-	    },
-
-	    /**
-	     * Get class name
-	     * @param {HTMLElement} element - HTMLElement
-	     * @returns {string} Class name
-	     */
-	    getClass: function(element) {
-	        return element && element.getAttribute &&
-	            (element.getAttribute('class') || element.getAttribute('className') || '');
-	    },
-
-	    /**
-	     * Capitalize first letter
-	     * @param {string} str - String to change
-	     * @returns {string} Changed string
-	     */
-	    capitalizeFirstLetter: function(str) {
-	        return str.substring(0, 1).toUpperCase() + str.substring(1, str.length);
-	    },
-
-	    /**
-	     * Check the element is contained
-	     * @param {HTMLElement} find - Target element
-	     * @param {HTMLElement} parent - Wrapper element
-	     * @returns {boolean} Whether contained or not
-	     */
-	    isContained: function(find, parent) {
-	        if (!parent) {
-	            return false;
-	        }
-
-	        return (find === parent) ? true : parent.contains(find);
-	    },
-
-	    /**
-	     * Replace matched property with template
-	     * @param {string} template - String of template
-	     * @param {object} props - Properties
-	     * @returns {string} Replaced template string
-	     */
-	    replaceTemplate: function(template, props) {
-	        var newTemplate = template.replace(/\{\{(\w*)\}\}/g, function(value, prop) {
-	            return props.hasOwnProperty(prop) ? props[prop] : '';
-	        });
-
-	        return newTemplate;
-	    },
-
-	    /**
-	     * Change template string to element
-	     * @param {string|Function} template - Template option
-	     * @param {object} props - Template props
-	     * @returns {string} Replaced template
-	     */
-	    changeTemplateToElement: function(template, props) {
-	        var html;
-
-	        if (snippet.isFunction(template)) {
-	            html = template(props);
-	        } else {
-	            html = util.replaceTemplate(template, props);
-	        }
-
-	        return util.getElementFromTemplate(html);
-	    },
-
-	    /**
-	     * Get element from template string
-	     * @param {string} template - Template string
-	     * @returns {HTMLElement} Changed element
-	     */
-	    getElementFromTemplate: function(template) {
-	        var tempElement = document.createElement('div');
-
-	        tempElement.innerHTML = template;
-
-	        return tempElement.children[0];
-	    },
-
-	    /**
-	     * Send information to google analytics
-	     */
-	    sendHostNameToGA: function() {
-	        snippet.sendHostname('pagination', 'UA-129987462-1');
-	    }
-	};
-
-	module.exports = util;
-
+eval("module.exports = __WEBPACK_EXTERNAL_MODULE_tui_code_snippet__;\n\n//# sourceURL=webpack://tui.Pagination/external_%7B%22commonjs%22:%22tui-code-snippet%22,%22commonjs2%22:%22tui-code-snippet%22,%22amd%22:%22tui-code-snippet%22,%22root%22:%5B%22tui%22,%22util%22%5D%7D?");
 
 /***/ })
-/******/ ])
+
+/******/ });
 });
-;
