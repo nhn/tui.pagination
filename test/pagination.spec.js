@@ -1,7 +1,7 @@
 'use strict';
 
-var snippet = require('tui-code-snippet');
 var Pagination = require('../src/js/pagination.js');
+var util = require('../src/js/util');
 
 describe('Pagination', function() {
   var pagination1, pagination2, pagination3;
@@ -36,12 +36,12 @@ describe('Pagination', function() {
 
   describe('Using "usageStatistics" option', function() {
     beforeEach(function() {
-      spyOn(snippet, 'sendHostname');
+      spyOn(util, 'sendHostName');
     });
 
     it('when the value set to true by default, the host name is send to server.', function() {
       pagination1 = new Pagination($element1);
-      expect(snippet.sendHostname).toHaveBeenCalled();
+      expect(util.sendHostName).toHaveBeenCalled();
     });
 
     it('when the value set to false, the host name is not send to server.', function() {
@@ -49,7 +49,7 @@ describe('Pagination', function() {
         usageStatistics: false
       });
 
-      expect(snippet.sendHostname).not.toHaveBeenCalled();
+      expect(util.sendHostName).not.toHaveBeenCalled();
     });
   });
 

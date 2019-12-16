@@ -36,7 +36,6 @@
     "eslint-config-prettier": "^6.2.0",
     "eslint-config-tui": "^2.2.0",
     "eslint-loader": "^3.0.0",
-    "file-loader": "^0.9.0",
     "istanbul-instrumenter-loader": "^1.0.0",
     "jasmine-core": "^2.4.1",
     "jasmine-jquery": "^2.1.0",
@@ -62,6 +61,6 @@
     "webpack-dev-server": "^3.8.0"
   },
   "dependencies": {
-    "tui-code-snippet": "^1.5.0"
+    "tui-code-snippet": "^2.1.0"
   }
 }

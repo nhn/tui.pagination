@@ -1,29 +1,26 @@
-## Add dependency files
-
-To use a pagination component, you must include CSS and JavaScript files.
-These files can be downloaded from the `dist` folder in this repository.
-
-#### CSS File
+## Load files
 
 ```html
-<link rel="stylesheet" href="tui-pagination.css">
+<html>
+    <head>
+        ....
+        <link href="tui-pagination.css" rel="stylesheet">
+    </head>
+    <body>
+        ....
+        <script type="text/javascript" src="tui-pagination.min.js"></script>
+        ....
+    </body>
+</html>
 ```
 
-#### JS Files
-```html
-<script type="text/javascript" src="tui-code-snippet.js"></script>
-<script type="text/javascript" src="tui-pagination.js"></script>
-```
-
-## Create a pagination component
-
-### Step 1. Add a container element that the pagination component will be created.
+## Write a wrapper element
 
 ```html
 <div id="pagination" class="tui-pagination"></div>
 ```
 
-### Step 2. Create instance.
+## Create an instance
 
 Create an instance by passing the container element and option values as parameters.
 
