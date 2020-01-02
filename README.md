@@ -33,15 +33,15 @@ It also serves as important index to determine the future course of projects.
  To disable GA, use the following `usageStatistics` option when creating the instance.
 
 ```js
-var options = {
+const options = {
     ...
     usageStatistics: false
 }
 
-var instance = new Pagination(container, options);
+const instance = new Pagination(container, options);
 ```
 
-Or, include [`tui-code-snippet`](https://github.com/nhn/tui.code-snippet)(**v2.1.0** or **later**) and then immediately write the options as follows:
+Or, include [`tui-code-snippet`](https://github.com/nhn/tui.code-snippet)(**v2.2.0** or **later**) and then immediately write the options as follows:
 
 ```js
 tui.usageStatistics = false;
@@ -114,6 +114,7 @@ tui.pagination/
 ├─ latest/
 │  ├─ tui-pagination.css
 │  ├─ tui-pagination.js
+│  ├─ tui-pagination.min.css
 │  └─ tui-pagination.min.js
 ├─ v3.2.0/
 │  ├─ ...
@@ -141,12 +142,12 @@ To get the constructor function, you should import the module using one of the f
 
 #### Using namespace in browser environment
 ``` javascript
-var Pagination = tui.Pagination;
+const Pagination = tui.Pagination;
 ```
 
 #### Using module format in node environment
 ``` javascript
-var Pagination = require('tui-pagination'); /* CommonJS */
+const Pagination = require('tui-pagination'); /* CommonJS */
 ```
 
 ``` javascript
@@ -156,8 +157,8 @@ import Pagination from 'tui-pagination'; /* ES6 */
 You can create an instance with [options](https://nhn.github.io/tui.pagination/latest/Pagination) and call various APIs after creating an instance.
 
 ``` javascript
-var container = document.getElementById('tui-pagination-container');
-var instance = new Pagination(container, { ... });
+const container = document.getElementById('tui-pagination-container');
+const instance = new Pagination(container, { ... });
 
 instance.getCurrentPage();
 ```
@@ -166,7 +167,7 @@ For more information about the API, please see [here](https://nhn.github.io/tui.
 
 
 ## 🔩 Dependency
-* [tui-code-snippet](https://github.com/nhn/tui.code-snippet) >= 2.1.0
+* [tui-code-snippet](https://github.com/nhn/tui.code-snippet) >=2.2.0
 
 
 ## 🌏 Browser Support

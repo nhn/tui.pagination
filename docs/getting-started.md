@@ -1,45 +1,53 @@
-## Load files
+## Install
 
-```html
-<html>
-    <head>
-        ....
-        <link href="tui-pagination.css" rel="stylesheet">
-    </head>
-    <body>
-        ....
-        <script type="text/javascript" src="tui-pagination.min.js"></script>
-        ....
-    </body>
-</html>
+``` sh
+# npm
+$ npm install --save tui-pagination # Latest version
+$ npm install --save tui-pagination@<version> # Specific version
 ```
 
-## Write a wrapper element
+It can also be installed by using bower or downloaded by CDN. Please refer to the [💾 Install](https://github.com/nhn/tui.pagination#-install).
+
+## Usage
+
+### Write a wrapper element
+
+A wrapper element should have `tui-pagination` as a class name.
 
 ```html
 <div id="pagination" class="tui-pagination"></div>
 ```
 
-## Create an instance
+### Import a component
+
+```javascript
+// ES6
+import Pagination from 'tui-pagination';
+import 'tui-pagination/dist/tui-pagination.css';
+```
+
+It can also be used by namespace or CommonJS module. Please refer to the [🔨 Usage](https://github.com/nhn/tui.pagination#-usage).
+
+### Create an instance
 
 Create an instance by passing the container element and option values as parameters.
 
 * Create with the id selector of the container element
 ```js
-var pagination = new tui.Pagination('pagination', options);
+const pagination = new Pagination('pagination');
 ```
 
 * Create with a container element
 
 ```js
-var container = document.getElementById('pagination');
-var pagination = new tui.Pagination(container, options);
+const container = document.getElementById('pagination');
+const pagination = new Pagination(container);
 ```
 
 * Create with options
 
 ```js
-var options = {
+const options = {
   totalItems: 10,
   itemsPerPage: 10,
   visiblePages: 10,
@@ -65,7 +73,7 @@ var options = {
    }
 };
 
-var pagination = new tui.Pagination('pagination', options);
+const pagination = new Pagination('pagination', options);
 ```
 
 Information about each option is as follows:
@@ -98,6 +106,8 @@ The example below uses the template option to customize the more button.
 
 ### Using string template
 
+If you use string templates, it should be converted by [tui-code-snippet's template](https://nhn.github.io/tui.code-snippet/2.2.0/domUtil#template).
+
 ```js
 ...
 template: {
@@ -117,8 +127,8 @@ template: {
 ...
 template: {
     ...
-    moveButton: function(type) {
-        var template = '';
+    moveButton: type => {
+        let template = '';
 
         if (type === 'first') {
             template = '<div class="custom-page-btn">' +
@@ -151,21 +161,18 @@ For each custom event, the `page` number is returned in the` eventData` object, 
 
 
 ```js
-pagination.on('beforeMove', function(evt) {
-    var ePage = evt.page;
-    var result = ajax.call({page: ePage});
+pagination.on('beforeMove', evt => {
+    const {page} = evt;
+    const result = ajax.call({page});
 
     if(result) {
-        pagination.movePageTo(ePage);
+        pagination.movePageTo(page);
     } else {
         return false;
     }
 });
 
-pagination.on('afterMove', function(evt) {
-    var ePage = evt.page;
-    console.log(ePage);
-});
+pagination.on('afterMove', ({page}) => console.log(page));
 ```
 
-For more information, see the [API](https://nhn.github.io/tui.pagination/latest/).
+For more information about the API, please see [here](https://nhn.github.io/tui.pagination/latest/Pagination).
