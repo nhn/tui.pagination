@@ -12,7 +12,7 @@ It can also be installed by using bower or downloaded by CDN. Please refer to th
 
 ### Write a wrapper element
 
-A wrapper element should have `tui-pagination` as a class name.
+A wrapper element should have `tui-pagination` as a class name to apply tui-pagination's style.
 
 ```html
 <div id="pagination" class="tui-pagination"></div>

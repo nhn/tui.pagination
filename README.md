@@ -129,7 +129,7 @@ tui.pagination/
 
 ### HTML
 
-Add the container element to create the component.
+Add the container element to create the component. A wrapper element should have `tui-pagination` as a class name to apply tui-pagination's style.
 
 ``` html
 <div id="tui-pagination-container" class="tui-pagination"></div>
