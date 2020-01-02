@@ -102,7 +102,7 @@ function setConfig(defaultConfig, server) {
 module.exports = function(config) {
   var defaultConfig = {
     basePath: './',
-    frameworks: ['jquery-1.8.3', 'jasmine', 'es5-shim'],
+    frameworks: ['jasmine', 'es5-shim'],
     files: ['test/index.js'],
     preprocessors: {
       'test/index.js': ['webpack', 'sourcemap']
