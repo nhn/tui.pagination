@@ -389,9 +389,11 @@ var View = defineClass(
      * @ignore
      */
     _findPageElement: function(targetElement) {
-      var i, length, pickedItem;
+      var i = 0;
+      var length = this._enabledPageElements.length;
+      var pickedItem;
 
-      for (i = 0, length = this._enabledPageElements.length; i < length; i += 1) {
+      for (; i < length; i += 1) {
         pickedItem = this._enabledPageElements[i];
 
         if (util.isContained(targetElement, pickedItem)) {

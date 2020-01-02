@@ -13,7 +13,8 @@
     "serve": "webpack-dev-server --inline --hot -d",
     "serve:ie8": "webpack-dev-server -d",
     "doc:serve": "tuidoc --serv",
-    "doc": "tuidoc"
+    "doc": "tuidoc",
+    "note": "tui-note"
   },
   "repository": {
     "type": "git",
@@ -38,14 +39,11 @@
     "eslint-loader": "^3.0.0",
     "istanbul-instrumenter-loader": "^1.0.0",
     "jasmine-core": "^2.4.1",
-    "jasmine-jquery": "^2.1.0",
     "karma": "^4.3.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-coverage": "^1.1.1",
     "karma-es5-shim": "^0.0.4",
     "karma-jasmine": "^1.0.2",
-    "karma-jasmine-jquery": "^0.1.1",
-    "karma-jquery": "^0.2.2",
     "karma-junit-reporter": "^1.2.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webdriver-launcher": "git+https://github.com/nhn/karma-webdriver-launcher.git#v1.2.0",
@@ -61,6 +59,6 @@
     "webpack-dev-server": "^3.8.0"
   },
   "dependencies": {
-    "tui-code-snippet": "^2.1.0"
+    "tui-code-snippet": "^2.2.0"
   }
 }
