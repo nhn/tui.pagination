@@ -34,8 +34,8 @@ It also serves as important index to determine the future course of projects.
 
 ```js
 const options = {
-    ...
-    usageStatistics: false
+  ...
+  usageStatistics: false
 }
 
 const instance = new Pagination(container, options);

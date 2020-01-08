@@ -135,7 +135,9 @@ var View = defineClass(
       forEach(
         moveButtons,
         function(type) {
-          this._buttons[type] = util.createElementByTemplate(this._template.moveButton, {type: type});
+          this._buttons[type] = util.createElementByTemplate(this._template.moveButton, {
+            type: type
+          });
         },
         this
       );
@@ -150,7 +152,9 @@ var View = defineClass(
         moveButtons,
         function(type) {
           var key = 'disabled' + util.capitalizeFirstLetter(type);
-          this._buttons[key] = util.createElementByTemplate(this._template.disabledMoveButton, {type: type});
+          this._buttons[key] = util.createElementByTemplate(this._template.disabledMoveButton, {
+            type: type
+          });
         },
         this
       );
@@ -165,7 +169,9 @@ var View = defineClass(
         moreButtons,
         function(type) {
           var key = type + 'More';
-          this._buttons[key] = util.createElementByTemplate(this._template.moreButton, {type: type});
+          this._buttons[key] = util.createElementByTemplate(this._template.moreButton, {
+            type: type
+          });
         },
         this
       );
@@ -292,9 +298,9 @@ var View = defineClass(
 
       for (i = firstPage; i <= lastPage; i += 1) {
         if (i === viewData.page) {
-          pageItem = util.createElementByTemplate(this._template.currentPage, {page: i});
+          pageItem = util.createElementByTemplate(this._template.currentPage, { page: i });
         } else {
-          pageItem = util.createElementByTemplate(this._template.page, {page: i});
+          pageItem = util.createElementByTemplate(this._template.page, { page: i });
           this._enabledPageElements.push(pageItem);
         }
 

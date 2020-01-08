@@ -1,6 +1,6 @@
 'use strict';
 
-var View = require('../src/js/view.js');
+var View = require('@/view.js');
 
 function createElement(tagName, id) {
   var elem = document.createElement(tagName);

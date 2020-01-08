@@ -5,6 +5,8 @@
 
 'use strict';
 
+var path = require('path');
+
 var webdriverConfig = {
   hostname: 'fe.nhnent.com',
   port: 4444,
@@ -134,6 +136,11 @@ module.exports = function(config) {
             loader: 'url-loader'
           }
         ]
+      },
+      resolve: {
+        alias: {
+          '@': path.resolve(__dirname, './src/js')
+        }
       }
     },
     port: 9876,

@@ -172,7 +172,7 @@ var Pagination = defineClass(
       } else {
         pageIndex = isPrevMove
           ? (currentPageIndex - 1) * pageCount
-          : (currentPageIndex * pageCount) + 1;
+          : currentPageIndex * pageCount + 1;
       }
 
       return pageIndex;
@@ -254,7 +254,7 @@ var Pagination = defineClass(
           rightPageNumber = lastPage;
         }
       } else {
-        leftPageNumber = ((currentPageIndex - 1) * visiblePages) + 1;
+        leftPageNumber = (currentPageIndex - 1) * visiblePages + 1;
         rightPageNumber = currentPageIndex * visiblePages;
         rightPageNumber = Math.min(rightPageNumber, lastPage);
       }
@@ -342,7 +342,7 @@ var Pagination = defineClass(
        *     }
        * });
        */
-      if (!this.invoke('beforeMove', {page: targetPage})) {
+      if (!this.invoke('beforeMove', { page: targetPage })) {
         return;
       }
 
@@ -358,7 +358,7 @@ var Pagination = defineClass(
        *      console.log(currentPage);
        * });
        */
-      this.fire('afterMove', {page: targetPage});
+      this.fire('afterMove', { page: targetPage });
     },
 
     /**

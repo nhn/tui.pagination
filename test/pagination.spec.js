@@ -1,7 +1,7 @@
 'use strict';
 
-var Pagination = require('../src/js/pagination.js');
-var util = require('../src/js/util');
+var Pagination = require('@/pagination.js');
+var util = require('@/util');
 
 function createElement(tagName, id) {
   var elem = document.createElement(tagName);
