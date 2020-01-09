@@ -1,14 +1,16 @@
 'use strict';
 
-var snippet = require('tui-code-snippet');
+var forEach = require('tui-code-snippet/collection/forEach');
+var defineClass = require('tui-code-snippet/defineClass/defineClass');
+var getTarget = require('tui-code-snippet/domEvent/getTarget');
+var on = require('tui-code-snippet/domEvent/on');
+var preventDefault = require('tui-code-snippet/domEvent/preventDefault');
+var addClass = require('tui-code-snippet/domUtil/addClass');
+var extend = require('tui-code-snippet/object/extend');
+var isString = require('tui-code-snippet/type/isString');
+var isHTMLNode = require('tui-code-snippet/type/isHTMLNode');
 
 var util = require('./util.js');
-
-var extend = snippet.extend;
-var forEach = snippet.forEach;
-var isString = snippet.isString;
-var bind = snippet.bind;
-var isHTMLNode = snippet.isHTMLNode;
 
 var defaultTemplate = {
   page: '<a href="#" class="tui-page-btn">{{page}}</a>',
@@ -52,7 +54,7 @@ var INVALID_CONTAINER_ELEMENT = 'The container element is invalid.';
  * @param {function} handler - Event handler
  * @ignore
  */
-var View = snippet.defineClass(
+var View = defineClass(
   /** @lends View.prototype */ {
     init: function(container, options, handler) {
       /**
@@ -130,12 +132,10 @@ var View = snippet.defineClass(
      * @private
      */
     _setMoveButtons: function() {
-      var template = this._template.moveButton;
-
       forEach(
         moveButtons,
         function(type) {
-          this._buttons[type] = util.changeTemplateToElement(template, {
+          this._buttons[type] = util.createElementByTemplate(this._template.moveButton, {
             type: type
           });
         },
@@ -148,14 +148,11 @@ var View = snippet.defineClass(
      * @private
      */
     _setDisabledMoveButtons: function() {
-      var template = this._template.disabledMoveButton;
-      var key;
-
       forEach(
         moveButtons,
         function(type) {
-          key = 'disabled' + util.capitalizeFirstLetter(type);
-          this._buttons[key] = util.changeTemplateToElement(template, {
+          var key = 'disabled' + util.capitalizeFirstLetter(type);
+          this._buttons[key] = util.createElementByTemplate(this._template.disabledMoveButton, {
             type: type
           });
         },
@@ -168,14 +165,11 @@ var View = snippet.defineClass(
      * @private
      */
     _setMoreButtons: function() {
-      var template = this._template.moreButton;
-      var key;
-
       forEach(
         moreButtons,
         function(type) {
-          key = type + 'More';
-          this._buttons[key] = util.changeTemplateToElement(template, {
+          var key = type + 'More';
+          this._buttons[key] = util.createElementByTemplate(this._template.moreButton, {
             type: type
           });
         },
@@ -271,7 +265,7 @@ var View = snippet.defineClass(
 
       if (viewData.prevMore) {
         button = this._buttons.prevMore;
-        util.addClass(button, this._firstItemClassName);
+        addClass(button, this._firstItemClassName);
         this._getContainerElement().appendChild(button);
       }
     },
@@ -286,7 +280,7 @@ var View = snippet.defineClass(
 
       if (viewData.nextMore) {
         button = this._buttons.nextMore;
-        util.addClass(button, this._lastItemClassName);
+        addClass(button, this._lastItemClassName);
         this._getContainerElement().appendChild(button);
       }
     },
@@ -298,24 +292,23 @@ var View = snippet.defineClass(
      */
     // eslint-disable-next-line complexity
     _appendPages: function(viewData) {
-      var template = this._template;
       var firstPage = viewData.leftPageNumber;
       var lastPage = viewData.rightPageNumber;
       var pageItem, i;
 
       for (i = firstPage; i <= lastPage; i += 1) {
         if (i === viewData.page) {
-          pageItem = util.changeTemplateToElement(template.currentPage, {page: i});
+          pageItem = util.createElementByTemplate(this._template.currentPage, { page: i });
         } else {
-          pageItem = util.changeTemplateToElement(template.page, {page: i});
+          pageItem = util.createElementByTemplate(this._template.page, { page: i });
           this._enabledPageElements.push(pageItem);
         }
 
         if (i === firstPage && !viewData.prevMore) {
-          util.addClass(pageItem, this._firstItemClassName);
+          addClass(pageItem, this._firstItemClassName);
         }
         if (i === lastPage && !viewData.nextMore) {
-          util.addClass(pageItem, this._lastItemClassName);
+          addClass(pageItem, this._lastItemClassName);
         }
         this._getContainerElement().appendChild(pageItem);
       }
@@ -329,14 +322,14 @@ var View = snippet.defineClass(
     _attachClickEvent: function(callback) {
       var rootElement = this._getContainerElement();
 
-      util.addEventListener(
+      on(
         rootElement,
         'click',
-        bind(function(event) {
-          var target = util.getTargetElement(event);
+        function(ev) {
+          var target = getTarget(ev);
           var page, buttonType;
 
-          util.preventDefault(event);
+          preventDefault(ev);
 
           buttonType = this._getButtonType(target);
 
@@ -345,7 +338,8 @@ var View = snippet.defineClass(
           }
 
           callback(buttonType, page);
-        }, this)
+        },
+        this
       );
     },
 
@@ -401,9 +395,11 @@ var View = snippet.defineClass(
      * @ignore
      */
     _findPageElement: function(targetElement) {
-      var i, length, pickedItem;
+      var i = 0;
+      var length = this._enabledPageElements.length;
+      var pickedItem;
 
-      for (i = 0, length = this._enabledPageElements.length; i < length; i += 1) {
+      for (; i < length; i += 1) {
         pickedItem = this._enabledPageElements[i];
 
         if (util.isContained(targetElement, pickedItem)) {

@@ -1,85 +1,10 @@
 'use strict';
 
-var snippet = require('tui-code-snippet');
+var template = require('tui-code-snippet/domUtil/template');
+var sendHostname = require('tui-code-snippet/request/sendHostname');
+var isFunction = require('tui-code-snippet/type/isFunction');
 
 var util = {
-  /**
-   * Bind event to element
-   * @param {HTMLElement} element - DOM element to attach the event handler on
-   * @param {string} eventType - Event type
-   * @param {Function} callback - Event handler function
-   */
-  addEventListener: function(element, eventType, callback) {
-    if (element.addEventListener) {
-      element.addEventListener(eventType, callback, false);
-    } else {
-      element.attachEvent('on' + eventType, callback);
-    }
-  },
-
-  /**
-   * Prevent default event
-   * @param {Event} event - Event object
-   */
-  preventDefault: function(event) {
-    if (event.preventDefault) {
-      event.preventDefault();
-    } else {
-      event.returnValue = false;
-    }
-  },
-
-  /**
-   * Get target from event object
-   * @param {Event} event - Event object
-   * @returns {HTMLElement} Target element
-   */
-  getTargetElement: function(event) {
-    return event.target || event.srcElement;
-  },
-
-  /**
-   * Add classname
-   * @param {HTMLElement} element - Target element
-   * @param {string} className - Classname
-   */
-  addClass: function(element, className) {
-    if (!element) {
-      return;
-    }
-
-    if (element.className === '') {
-      element.className = className;
-    } else if (!util.hasClass(element, className)) {
-      element.className += ' ' + className;
-    }
-  },
-
-  /**
-   * Check the element has specific class or not
-   * @param {HTMLElement} element - A target element
-   * @param {string} className - A name of class to find
-   * @returns {boolean} Whether the element has the class
-   */
-  hasClass: function(element, className) {
-    var elClassName = util.getClass(element);
-
-    return elClassName.indexOf(className) > -1;
-  },
-
-  /**
-   * Get class name
-   * @param {HTMLElement} element - HTMLElement
-   * @returns {string} Class name
-   */
-  getClass: function(element) {
-    return (
-      element &&
-      element.getAttribute &&
-      (element.getAttribute('class') || element.getAttribute('className') || '')
-    );
-  },
-
   /**
    * Capitalize first letter
    * @param {string} str - String to change
@@ -104,55 +29,46 @@ var util = {
   },
 
   /**
-   * Replace matched property with template
-   * @param {string} template - String of template
-   * @param {object} props - Properties
-   * @returns {string} Replaced template string
+   * Create an new element by template literals.
+   * @param {string|function} tmpl - template
+   * @param {Object} context - context
+   * @returns {HTMLElement}
    */
-  replaceTemplate: function(template, props) {
-    var newTemplate = template.replace(/\{\{(\w*)\}\}/g, function(value, prop) {
-      return props.hasOwnProperty(prop) ? props[prop] : '';
-    });
+  createElementByTemplate: function(tmpl, context) {
+    var parent = document.createElement('div');
+    var html = isFunction(tmpl) ? tmpl(context) : template(tmpl, context);
+    parent.innerHTML = html;
 
-    return newTemplate;
+    return parent.firstChild;
   },
 
   /**
-   * Change template string to element
-   * @param {string|Function} template - Template option
-   * @param {object} props - Template props
-   * @returns {string} Replaced template
+   * Create a new function that, when called, has its this keyword set to the provided value.
+   * @param {function} fn A original function before binding
+   * @param {*} obj context of function in arguments[0]
+   * @returns {function} A new bound function with context that is in arguments[1]
    */
-  changeTemplateToElement: function(template, props) {
-    var html;
+  bind: function(fn, obj) {
+    var slice = Array.prototype.slice;
+    var args;
 
-    if (snippet.isFunction(template)) {
-      html = template(props);
-    } else {
-      html = util.replaceTemplate(template, props);
+    if (fn.bind) {
+      return fn.bind.apply(fn, slice.call(arguments, 1));
     }
 
-    return util.getElementFromTemplate(html);
+    args = slice.call(arguments, 2);
+
+    return function() {
+      return fn.apply(obj, args.length ? args.concat(slice.call(arguments)) : arguments);
+    };
   },
 
   /**
-   * Get element from template string
-   * @param {string} template - Template string
-   * @returns {HTMLElement} Changed element
+   * Send hostname for GA
+   * @ignore
    */
-  getElementFromTemplate: function(template) {
-    var tempElement = document.createElement('div');
-
-    tempElement.innerHTML = template;
-
-    return tempElement.children[0];
-  },
-
-  /**
-   * Send information to google analytics
-   */
-  sendHostNameToGA: function() {
-    snippet.sendHostname('pagination', 'UA-129987462-1');
+  sendHostName: function() {
+    sendHostname('pagination', 'UA-129987462-1');
   }
 };
 
