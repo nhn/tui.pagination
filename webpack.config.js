@@ -9,10 +9,33 @@ var path = require('path');
 var pkg = require('./package.json');
 var webpack = require('webpack');
 var MiniCssExtractPlugin = require('mini-css-extract-plugin');
+var TerserPlugin = require('terser-webpack-plugin');
+var OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
+function getOptimization(isMinified) {
+  if (isMinified) {
+    return {
+      minimizer: [
+        new TerserPlugin({
+          cache: true,
+          parallel: true,
+          sourceMap: false,
+          extractComments: false
+        }),
+        new OptimizeCSSAssetsPlugin()
+      ]
+    };
+  }
+
+  return {
+    minimize: false
+  };
+}
 
 module.exports = function(env, argv) {
   var isProduction = argv.mode === 'production';
-  var FILENAME = pkg.name + (isProduction ? '.min.js' : '.js');
+  var isMinified = !!argv.minify;
+  var FILENAME = pkg.name + (isMinified ? '.min' : '');
   var BANNER = [
     'TOAST UI Pagination',
     '@version ' + pkg.version,
@@ -28,15 +51,7 @@ module.exports = function(env, argv) {
       libraryTarget: 'umd',
       path: path.resolve(__dirname, 'dist'),
       publicPath: 'dist',
-      filename: FILENAME
-    },
-    externals: {
-      'tui-code-snippet': {
-        commonjs: 'tui-code-snippet',
-        commonjs2: 'tui-code-snippet',
-        amd: 'tui-code-snippet',
-        root: ['tui', 'util']
-      }
+      filename: FILENAME + '.js'
     },
     module: {
       rules: [
@@ -51,10 +66,7 @@ module.exports = function(env, argv) {
         },
         {
           test: /\.css$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            'css-loader'
-          ]
+          use: [MiniCssExtractPlugin.loader, 'css-loader']
         },
         {
           test: /\.png$/,
@@ -64,8 +76,9 @@ module.exports = function(env, argv) {
     },
     plugins: [
       new webpack.BannerPlugin(BANNER),
-      new MiniCssExtractPlugin({filename: pkg.name + '.css'})
+      new MiniCssExtractPlugin({ filename: FILENAME + '.css' })
     ],
+    optimization: getOptimization(isMinified),
     devServer: {
       historyApiFallback: false,
       progress: true,

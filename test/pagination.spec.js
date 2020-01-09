@@ -1,60 +1,74 @@
 'use strict';
 
-var snippet = require('tui-code-snippet');
-var Pagination = require('../src/js/pagination.js');
+var Pagination = require('@/pagination.js');
+var util = require('@/util');
+
+function createElement(tagName, id) {
+  var elem = document.createElement(tagName);
+  elem.id = id;
+  document.body.appendChild(elem);
+
+  return elem;
+}
 
 describe('Pagination', function() {
   var pagination1, pagination2, pagination3;
-  var $element1, $element2, $element3;
+  var element1, element2, element3;
 
   beforeEach(function() {
-    $element1 = $('<div id="pagination1"></div>');
-    $element2 = $('<div id="pagination2"></div>');
-    $element3 = $('<div id="pagination3"></div>');
+    element1 = createElement('div', 'pagination1');
+    element2 = createElement('div', 'pagination2');
+    element3 = createElement('div', 'pagination3');
 
-    pagination1 = new Pagination($element1);
+    pagination1 = new Pagination('pagination1');
 
-    pagination2 = new Pagination($element2, {
+    pagination2 = new Pagination('#pagination2', {
       totalItems: 500,
       itemsPerPage: 10,
       visiblePages: 11,
       page: 22
     });
 
-    pagination3 = new Pagination($element3, {
+    pagination3 = new Pagination(element3, {
       totalItems: 500,
       itemsPerPage: 10,
       visiblePages: 11,
       page: 15,
       centerAlign: true,
       template: {
-        page: '<a href="#" class="page">{{page}}</a>',
-        currentPage: '<span class="page">{{page}}</span>'
+        page: '<a href=# class=page>{{page}}</a>',
+        currentPage: '<span class=page>{{page}}</span>'
       }
     });
   });
 
-  describe('Using "usageStatistics" option', function() {
+  afterEach(function() {
+    document.body.removeChild(element1);
+    document.body.removeChild(element2);
+    document.body.removeChild(element3);
+  });
+
+  describe('usageStatistics', function() {
     beforeEach(function() {
-      spyOn(snippet, 'sendHostname');
+      spyOn(util, 'sendHostName');
     });
 
-    it('when the value set to true by default, the host name is send to server.', function() {
-      pagination1 = new Pagination($element1);
-      expect(snippet.sendHostname).toHaveBeenCalled();
+    it('should send a hostname if it sets to true or nothing', function() {
+      pagination1 = new Pagination(element1);
+      expect(util.sendHostName).toHaveBeenCalled();
     });
 
-    it('when the value set to false, the host name is not send to server.', function() {
-      pagination1 = new Pagination($element1, {
+    it('should not send a hostname if it sets to false', function() {
+      pagination1 = new Pagination(element1, {
         usageStatistics: false
       });
 
-      expect(snippet.sendHostname).not.toHaveBeenCalled();
+      expect(util.sendHostName).not.toHaveBeenCalled();
     });
   });
 
   describe('Private method - ', function() {
-    it('"getCurrentPage" returns page value in options', function() {
+    it('getCurrentPage() should return page value in options', function() {
       var page1, page2, page3;
       page1 = pagination1.getCurrentPage();
       expect(page1).toBe(1); // default
@@ -64,7 +78,7 @@ describe('Pagination', function() {
       expect(page3).toBe(15);
     });
 
-    it('"getLastPage" returns last page number on total pages.', function() {
+    it('getLastPage should return last page number on total pages', function() {
       var lastPage1, lastPage2, lastPage3;
       lastPage1 = pagination1._getLastPage();
       expect(lastPage1).toBe(1); // default
@@ -74,7 +88,7 @@ describe('Pagination', function() {
       expect(lastPage3).toBe(50);
     });
 
-    it('"getPageIndex" returns different page index by "centerAlign" option.', function() {
+    it('getPageIndex should return different page index by centerAlign option', function() {
       var pageIndex1, pageIndex2;
       pageIndex1 = pagination2._getPageIndex(12);
       expect(pageIndex1).toBe(2);
@@ -82,7 +96,7 @@ describe('Pagination', function() {
       expect(pageIndex2).toBe(7);
     });
 
-    it('"getRelativePage" returns prev or next page by type.', function() {
+    it('getRelativePage should return prev or next page by type', function() {
       var prevPage, nextPage;
       prevPage = pagination2._getRelativePage('prev');
       expect(prevPage).toBe(21);
@@ -90,7 +104,7 @@ describe('Pagination', function() {
       expect(nextPage).toBe(23);
     });
 
-    it('"getMorePage" returns start or last page index of next page list by type.', function() {
+    it('getMorePage should return start or last page index of next page list by type', function() {
       var prevPageIndex, nextPageIndex, prevCenterPageIndex, nextCenterPageIndex;
       prevPageIndex = pagination2._getMorePageIndex('prev');
       expect(prevPageIndex).toBe(11);
@@ -104,7 +118,7 @@ describe('Pagination', function() {
   });
 
   describe('Public API -', function() {
-    it('When "movePageTo" is called, the page is changed.', function() {
+    it('When movePageTo is called, the page should be changed', function() {
       var page1, page2, page3, page4, lastPage;
 
       pagination2.movePageTo(1);
@@ -125,7 +139,7 @@ describe('Pagination', function() {
       expect(page4).toBe(lastPage);
     });
 
-    it('When "reset" is called, the current page reset and total items is changed.', function() {
+    it('When reset is called, the current page should reset and total items should be changed', function() {
       var currentPage;
 
       pagination3.reset();
@@ -138,25 +152,25 @@ describe('Pagination', function() {
       expect(currentPage).toBe(1);
     });
 
-    it('When "reset" is called with total items, the displaying pages are changed.', function() {
+    it('When reset is called with total items, the displaying pages should be changed', function() {
       var pages;
 
       pagination3.reset(0);
-      pages = $element3.find('.page').length;
+      pages = element3.querySelectorAll('.page').length;
       expect(pages).toBe(1);
 
       pagination3.reset(20);
-      pages = $element3.find('.page').length;
+      pages = element3.querySelectorAll('.page').length;
       expect(pages).toBe(2);
     });
   });
 
   describe('Event - ', function() {
     it(
-      'When "movePageTo" is called and the "beforeMove" event is ignore,' +
-        'the current page is not changed.',
+      'When movePageTo is called and the beforeMove event is ignore,' +
+        'the current page should be not changed',
       function() {
-        var mock = jasmine.createSpy('"beforeMove" handler').and.returnValue(false);
+        var mock = jasmine.createSpy('beforeMove handler').and.returnValue(false);
         var prevPage = pagination2.getCurrentPage();
         var currentPage;
 
@@ -169,10 +183,10 @@ describe('Pagination', function() {
     );
 
     it(
-      'When "movePageTo" is called and the "beforeMove" event is fired,' +
-        'the current page is change.',
+      'When movePageTo is called and the beforeMove event is fired,' +
+        'the current page should be changed',
       function() {
-        var mock = jasmine.createSpy('"beforeMove" handler').and.returnValue(true);
+        var mock = jasmine.createSpy('beforeMove handler').and.returnValue(true);
         var prevPage = pagination2.getCurrentPage();
         var currentPage;
 
@@ -185,11 +199,11 @@ describe('Pagination', function() {
     );
 
     it(
-      'When "movePageTo" is called and the "beforeMove" event is fired,' +
-        '"afterMove" event is fired.',
+      'When movePageTo is called and the beforeMove event is fired,' +
+        'afterMove event should be fired',
       function() {
-        var beforeMoveMock = jasmine.createSpy('"beforeMove" handler').and.returnValue(true);
-        var afterMoveMock = jasmine.createSpy('"afterMove" handler');
+        var beforeMoveMock = jasmine.createSpy('beforeMove handler').and.returnValue(true);
+        var afterMoveMock = jasmine.createSpy('afterMove handler');
 
         pagination2.on('beforeMove', beforeMoveMock);
         pagination2.on('afterMove', afterMoveMock);
@@ -199,7 +213,7 @@ describe('Pagination', function() {
       }
     );
 
-    it('When the "first" move button is clicked, the page is changeed to 1 page.', function() {
+    it('When the first move button is clicked, the page should be changeed to 1 page', function() {
       var currentPage;
 
       pagination3._onClickHandler('first');
@@ -208,7 +222,7 @@ describe('Pagination', function() {
       expect(currentPage).toBe(1);
     });
 
-    it('When the "prev" move button is clicked, the page is changed to previous page.', function() {
+    it('When the prev move button is clicked, the page should be changed to previous page', function() {
       var prevPage = pagination3.getCurrentPage();
       var currentPage;
 
@@ -218,7 +232,7 @@ describe('Pagination', function() {
       expect(currentPage).toBe(prevPage - 1);
     });
 
-    it('When the "next" move button is clicked, the page is changed to next page.', function() {
+    it('When the next move button is clicked, the page should be changed to next page', function() {
       var prevPage = pagination3.getCurrentPage();
       var currentPage;
 
@@ -228,7 +242,7 @@ describe('Pagination', function() {
       expect(currentPage).toBe(prevPage + 1);
     });
 
-    it('When the "last" move button is clicked, the page is changed to last page.', function() {
+    it('When the last move button is clicked, the page should be changed to last page', function() {
       var lastPage = pagination3._getLastPage();
       var currentPage;
 
@@ -239,8 +253,8 @@ describe('Pagination', function() {
     });
 
     it(
-      'When the "prev" more button is clicked,' +
-        'the page is changed to last page number of previous page list.',
+      'When the prev more button is clicked,' +
+        'the page should be changed to last page number of previous page list',
       function() {
         var currentPage;
 
@@ -252,8 +266,8 @@ describe('Pagination', function() {
     );
 
     it(
-      'When the "prev" more button is clicked,' +
-        'the page is changed to last page number of next page list.',
+      'When the prev more button is clicked,' +
+        'the page should be changed to last page number of next page list',
       function() {
         var currentPage;
 
@@ -264,7 +278,7 @@ describe('Pagination', function() {
       }
     );
 
-    it('When the page is clicked and is enabled, the current page is changed.', function() {
+    it('When the page is clicked and is enabled, the current page should be changed', function() {
       var prevPage = pagination3.getCurrentPage();
       var currentPage;
 
@@ -274,7 +288,7 @@ describe('Pagination', function() {
       expect(currentPage).not.toBe(prevPage);
     });
 
-    it('When the page is clicked and is selected already, the current page is not changed.', function() {
+    it('When the page is clicked and is selected already, the current page should be not changed', function() {
       var prevPage, currentPage;
 
       pagination3.movePageTo(3);

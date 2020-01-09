@@ -1,6 +1,9 @@
 'use strict';
 
-var snippet = require('tui-code-snippet');
+var CustomEvents = require('tui-code-snippet/customEvents/customEvents');
+var defineClass = require('tui-code-snippet/defineClass/defineClass');
+var extend = require('tui-code-snippet/object/extend');
+var isUndefined = require('tui-code-snippet/type/isUndefined');
 
 var View = require('./view.js');
 var util = require('./util.js');
@@ -19,7 +22,10 @@ var defaultOption = {
 /**
  * Pagination class
  * @class Pagination
- * @param {string|HTMLElement|jQueryObject} container - Container element or id selector
+ * @param {string|HTMLElement|jQueryObject} container - Container element or selector.
+ * In case of a string, it is considered as an id selector and find the element by id.
+ * If there is no element, it is considered as a selector and find the element by querySelector().
+ * Passing jQueryObject and considering an id selector at first will be deprecated in v4.0.0.
  * @param {object} options - Option object
  *     @param {number} [options.totalItems=10] Total item count
  *     @param {number} [options.itemsPerPage=10] Item count per page
@@ -28,7 +34,7 @@ var defaultOption = {
  *     @param {boolean}[options.centerAlign=false] Whether current page keep center or not
  *     @param {string} [options.firstItemClassName='first-child'] The class name of the first item
  *     @param {string} [options.lastItemClassName='last-child'] The class name of the last item
- *     @param {object} [options.template] A markup string set to make element
+ *     @param {object} [options.template] A markup string set to make element. Refer to {@link https://github.com/nhn/tui.pagination/blob/master/docs/getting-started.md#how-to-use-template Getting Started: How to use template}.
  *         @param {string|function} [options.template.page] HTML template
  *         @param {string|function} [options.template.currentPage] HTML template
  *         @param {string|function} [options.template.moveButton] HTML template
@@ -67,7 +73,7 @@ var defaultOption = {
  * };
  * var pagination = new Pagination(container, options);
  */
-var Pagination = snippet.defineClass(
+var Pagination = defineClass(
   /** @lends Pagination.prototype */ {
     init: function(container, options) {
       /**
@@ -75,7 +81,7 @@ var Pagination = snippet.defineClass(
        * @type {object}
        * @private
        */
-      this._options = snippet.extend({}, defaultOption, options);
+      this._options = extend({}, defaultOption, options);
 
       /**
        * Current page number
@@ -89,12 +95,12 @@ var Pagination = snippet.defineClass(
        * @type {View}
        * @private
        */
-      this._view = new View(container, this._options, snippet.bind(this._onClickHandler, this));
+      this._view = new View(container, this._options, util.bind(this._onClickHandler, this));
 
       this._paginate();
 
       if (this._options.usageStatistics) {
-        util.sendHostNameToGA();
+        util.sendHostName();
       }
     },
 
@@ -169,7 +175,7 @@ var Pagination = snippet.defineClass(
       } else {
         pageIndex = isPrevMove
           ? (currentPageIndex - 1) * pageCount
-          : (currentPageIndex * pageCount) + 1;
+          : currentPageIndex * pageCount + 1;
       }
 
       return pageIndex;
@@ -251,7 +257,7 @@ var Pagination = snippet.defineClass(
           rightPageNumber = lastPage;
         }
       } else {
-        leftPageNumber = ((currentPageIndex - 1) * visiblePages) + 1;
+        leftPageNumber = (currentPageIndex - 1) * visiblePages + 1;
         rightPageNumber = currentPageIndex * visiblePages;
         rightPageNumber = Math.min(rightPageNumber, lastPage);
       }
@@ -307,7 +313,7 @@ var Pagination = snippet.defineClass(
      * pagination.reset(100);
      */
     reset: function(totalItems) {
-      if (snippet.isUndefined(totalItems)) {
+      if (isUndefined(totalItems)) {
         totalItems = this._options.totalItems;
       }
 
@@ -339,7 +345,7 @@ var Pagination = snippet.defineClass(
        *     }
        * });
        */
-      if (!this.invoke('beforeMove', {page: targetPage})) {
+      if (!this.invoke('beforeMove', { page: targetPage })) {
         return;
       }
 
@@ -355,7 +361,7 @@ var Pagination = snippet.defineClass(
        *      console.log(currentPage);
        * });
        */
-      this.fire('afterMove', {page: targetPage});
+      this.fire('afterMove', { page: targetPage });
     },
 
     /**
@@ -384,6 +390,6 @@ var Pagination = snippet.defineClass(
   }
 );
 
-snippet.CustomEvents.mixin(Pagination);
+CustomEvents.mixin(Pagination);
 
 module.exports = Pagination;

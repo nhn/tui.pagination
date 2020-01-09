@@ -1,48 +1,51 @@
-## Add dependency files
+## Install
 
-To use a pagination component, you must include CSS and JavaScript files.
-These files can be downloaded from the `dist` folder in this repository.
-
-#### CSS File
-
-```html
-<link rel="stylesheet" href="tui-pagination.css">
+``` sh
+$ npm install --save tui-pagination # Latest version
+$ npm install --save tui-pagination@<version> # Specific version
 ```
 
-#### JS Files
-```html
-<script type="text/javascript" src="tui-code-snippet.js"></script>
-<script type="text/javascript" src="tui-pagination.js"></script>
-```
+It can also be installed by using bower or downloaded by CDN. Please refer to the [💾 Install](https://github.com/nhn/tui.pagination#-install).
 
-## Create a pagination component
+## Usage
 
-### Step 1. Add a container element that the pagination component will be created.
+### Write a wrapper element
+
+A wrapper element should have `tui-pagination` as a class name to apply tui-pagination's style.
 
 ```html
 <div id="pagination" class="tui-pagination"></div>
 ```
 
-### Step 2. Create instance.
+### Import a component
+
+```javascript
+import Pagination from 'tui-pagination';
+import 'tui-pagination/dist/tui-pagination.css';
+```
+
+It can also be used by namespace or CommonJS module. Please refer to the [🔨 Usage](https://github.com/nhn/tui.pagination#-usage).
+
+### Create an instance
 
 Create an instance by passing the container element and option values as parameters.
 
 * Create with the id selector of the container element
 ```js
-var pagination = new tui.Pagination('pagination', options);
+const pagination = new Pagination('pagination');
 ```
 
 * Create with a container element
 
 ```js
-var container = document.getElementById('pagination');
-var pagination = new tui.Pagination(container, options);
+const container = document.getElementById('pagination');
+const pagination = new Pagination(container);
 ```
 
 * Create with options
 
 ```js
-var options = {
+const options = {
   totalItems: 10,
   itemsPerPage: 10,
   visiblePages: 10,
@@ -51,24 +54,24 @@ var options = {
   firstItemClassName: 'tui-first-child',
   lastItemClassName: 'tui-last-child',
   template: {
-      page: '<a href="#" class="tui-page-btn">{{page}}</a>',
-      currentPage: '<strong class="tui-page-btn tui-is-selected">{{page}}</strong>',
-      moveButton:
-          '<a href="#" class="tui-page-btn tui-{{type}}">' +
-              '<span class="tui-ico-{{type}}">{{type}}</span>' +
-          '</a>',
-      disabledMoveButton:
-          '<span class="tui-page-btn tui-is-disabled tui-{{type}}">' +
-              '<span class="tui-ico-{{type}}">{{type}}</span>' +
-          '</span>',
-      moreButton:
-          '<a href="#" class="tui-page-btn tui-{{type}}-is-ellip">' +
-              '<span class="tui-ico-ellip">...</span>' +
-          '</a>'
-   }
+    page: '<a href="#" class="tui-page-btn">{{page}}</a>',
+    currentPage: '<strong class="tui-page-btn tui-is-selected">{{page}}</strong>',
+    moveButton:
+      '<a href="#" class="tui-page-btn tui-{{type}}">' +
+        '<span class="tui-ico-{{type}}">{{type}}</span>' +
+      '</a>',
+    disabledMoveButton:
+      '<span class="tui-page-btn tui-is-disabled tui-{{type}}">' +
+        '<span class="tui-ico-{{type}}">{{type}}</span>' +
+      '</span>',
+    moreButton:
+      '<a href="#" class="tui-page-btn tui-{{type}}-is-ellip">' +
+        '<span class="tui-ico-ellip">...</span>' +
+      '</a>'
+  }
 };
 
-var pagination = new tui.Pagination('pagination', options);
+const pagination = new Pagination('pagination', options);
 ```
 
 Information about each option is as follows:
@@ -101,16 +104,18 @@ The example below uses the template option to customize the more button.
 
 ### Using string template
 
+If you use string templates, it should be converted by [tui-code-snippet's template](https://nhn.github.io/tui.code-snippet/2.2.0/domUtil#template).
+
 ```js
 ...
 template: {
-    ...
-    moveButton:
-        '<div class="custom-page-btn custom-{{type}}">' +
-            '<span class="custom-ico-{{type}}"></span>' +
-        '</div>'
-    },
-    ...
+  ...
+  moveButton:
+    '<div class="custom-page-btn custom-{{type}}">' +
+      '<span class="custom-ico-{{type}}"></span>' +
+    '</div>'
+  },
+  ...
 ...
 ```
 
@@ -119,19 +124,20 @@ template: {
 ```js
 ...
 template: {
-    ...
-    moveButton: function(type) {
-        var template = '';
+  ...
+  moveButton: type => {
+    let template = '';
 
-        if (type === 'first') {
-            template = '<div class="custom-page-btn">' +
-                           '<span class="custom-ico"></span>' +
-                       '</div>';
-        }
+    if (type === 'first') {
+      template =
+        '<div class="custom-page-btn">' +
+          '<span class="custom-ico"></span>' +
+        '</div>';
+    }
 
-        return template;
-    },
-    ...
+    return template;
+  },
+  ...
 ...
 ```
 
@@ -154,21 +160,18 @@ For each custom event, the `page` number is returned in the` eventData` object, 
 
 
 ```js
-pagination.on('beforeMove', function(evt) {
-    var ePage = evt.page;
-    var result = ajax.call({page: ePage});
+pagination.on('beforeMove', evt => {
+  const { page } = evt;
+  const result = ajax.call({page});
 
-    if(result) {
-        pagination.movePageTo(ePage);
-    } else {
-        return false;
-    }
+  if(result) {
+    pagination.movePageTo(page);
+  } else {
+    return false;
+  }
 });
 
-pagination.on('afterMove', function(evt) {
-    var ePage = evt.page;
-    console.log(ePage);
-});
+pagination.on('afterMove', ({ page }) => console.log(page));
 ```
 
-For more information, see the [API](https://nhn.github.io/tui.pagination/latest/).
+For more information about the API, please see [here](https://nhn.github.io/tui.pagination/latest/Pagination).
