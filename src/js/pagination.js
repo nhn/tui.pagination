@@ -22,7 +22,10 @@ var defaultOption = {
 /**
  * Pagination class
  * @class Pagination
- * @param {string|HTMLElement|jQueryObject} container - Container element or id selector
+ * @param {string|HTMLElement|jQueryObject} container - Container element or selector.
+ * In case of a string, it is considered as an id selector and find the element by id.
+ * If there is no element, it is considered as a selector and find the element by querySelector().
+ * Passing jQueryObject and considering an id selector at first will be deprecated in v4.0.0.
  * @param {object} options - Option object
  *     @param {number} [options.totalItems=10] Total item count
  *     @param {number} [options.itemsPerPage=10] Item count per page

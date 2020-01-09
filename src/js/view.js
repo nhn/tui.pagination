@@ -115,7 +115,7 @@ var View = defineClass(
      */
     _setRootElement: function(container) {
       if (isString(container)) {
-        container = document.getElementById(container);
+        container = document.getElementById(container) || document.querySelector(container);
       } else if (container.jquery) {
         container = container[0];
       }
