@@ -6,6 +6,7 @@ var util = require('@/util');
 function createElement(tagName, id) {
   var elem = document.createElement(tagName);
   elem.id = id;
+  document.body.appendChild(elem);
 
   return elem;
 }
@@ -19,9 +20,9 @@ describe('Pagination', function() {
     element2 = createElement('div', 'pagination2');
     element3 = createElement('div', 'pagination3');
 
-    pagination1 = new Pagination(element1);
+    pagination1 = new Pagination('pagination1');
 
-    pagination2 = new Pagination(element2, {
+    pagination2 = new Pagination('#pagination2', {
       totalItems: 500,
       itemsPerPage: 10,
       visiblePages: 11,
@@ -39,6 +40,12 @@ describe('Pagination', function() {
         currentPage: '<span class=page>{{page}}</span>'
       }
     });
+  });
+
+  afterEach(function() {
+    document.body.removeChild(element1);
+    document.body.removeChild(element2);
+    document.body.removeChild(element3);
   });
 
   describe('usageStatistics', function() {

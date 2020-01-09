@@ -5,6 +5,7 @@ var View = require('@/view.js');
 function createElement(tagName, id) {
   var elem = document.createElement(tagName);
   elem.id = id;
+  document.body.appendChild(elem);
 
   return elem;
 }
@@ -27,7 +28,7 @@ describe('View', function() {
     element1 = createElement('div', 'pagination1');
     element2 = createElement('div', 'pagination2');
 
-    pagination1 = new View(element1, {
+    pagination1 = new View('pagination1', {
       firstItemClassName: 'left-child',
       lastItemClassName: 'right-child'
     });
@@ -48,6 +49,11 @@ describe('View', function() {
     });
 
     pagination2.update(viewData);
+  });
+
+  afterEach(function() {
+    document.body.removeChild(element1);
+    document.body.removeChild(element2);
   });
 
   describe('basic opitons - ', function() {
