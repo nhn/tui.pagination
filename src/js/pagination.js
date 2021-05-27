@@ -43,10 +43,12 @@ var defaultOption = {
  *     @param {boolean} [options.usageStatistics=true] Send the hostname to google analytics.
  *         If you do not want to send the hostname, this option set to false.
  * @example
- * var Pagination = tui.Pagination; // or require('tui-pagination')
+ * import Pagination from 'tui-pagination'; // ES6
+ * // const Pagination = require('tui-pagination'); // CommonJS
+ * // const Pagination = tui.Pagination;
  *
- * var container = document.getElementById('pagination');
- * var options = { // below default value of options
+ * const container = document.getElementById('pagination');
+ * const options = { // below default value of options
  *      totalItems: 10,
  *      itemsPerPage: 10,
  *      visiblePages: 10,
@@ -71,7 +73,7 @@ var defaultOption = {
  *              '</a>'
  *      }
  * };
- * var pagination = new Pagination(container, options);
+ * const pagination = new Pagination(container, options);
  */
 var Pagination = defineClass(
   /** @lends Pagination.prototype */ {
@@ -337,7 +339,7 @@ var Pagination = defineClass(
        * @property {number} page - Moved page
        * @example
        * paganation.on('beforeMove', function(evt) {
-       *     var currentPage = evt.page;
+       *     const currentPage = evt.page;
        *
        *     if (currentPage === 10) {
        *         return false;
@@ -357,7 +359,7 @@ var Pagination = defineClass(
        * @property {number} page - Moved page
        * @example
        * paganation.on('afterMove', function(evt) {
-       *      var currentPage = evt.page;
+       *      const currentPage = evt.page;
        *      console.log(currentPage);
        * });
        */
