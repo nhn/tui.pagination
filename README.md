@@ -18,7 +18,6 @@
 * [Examples](#-examples)
 * [Install](#-install)
 * [Usage](#-usage)
-* [Dependency](#-dependency)
 * [Browser Support](#-browser-support)
 * [Pull Request Steps](#-pull-request-steps)
 * [Contributing](#-contributing)
@@ -164,10 +163,6 @@ instance.getCurrentPage();
 ```
 
 For more information about the API, please see [here](https://nhn.github.io/tui.pagination/latest/Pagination).
-
-
-## 🔩 Dependency
-* [tui-code-snippet](https://github.com/nhn/tui.code-snippet) >=2.2.0
 
 
 ## 🌏 Browser Support
