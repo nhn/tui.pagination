@@ -338,8 +338,8 @@ var Pagination = defineClass(
        * @type {object} evt - Custom event object
        * @property {number} page - Moved page
        * @example
-       * paganation.on('beforeMove', function(evt) {
-       *     const currentPage = evt.page;
+       * paganation.on('beforeMove', (event) => {
+       *     const currentPage = event.page;
        *
        *     if (currentPage === 10) {
        *         return false;
@@ -358,8 +358,8 @@ var Pagination = defineClass(
        * @type {object} evt - Custom event object
        * @property {number} page - Moved page
        * @example
-       * paganation.on('afterMove', function(evt) {
-       *      const currentPage = evt.page;
+       * paganation.on('afterMove', (event) => {
+       *      const currentPage = event.page;
        *      console.log(currentPage);
        * });
        */
