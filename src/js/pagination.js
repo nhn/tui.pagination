@@ -43,9 +43,14 @@ var defaultOption = {
  *     @param {boolean} [options.usageStatistics=true] Send the hostname to google analytics.
  *         If you do not want to send the hostname, this option set to false.
  * @example
- * import Pagination from 'tui-pagination'; // ES6
- * // const Pagination = require('tui-pagination'); // CommonJS
- * // const Pagination = tui.Pagination;
+ * // ES6
+ * import Pagination from 'tui-pagination';
+ *
+ * // CommonJS
+ * const Pagination = require('tui-pagination');
+ *
+ * // Browser
+ * const Pagination = tui.Pagination;
  *
  * const container = document.getElementById('pagination');
  * const options = { // below default value of options
