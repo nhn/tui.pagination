@@ -150,7 +150,7 @@ describe('View', function() {
       findElement = element2.querySelector('.current');
       foundElement = pagination2._findPageElement(findElement);
 
-      expect(foundElement).toBe(null);
+      expect(foundElement).toBeNull();
     });
   });
 });
