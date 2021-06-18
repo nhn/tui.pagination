@@ -1,6 +1,6 @@
 /*!
  * TOAST UI Pagination
- * @version 3.4.0
+ * @version 3.4.1
  * @author NHN FE Development Team <dl_javascript@nhn.com>
  * @license MIT
  */
@@ -660,10 +660,17 @@ var defaultOption = {
  *     @param {boolean} [options.usageStatistics=true] Send the hostname to google analytics.
  *         If you do not want to send the hostname, this option set to false.
  * @example
- * var Pagination = tui.Pagination; // or require('tui-pagination')
+ * // ES6
+ * import Pagination from 'tui-pagination';
  *
- * var container = document.getElementById('pagination');
- * var options = { // below default value of options
+ * // CommonJS
+ * const Pagination = require('tui-pagination');
+ *
+ * // Browser
+ * const Pagination = tui.Pagination;
+ *
+ * const container = document.getElementById('pagination');
+ * const options = { // below default value of options
  *      totalItems: 10,
  *      itemsPerPage: 10,
  *      visiblePages: 10,
@@ -688,7 +695,7 @@ var defaultOption = {
  *              '</a>'
  *      }
  * };
- * var pagination = new Pagination(container, options);
+ * const pagination = new Pagination(container, options);
  */
 var Pagination = defineClass(
   /** @lends Pagination.prototype */ {
@@ -953,8 +960,8 @@ var Pagination = defineClass(
        * @type {object} evt - Custom event object
        * @property {number} page - Moved page
        * @example
-       * paganation.on('beforeMove', function(evt) {
-       *     var currentPage = evt.page;
+       * paganation.on('beforeMove', (event) => {
+       *     const currentPage = event.page;
        *
        *     if (currentPage === 10) {
        *         return false;
@@ -973,8 +980,8 @@ var Pagination = defineClass(
        * @type {object} evt - Custom event object
        * @property {number} page - Moved page
        * @example
-       * paganation.on('afterMove', function(evt) {
-       *      var currentPage = evt.page;
+       * paganation.on('afterMove', (event) => {
+       *      const currentPage = event.page;
        *      console.log(currentPage);
        * });
        */
