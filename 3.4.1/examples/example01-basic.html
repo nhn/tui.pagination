@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>1. Basic</title>
+    <link rel="stylesheet" type="text/css" href="./css/tui-example-style.css" />
+    <link rel="stylesheet" type="text/css" href="../dist/tui-pagination.css" />
+    <style type="text/css">
+        h3{text-align: center;margin-top:50px;}
+    </style>
+</head>
+
+<body>
+    <div class="code-html">
+        <h3>Default</h3>
+        <div id="pagination1" class="tui-pagination"></div>
+
+        <h3>Center the current page</h3>
+        <div id="pagination2" class="tui-pagination"></div>
+    </div>
+    <script type="text/javascript" src="../dist/tui-pagination.js"></script>
+    <script class="code-js">
+    var pagination1 = new tui.Pagination('pagination1', {
+        totalItems: 500,
+        itemsPerPage: 10,
+        visiblePages: 5
+    });
+
+    var pagination2 = new tui.Pagination(document.getElementById('pagination2'), {
+        totalItems: 500,
+        itemsPerPage: 10,
+        visiblePages: 5,
+        centerAlign: true
+    });
+    </script>
+</body>
+</html>
