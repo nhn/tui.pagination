@@ -50,7 +50,7 @@ describe('Pagination', function() {
 
   describe('usageStatistics', function() {
     beforeEach(function() {
-      spyOn(util, 'sendHostName');
+      util.sendHostName = jest.fn();
     });
 
     it('should send a hostname if it sets to true or nothing', function() {
@@ -170,7 +170,7 @@ describe('Pagination', function() {
       'When movePageTo is called and the beforeMove event is ignore,' +
         'the current page should be not changed',
       function() {
-        var mock = jasmine.createSpy('beforeMove handler').and.returnValue(false);
+        var mock = jest.fn().mockReturnValue(false);
         var prevPage = pagination2.getCurrentPage();
         var currentPage;
 
@@ -186,7 +186,7 @@ describe('Pagination', function() {
       'When movePageTo is called and the beforeMove event is fired,' +
         'the current page should be changed',
       function() {
-        var mock = jasmine.createSpy('beforeMove handler').and.returnValue(true);
+        var mock = jest.fn().mockReturnValue(true);
         var prevPage = pagination2.getCurrentPage();
         var currentPage;
 
@@ -202,9 +202,8 @@ describe('Pagination', function() {
       'When movePageTo is called and the beforeMove event is fired,' +
         'afterMove event should be fired',
       function() {
-        var beforeMoveMock = jasmine.createSpy('beforeMove handler').and.returnValue(true);
-        var afterMoveMock = jasmine.createSpy('afterMove handler');
-
+        var beforeMoveMock = jest.fn().mockReturnValue(true);
+        var afterMoveMock = jest.fn();
         pagination2.on('beforeMove', beforeMoveMock);
         pagination2.on('afterMove', afterMoveMock);
         pagination2.movePageTo(3);
