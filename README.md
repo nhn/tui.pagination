@@ -5,7 +5,7 @@
 [![npm](https://img.shields.io/npm/v/tui-pagination.svg)](https://www.npmjs.com/package/tui-pagination)
 [![GitHub license](https://img.shields.io/github/license/nhn/tui.pagination.svg)](https://github.com/nhn/tui.pagination/blob/production/LICENSE)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg)](https://github.com/nhn/tui.project-name/labels/help%20wanted)
-[![code with hearth by NHN](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-NHN-ff1414.svg)](https://github.com/nhn)
+[![code with hearth by NHN Cloud](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-NHN_Cloud-ff1414.svg)](https://github.com/nhn)
 
 
 <p><a href="https://nhn.github.io/tui.pagination/latest/"><img src="https://user-images.githubusercontent.com/8615506/64503744-6852cf00-d307-11e9-8a7e-9d073c31412f.gif" /></a></p>
@@ -250,4 +250,4 @@ For more information on PR's steps, please see links in the Contributing section
 
 ## 📜 License
 
-This software is licensed under the [MIT](https://github.com/nhn/tui.pagination/blob/production/LICENSE) © [NHN](https://github.com/nhn).
+This software is licensed under the [MIT](https://github.com/nhn/tui.pagination/blob/production/LICENSE) © [NHN Cloud](https://github.com/nhn).
