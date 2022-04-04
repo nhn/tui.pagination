@@ -1,7 +1,7 @@
 /*!
  * TOAST UI Pagination
  * @version 3.4.1
- * @author NHN FE Development Team <dl_javascript@nhn.com>
+ * @author NHN Cloud FE Development Team <dl_javascript@nhn.com>
  * @license MIT
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -594,7 +594,6 @@ module.exports = util;
 "use strict";
 /**
  * @fileoverview The entry file of Pagination components
- * @author NHN. FE Development Lab <dl_javascript@nhn.com>
  */
 
 
